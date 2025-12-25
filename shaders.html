@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shaders - Blender Concepts</title>
+    <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <wiki-sidebar></wiki-sidebar>
+        </aside>
+
+        <main class="main-container">
+            <div class="content-area">
+                <div class="canvas-container">
+                    <canvas id="three-canvas"></canvas>
+                </div>
+
+                <aside class="info-panel">
+                    <h1>Shaders</h1>
+
+                    <div class="tldr-box">
+                        <h2>TL;DR</h2>
+                        <p>Shaders are programs that run on your graphics card to determine how every pixel on your 3D models should be colored - they enable effects that regular materials can't achieve!</p>
+                    </div>
+
+                    <div class="explanation">
+                        <h2>Understanding Shaders</h2>
+                        <p>Shaders represent a deeper level of control over your 3D graphics. While materials in Blender provide sliders for properties like roughness and metallic, shaders are the actual programs running behind the scenes that calculate those properties.</p>
+
+                        <p><strong>What shaders do:</strong> For every pixel that needs to be rendered, the shader calculates what color it should be based on factors like lighting, viewing angle, material properties, and custom logic you provide.</p>
+
+                        <p>In Blender's Shader Editor, you work with a node-based system. Each node performs a specific calculation (get the surface normal, sample a texture, mix two colors), and you connect them to build complex material behaviors. This is visual shader programming.</p>
+
+                        <p><strong>Types of shader nodes:</strong></p>
+
+                        <p><strong>BSDF nodes:</strong> (Bidirectional Scattering Distribution Function) Define how light scatters off surfaces. The Principled BSDF you use in materials is actually a sophisticated shader that combines multiple simpler shaders.</p>
+
+                        <p><strong>Texture nodes:</strong> Sample images or generate procedural patterns (noise, gradients, etc.).</p>
+
+                        <p><strong>Math nodes:</strong> Perform calculations, allowing you to create dynamic, responsive materials.</p>
+
+                        <p><strong>Input nodes:</strong> Provide information about the surface (position, normal direction, UV coordinates, etc.).</p>
+
+                        <div class="tip-box">
+                            <strong>Custom Shader Effects:</strong>
+                            Want materials that change color based on viewing angle? Use a Fresnel node. Need animated patterns? Connect a noise texture to a time value. Want cartoon-style cel shading? Use ColorRamp nodes to posterize lighting. Shaders unlock these creative possibilities.
+                        </div>
+
+                        <p>In the visualization, you see a torus knot with a custom animated shader. The colorful, flowing pattern is created by shader code that calculates colors based on the surface position and time. This effect would be impossible with static materials alone.</p>
+
+                        <p>The pattern uses:</p>
+                        <p>• Position data (where on the surface each pixel is)<br>
+                        • Time data (to create animation)<br>
+                        • Sine functions (to create wave patterns)<br>
+                        • Color mixing (blending between two colors)</p>
+
+                        <p><strong>When to use shaders:</strong></p>
+
+                        <p><em>Special effects:</em> Holographic materials, force fields, magical effects, stylized rendering.</p>
+
+                        <p><em>Procedural variation:</em> Materials that vary based on position, orientation, or random values without requiring texture maps.</p>
+
+                        <p><em>Performance optimization:</em> Procedural shaders can be more efficient than large texture files.</p>
+
+                        <p>While beginners typically work with pre-made materials, understanding that shaders exist helps you recognize what's possible. As you advance, shader knowledge becomes essential for creating unique, compelling visuals.</p>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="navigation-footer">
+                <a href="camera.html" class="nav-button">← Previous: Camera</a>
+                <a href="index.html" class="nav-button">Back to Home</a>
+            </nav>
+        </main>
+    </div>
+
+    <script type="module">
+        import * as THREE from './node_modules/three/build/three.module.js';
+        import './components/wiki-sidebar.js';
+
+        function initScene() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const vertexShader = `
+                varying vec3 vPosition;
+                void main() {
+                    vPosition = position;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `;
+
+            const fragmentShader = `
+                uniform float time;
+                varying vec3 vPosition;
+
+                void main() {
+                    vec3 color1 = vec3(1.0, 0.0, 0.5);
+                    vec3 color2 = vec3(0.0, 0.5, 1.0);
+
+                    float pattern = sin(vPosition.x * 5.0 + time) * sin(vPosition.y * 5.0 + time) * sin(vPosition.z * 5.0 + time);
+                    vec3 color = mix(color1, color2, pattern * 0.5 + 0.5);
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `;
+
+            const material = new THREE.ShaderMaterial({
+                vertexShader,
+                fragmentShader,
+                uniforms: {
+                    time: { value: 0 }
+                }
+            });
+
+            const geometry = new THREE.TorusKnotGeometry(1.5, 0.5, 100, 16);
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            camera.position.z = 6;
+
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.01;
+                material.uniforms.time.value = time;
+                mesh.rotation.x += 0.005;
+                mesh.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
+        initScene();
+    </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bevel - Blender Concepts</title>
+    <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <wiki-sidebar></wiki-sidebar>
+        </aside>
+
+        <main class="main-container">
+            <div class="content-area">
+                <div class="canvas-container">
+                    <canvas id="three-canvas"></canvas>
+                </div>
+
+                <aside class="info-panel">
+                    <h1>Bevel</h1>
+
+                    <div class="tldr-box">
+                        <h2>TL;DR</h2>
+                        <p>Bevel rounds off sharp edges to make things look more realistic - nothing in real life has perfectly sharp edges, so bevel makes your models look less 'CG'!</p>
+                    </div>
+
+                    <div class="explanation">
+                        <h2>Understanding Beveling</h2>
+                        <p>Here's a crucial insight that separates amateur 3D work from professional: <em>nothing in the real world has perfectly sharp edges</em>. Even objects that appear sharp - a knife blade, a fresh sheet of metal, the corner of a building - have microscopic roundness when viewed up close.</p>
+
+                        <p><strong>Why this matters:</strong> Sharp edges don't catch light the way real objects do. When light hits a perfectly sharp edge in 3D, it creates an unnaturally harsh highlight. Beveling those edges - even slightly - allows light to play across the surface more naturally, immediately making your model look more realistic.</p>
+
+                        <p>To bevel in Blender:</p>
+                        <p>1. Select edges (or vertices) in Edit Mode<br>
+                        2. Press <code>Ctrl+B</code> to activate bevel<br>
+                        3. Move your mouse to control the width of the bevel<br>
+                        4. Scroll your mouse wheel to add more segments (smoother rounding)<br>
+                        5. Click to confirm</p>
+
+                        <div class="tip-box">
+                            <strong>Hard Surface Modeling:</strong>
+                            Beveling is absolutely essential for hard surface work - mechanical objects, vehicles, architecture, product design. A good rule of thumb: if it would hurt to get hit by it in real life, it probably needs a bevel in your 3D model. Even subtle bevels (0.5-2mm on real-world scale objects) make a huge difference.
+                        </div>
+
+                        <p>In the visualization, compare the two cubes:</p>
+
+                        <p><strong>Orange cube (left):</strong> Has perfectly sharp edges. Notice how the highlights are harsh and thin, and the object has that telltale "CG" look.</p>
+
+                        <p><strong>Green cube (right):</strong> Has beveled edges. The rounded corners catch light across a wider area, creating more natural highlights and giving the object visual weight and realism.</p>
+
+                        <p>The difference becomes even more pronounced under different lighting conditions. Beveled edges create subtle gradations in shading that make objects feel solid and tangible.</p>
+
+                        <p><strong>How much to bevel?</strong> It depends on the material and wear. New, manufactured objects might have very subtle bevels. Worn or soft materials (wood, plastic) might have more pronounced rounding. Metal edges could be anywhere on this spectrum depending on the object's history.</p>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="navigation-footer">
+                <a href="loop-cuts.html" class="nav-button">← Previous: Loop Cuts</a>
+                <a href="subdivision.html" class="nav-button">Next: Subdivision Surface →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script type="module">
+        import * as THREE from './node_modules/three/build/three.module.js';
+        import './components/wiki-sidebar.js';
+
+        function initScene() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Sharp cube (left)
+            const sharpGeometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+            const sharpMaterial = new THREE.MeshStandardMaterial({
+                color: 0xff6600,
+                metalness: 0.3,
+                roughness: 0.4
+            });
+            const sharpCube = new THREE.Mesh(sharpGeometry, sharpMaterial);
+            sharpCube.position.x = -2;
+            scene.add(sharpCube);
+
+            // Beveled cube (right)
+            const roundedShape = new THREE.Shape();
+            const radius = 0.15;
+            const size = 1.5;
+            const half = size / 2;
+
+            roundedShape.moveTo(-half + radius, -half);
+            roundedShape.lineTo(half - radius, -half);
+            roundedShape.quadraticCurveTo(half, -half, half, -half + radius);
+            roundedShape.lineTo(half, half - radius);
+            roundedShape.quadraticCurveTo(half, half, half - radius, half);
+            roundedShape.lineTo(-half + radius, half);
+            roundedShape.quadraticCurveTo(-half, half, -half, half - radius);
+            roundedShape.lineTo(-half, -half + radius);
+            roundedShape.quadraticCurveTo(-half, -half, -half + radius, -half);
+
+            const beveledGeometry = new THREE.ExtrudeGeometry(roundedShape, {
+                depth: size,
+                bevelEnabled: true,
+                bevelThickness: radius,
+                bevelSize: radius,
+                bevelSegments: 5
+            });
+
+            const beveledMaterial = new THREE.MeshStandardMaterial({
+                color: 0x00ff88,
+                metalness: 0.3,
+                roughness: 0.4
+            });
+            const beveledCube = new THREE.Mesh(beveledGeometry, beveledMaterial);
+            beveledCube.position.set(2, 0, -size / 2);
+            scene.add(beveledCube);
+
+            const light1 = new THREE.DirectionalLight(0xffffff, 1);
+            light1.position.set(5, 5, 5);
+            scene.add(light1);
+
+            const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+            light2.position.set(-5, 3, -5);
+            scene.add(light2);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.set(0, 2, 6);
+            camera.lookAt(0, 0, 0);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                sharpCube.rotation.x += 0.008;
+                sharpCube.rotation.y += 0.012;
+                beveledCube.rotation.x += 0.008;
+                beveledCube.rotation.y += 0.012;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
+        initScene();
+    </script>
+</body>
+</html>

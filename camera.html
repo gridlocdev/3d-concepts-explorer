@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera - Blender Concepts</title>
+    <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <wiki-sidebar></wiki-sidebar>
+        </aside>
+
+        <main class="main-container">
+            <div class="content-area">
+                <div class="canvas-container">
+                    <canvas id="three-canvas"></canvas>
+                </div>
+
+                <aside class="info-panel">
+                    <h1>Camera</h1>
+
+                    <div class="tldr-box">
+                        <h2>TL;DR</h2>
+                        <p>The camera is your 'eyeball' in the 3D world - it determines what gets shown in your final render. Position it thoughtfully to frame your scene like a photographer!</p>
+                    </div>
+
+                    <div class="explanation">
+                        <h2>Understanding the Camera</h2>
+                        <p>In Blender, you navigate freely around your 3D scene, viewing it from any angle. But when it comes time to render an image or animation, only one viewpoint matters: the camera's.</p>
+
+                        <p>Think of it like filmmaking - you can walk around the movie set looking at everything, but the audience only sees what the camera captures. Understanding this distinction is crucial for creating compelling final images.</p>
+
+                        <p><strong>Camera controls:</strong></p>
+
+                        <p>The camera is just another object in your scene. You can move it with <code>G</code>, rotate it with <code>R</code>, and even animate its position over time. Press <code>Numpad 0</code> to switch to Camera View, showing exactly what will be rendered.</p>
+
+                        <p><strong>Important camera properties:</strong></p>
+
+                        <p><strong>Focal Length:</strong> Measured in millimeters, this controls the field of view. Lower values (18mm-35mm) create wide-angle shots with more distortion, showing more of the scene. Higher values (85mm-200mm) create telephoto shots with compression, good for portraits. 50mm approximates human vision.</p>
+
+                        <p><strong>Sensor Size:</strong> Combined with focal length, this determines the exact field of view. Default settings (36mm) match full-frame cameras.</p>
+
+                        <p><strong>Depth of Field:</strong> Like real cameras, you can make some areas sharp while others are blurry. Enable it in camera settings, set a focus distance, and adjust the f-stop (lower f-stop = more blur, like f/1.4 for portraits; higher f-stop = more in focus, like f/22 for landscapes).</p>
+
+                        <div class="tip-box">
+                            <strong>Composition Principles:</strong>
+                            Apply photography rules: <em>Rule of thirds</em> (place interesting elements off-center), <em>Leading lines</em> (use geometry to guide the viewer's eye), <em>Headroom</em> (proper spacing above subjects). Enable composition guides in Camera View (press <code>N</code> to open properties, look for guides like thirds or golden ratio).
+                        </div>
+
+                        <p>In the visualization, you can see both a torus (the subject) and a camera object (the orange box with the camera frustum visualization). The camera orbits around the subject, showing how camera position dramatically changes what's captured.</p>
+
+                        <p><strong>Camera movement in animation:</strong></p>
+
+                        <p>Static camera: Professional and stable, lets the audience focus on the subject.</p>
+
+                        <p>Orbiting camera: Dynamic, reveals the three-dimensionality of objects.</p>
+
+                        <p>Following camera: Tracks moving subjects, common in product visualization and character animation.</p>
+
+                        <p>Your camera choices affect the emotional impact of your work. Low angles make subjects feel powerful or imposing. High angles make them feel small or vulnerable. Dutch angles (tilted) create unease or dynamism.</p>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="navigation-footer">
+                <a href="lighting.html" class="nav-button">← Previous: Lighting</a>
+                <a href="shaders.html" class="nav-button">Next: Shaders →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script type="module">
+        import * as THREE from './node_modules/three/build/three.module.js';
+        import './components/wiki-sidebar.js';
+
+        function initScene() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const torusGeometry = new THREE.TorusGeometry(1, 0.4, 16, 100);
+            const torusMaterial = new THREE.MeshStandardMaterial({
+                color: 0x00ff88,
+                roughness: 0.3,
+                metalness: 0.7
+            });
+            const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+            scene.add(torus);
+
+            const cameraHelper = new THREE.CameraHelper(
+                new THREE.PerspectiveCamera(50, 1, 0.1, 10)
+            );
+            cameraHelper.position.set(2, 1.5, 3);
+            cameraHelper.lookAt(0, 0, 0);
+            scene.add(cameraHelper);
+
+            const cameraBoxGeometry = new THREE.BoxGeometry(0.3, 0.2, 0.2);
+            const cameraBoxMaterial = new THREE.MeshBasicMaterial({ color: 0xff6600 });
+            const cameraBox = new THREE.Mesh(cameraBoxGeometry, cameraBoxMaterial);
+            cameraBox.position.copy(cameraHelper.position);
+            scene.add(cameraBox);
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x505050);
+            scene.add(ambientLight);
+
+            camera.position.set(4, 3, 5);
+            camera.lookAt(0, 0, 0);
+
+            let angle = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                torus.rotation.x += 0.01;
+                torus.rotation.y += 0.005;
+
+                angle += 0.005;
+                cameraHelper.position.x = Math.cos(angle) * 3;
+                cameraHelper.position.z = Math.sin(angle) * 3;
+                cameraHelper.lookAt(0, 0, 0);
+                cameraBox.position.copy(cameraHelper.position);
+                cameraHelper.update();
+
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
+        initScene();
+    </script>
+</body>
+</html>

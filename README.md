@@ -1,0 +1,60 @@
+# Blender Concepts Explorer
+
+An interactive learning guide for fundamental 3D modeling concepts in Blender, featuring live Three.js visualizations.
+
+## Structure
+
+This is now a multi-page wiki-style application with the following structure:
+
+### Main Pages
+- `index.html` - Landing page with overview and links to all concepts
+- `meshes.html` - Understanding vertices, edges, and faces
+- `normals.html` - Surface orientation and lighting
+- `transformations.html` - Grab, Rotate, and Scale operations
+- `extrude.html` - Creating new geometry
+- `loop-cuts.html` - Adding edge loops for detail
+- `bevel.html` - Rounding edges for realism
+- `subdivision.html` - Smoothing geometry
+- `materials.html` - Surface appearance and properties
+- `uv-maps.html` - Texture mapping
+- `lighting.html` - Light types and setup
+- `camera.html` - Framing and composition
+- `shaders.html` - Custom visual effects
+
+### Components
+- `components/wiki-sidebar.js` - Shared Web Component for navigation sidebar
+
+### Styles
+- `styles/main.css` - Shared styles for all pages
+
+### Assets
+- `static/` - Icons and other static assets
+- `node_modules/` - Three.js library
+
+## Features
+
+- **Wiki-style navigation** - Persistent sidebar on every page
+- **Interactive 3D visualizations** - Each concept has a live Three.js demo
+- **Educational tone** - Clear explanations that balance accessibility with technical accuracy
+- **Responsive design** - Works on desktop and mobile devices
+- **Consistent styling** - Shared design system across all pages
+
+## Development
+
+To run locally:
+1. Ensure Three.js is installed: `pnpm install`
+2. Open `index.html` in a web browser
+3. Use a local server for best results (e.g., `python -m http.server` or VSCode Live Server)
+
+## Navigation
+
+Each concept page includes:
+- A TL;DR box with a quick summary
+- Detailed explanation with technical depth
+- Live 3D visualization demonstrating the concept
+- Navigation links to previous/next concepts
+- Sidebar with links to all concepts
+
+## Original Version
+
+The original single-page application is preserved as `index-old.html`.

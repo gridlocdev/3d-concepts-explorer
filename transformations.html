@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformations - Blender Concepts</title>
+    <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <wiki-sidebar></wiki-sidebar>
+        </aside>
+
+        <main class="main-container">
+            <div class="content-area">
+                <div class="canvas-container">
+                    <canvas id="three-canvas"></canvas>
+                </div>
+
+                <aside class="info-panel">
+                    <h1>Transformations</h1>
+
+                    <div class="tldr-box">
+                        <h2>TL;DR</h2>
+                        <p>The three basic moves in 3D: G to grab/move things, R to rotate them, and S to scale (make bigger or smaller). These are the fundamental operations you'll use constantly!</p>
+                    </div>
+
+                    <div class="explanation">
+                        <h2>Understanding Transformations</h2>
+                        <p>Transformations are the bread and butter of 3D modeling. Every time you position an object in your scene or adjust its size, you're using one of these three fundamental operations.</p>
+
+                        <p><strong>Grab (G):</strong> Moves objects in 3D space. This is technically called "translation" in mathematics, but Blender calls it "Grab" to make it more intuitive. Press <code>G</code> and move your mouse to reposition the selected object.</p>
+
+                        <p><strong>Rotate (R):</strong> Spins objects around a pivot point. Press <code>R</code> to rotate freely, and the object will follow your mouse movement.</p>
+
+                        <p><strong>Scale (S):</strong> Makes objects larger or smaller. Press <code>S</code> and move your mouse away from the object to make it bigger, or toward it to make it smaller.</p>
+
+                        <div class="tip-box">
+                            <strong>Axis Constraints:</strong>
+                            After pressing <code>G</code>, <code>R</code>, or <code>S</code>, you can press <code>X</code>, <code>Y</code>, or <code>Z</code> to constrain the transformation to a single axis. For example, <code>G</code> then <code>X</code> moves the object only along the X-axis. This gives you precise control over transformations.
+                        </div>
+
+                        <p>In the visualization:</p>
+
+                        <p><strong>Orange cube:</strong> Demonstrates Grab by moving up and down along the Y-axis.</p>
+
+                        <p><strong>Green cube:</strong> Shows Rotation by continuously spinning.</p>
+
+                        <p><strong>Blue cube:</strong> Illustrates Scale by growing and shrinking.</p>
+
+                        <p>These operations become muscle memory quickly. You'll find yourself thinking "G-Z to move it up" or "S-Shift-Z to scale only in the X-Y plane" without conscious effort. They're applicable not just to objects, but also to individual vertices, edges, and faces in Edit Mode.</p>
+
+                        <p>Combined with axis constraints and numerical input (you can type exact values after pressing the hotkey), transformations give you both intuitive manipulation and precise control over your 3D scene.</p>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="navigation-footer">
+                <a href="normals.html" class="nav-button">← Previous: Normals</a>
+                <a href="extrude.html" class="nav-button">Next: Extrude →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script type="module">
+        import * as THREE from './node_modules/three/build/three.module.js';
+        import './components/wiki-sidebar.js';
+
+        function initScene() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+
+            // Left: Moving/Grab transformation
+            const moveMaterial = new THREE.MeshStandardMaterial({ color: 0xff6600 });
+            const moveCube = new THREE.Mesh(geometry, moveMaterial);
+            moveCube.position.x = -3;
+            scene.add(moveCube);
+
+            // Middle: Rotation transformation
+            const rotateMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff88 });
+            const rotateCube = new THREE.Mesh(geometry, rotateMaterial);
+            rotateCube.position.x = 0;
+            scene.add(rotateCube);
+
+            // Right: Scale transformation
+            const scaleMaterial = new THREE.MeshStandardMaterial({ color: 0x4488ff });
+            const scaleCube = new THREE.Mesh(geometry, scaleMaterial);
+            scaleCube.position.x = 3;
+            scene.add(scaleCube);
+
+            const light = new THREE.PointLight(0xffffff, 1.5, 100);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.z = 8;
+
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.02;
+
+                // Animate movement (G)
+                moveCube.position.y = Math.sin(time) * 0.5;
+
+                // Animate rotation (R)
+                rotateCube.rotation.x += 0.01;
+                rotateCube.rotation.y += 0.02;
+
+                // Animate scale (S)
+                const scale = 1 + Math.sin(time) * 0.3;
+                scaleCube.scale.set(scale, scale, scale);
+
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
+        initScene();
+    </script>
+</body>
+</html>

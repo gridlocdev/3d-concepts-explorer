@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materials - Blender Concepts</title>
+    <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <wiki-sidebar></wiki-sidebar>
+        </aside>
+
+        <main class="main-container">
+            <div class="content-area">
+                <div class="canvas-container">
+                    <canvas id="three-canvas"></canvas>
+                </div>
+
+                <aside class="info-panel">
+                    <h1>Materials</h1>
+
+                    <div class="tldr-box">
+                        <h2>TL;DR</h2>
+                        <p>Materials define what your objects look like - whether they appear as metal, plastic, glass, or any other substance. They control color, shininess, and how light interacts with surfaces.</p>
+                    </div>
+
+                    <div class="explanation">
+                        <h2>Understanding Materials</h2>
+                        <p>If meshes are the shape of your object, materials are its surface appearance. The same sphere geometry can look like a chrome ball bearing, a rubber toy, or a glass marble - entirely depending on its material properties.</p>
+
+                        <p>Materials in Blender use a physically-based rendering (PBR) system, which means they simulate how light behaves in the real world. This makes creating realistic materials more intuitive, as the parameters correspond to real physical properties.</p>
+
+                        <p><strong>Key material properties:</strong></p>
+
+                        <p><strong>Base Color:</strong> The fundamental color of the surface. This is what most people think of as the "color" of an object.</p>
+
+                        <p><strong>Metallic:</strong> Determines whether the surface behaves like metal (value of 1.0) or like a non-metal/dielectric (value of 0.0). Metals reflect their surroundings differently than non-metals. This is typically binary - either 0 or 1, rarely in between.</p>
+
+                        <p><strong>Roughness:</strong> Controls how smooth or rough the surface appears. A value of 0 creates a perfect mirror, while 1.0 creates a completely diffuse, matte surface. Most real materials fall somewhere in between.</p>
+
+                        <p><strong>Specular:</strong> Controls the strength of reflections on non-metallic surfaces. Most non-metals have a specular value around 0.5.</p>
+
+                        <div class="tip-box">
+                            <strong>Material Realism:</strong>
+                            Study real materials and their properties. Plastic is typically non-metallic with medium to high roughness. Polished wood is non-metallic with low roughness. Brushed aluminum is metallic with medium roughness. Understanding these patterns helps you create convincing materials quickly.
+                        </div>
+
+                        <p>In the visualization, you see three spheres with identical geometry but different materials:</p>
+
+                        <p><strong>Red sphere:</strong> Metallic (0.9) and smooth (low roughness ~0.1). It reflects the environment like polished metal.</p>
+
+                        <p><strong>Green sphere:</strong> Non-metallic (0.2) and rough (high roughness ~0.8). It has a matte, diffuse appearance like rubber or unglazed ceramic.</p>
+
+                        <p><strong>Blue sphere:</strong> Non-metallic (0.0) with medium roughness (0.3) and transparency (opacity 0.6). It simulates a translucent material like frosted glass.</p>
+
+                        <p>Materials can become incredibly complex with texture mapping, normal maps, and node-based shading, but these fundamental properties form the foundation of all material definitions.</p>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="navigation-footer">
+                <a href="subdivision.html" class="nav-button">← Previous: Subdivision Surface</a>
+                <a href="uv-maps.html" class="nav-button">Next: UV Maps →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script type="module">
+        import * as THREE from './node_modules/three/build/three.module.js';
+        import './components/wiki-sidebar.js';
+
+        function initScene() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const materials = [
+                new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 0.1, metalness: 0.9 }),
+                new THREE.MeshStandardMaterial({ color: 0x00ff00, roughness: 0.8, metalness: 0.2 }),
+                new THREE.MeshStandardMaterial({ color: 0x0000ff, roughness: 0.3, metalness: 0.0, transparent: true, opacity: 0.6 })
+            ];
+
+            const geometry = new THREE.SphereGeometry(1, 32, 32);
+            const spheres = [];
+
+            materials.forEach((material, index) => {
+                const sphere = new THREE.Mesh(geometry, material);
+                sphere.position.x = (index - 1) * 2.5;
+                scene.add(sphere);
+                spheres.push(sphere);
+            });
+
+            const light = new THREE.PointLight(0xffffff, 1.5, 100);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x303030);
+            scene.add(ambientLight);
+
+            camera.position.z = 6;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                spheres.forEach(sphere => {
+                    sphere.rotation.y += 0.01;
+                });
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
+        initScene();
+    </script>
+</body>
+</html>

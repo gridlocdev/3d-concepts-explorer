@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extrude - Blender Concepts</title>
+    <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <wiki-sidebar></wiki-sidebar>
+        </aside>
+
+        <main class="main-container">
+            <div class="content-area">
+                <div class="canvas-container">
+                    <canvas id="three-canvas"></canvas>
+                </div>
+
+                <aside class="info-panel">
+                    <h1>Extrude</h1>
+
+                    <div class="tldr-box">
+                        <h2>TL;DR</h2>
+                        <p>Extrude is like pulling clay out of your model - select a face and press E to pull it out and create new geometry. It's the most-used modeling tool!</p>
+                    </div>
+
+                    <div class="explanation">
+                        <h2>Understanding Extrusion</h2>
+                        <p>If there's one modeling operation you absolutely must master, it's extrusion. This single tool is responsible for creating a vast majority of 3D geometry across all skill levels.</p>
+
+                        <p><strong>What extrusion does:</strong> It takes selected geometry (faces, edges, or vertices) and creates new connected geometry by "pulling" it outward. Think of it like working with clay - when you pull part of the clay outward, you're stretching and adding material while keeping it connected to the original form.</p>
+
+                        <p>The process is beautifully simple:</p>
+                        <p>1. Select a face, edge, or vertex in Edit Mode<br>
+                        2. Press <code>E</code> to activate extrude<br>
+                        3. Move your mouse to pull the geometry outward<br>
+                        4. Click to confirm (or press <code>Enter</code>)</p>
+
+                        <div class="tip-box">
+                            <strong>Axis-Constrained Extrusion:</strong>
+                            Just like with transformations, you can press <code>X</code>, <code>Y</code>, or <code>Z</code> after pressing <code>E</code> to extrude along a specific axis. For example, <code>E</code> then <code>Z</code> extrudes straight up along the Z-axis, perfect for creating walls or vertical features.
+                        </div>
+
+                        <p>Common use cases for extrusion:</p>
+
+                        <p><strong>Building forms:</strong> Start with a simple cube, extrude one face to create a protrusion, and keep extruding to build complex shapes organically.</p>
+
+                        <p><strong>Adding appendages:</strong> Creating arms, legs, or branches? Select a face where you want it to start and extrude outward.</p>
+
+                        <p><strong>Creating architecture:</strong> Extruding walls upward, creating window frames, adding detail to structures.</p>
+
+                        <p>The visualization shows a stepped structure created through multiple extrusions. Each layer was created by selecting the top face and extruding upward, then scaling it slightly smaller. This technique of "extrude and scale" is fundamental to organic modeling.</p>
+
+                        <p>What makes extrusion powerful is that the new geometry stays connected to your mesh. This means no gaps, no separate pieces to worry about - everything remains part of a unified whole.</p>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="navigation-footer">
+                <a href="transformations.html" class="nav-button">← Previous: Transformations</a>
+                <a href="loop-cuts.html" class="nav-button">Next: Loop Cuts →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script type="module">
+        import * as THREE from './node_modules/three/build/three.module.js';
+        import './components/wiki-sidebar.js';
+
+        function initScene() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const extrudeSteps = 3;
+
+            // Create a stepped extrusion demonstration
+            const baseGeometry = new THREE.BoxGeometry(1.5, 0.5, 1.5);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x00ff88,
+                flatShading: false
+            });
+
+            const baseMesh = new THREE.Mesh(baseGeometry, material);
+            baseMesh.position.y = 0;
+            scene.add(baseMesh);
+
+            // Create extruded steps
+            for (let i = 0; i < extrudeSteps; i++) {
+                const size = 1.5 - (i + 1) * 0.3;
+                const stepGeometry = new THREE.BoxGeometry(size, 0.5, size);
+                const stepMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x00ff88 - (i * 0x001100),
+                    flatShading: false
+                });
+                const stepMesh = new THREE.Mesh(stepGeometry, stepMaterial);
+                stepMesh.position.y = (i + 1) * 0.5;
+                scene.add(stepMesh);
+            }
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x606060);
+            scene.add(ambientLight);
+
+            camera.position.set(3, 3, 5);
+            camera.lookAt(0, 1, 0);
+
+            let rotationAngle = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                rotationAngle += 0.005;
+                scene.rotation.y = rotationAngle;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
+        initScene();
+    </script>
+</body>
+</html>

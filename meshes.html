@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meshes - Blender Concepts</title>
+    <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <wiki-sidebar></wiki-sidebar>
+        </aside>
+
+        <main class="main-container">
+            <div class="content-area">
+                <div class="canvas-container">
+                    <canvas id="three-canvas"></canvas>
+                </div>
+
+                <aside class="info-panel">
+                    <h1>Meshes</h1>
+
+                    <div class="tldr-box">
+                        <h2>TL;DR</h2>
+                        <p>A mesh is the skeleton of your 3D object - made of dots (vertices), lines (edges), and flat surfaces (faces) that create the shape.</p>
+                    </div>
+
+                    <div class="explanation">
+                        <h2>Understanding Meshes</h2>
+                        <p>Everything you create in Blender starts as a mesh - it's the fundamental building block of 3D modeling. Think of a mesh as the skeletal framework of your object, similar to how a building has a frame of steel beams before the walls are added.</p>
+
+                        <p>A mesh is composed of three basic elements:</p>
+
+                        <p><strong>Vertices (dots):</strong> These are the corner points where edges meet. They're the fundamental building blocks - you can think of them as the joints in a skeleton.</p>
+
+                        <p><strong>Edges (lines):</strong> These connect vertices together, forming the outline of your shape. They're like the bones connecting the joints.</p>
+
+                        <p><strong>Faces (surfaces):</strong> These are flat surfaces bounded by edges. When you fill in the space between edges, you create a face - this is what becomes visible when you render your object.</p>
+
+                        <div class="tip-box">
+                            <strong>Pro Tip:</strong>
+                            The complexity of your mesh directly impacts performance. A simple cube has just 8 vertices, but a detailed character model might have thousands. More detail means more realism, but also requires more computing power to manipulate and render.
+                        </div>
+
+                        <p>In the visualization to the left, you can see the same object displayed three different ways:</p>
+
+                        <p><strong>Solid mesh (blue):</strong> This is what your finished object looks like with faces visible.</p>
+
+                        <p><strong>Wireframe (green):</strong> This shows only the edges, revealing the underlying structure of your mesh.</p>
+
+                        <p><strong>Vertices (red dots):</strong> These highlight just the vertices, showing you the control points of your mesh.</p>
+
+                        <p>Understanding that the mesh is just the shape - separate from its appearance - is crucial. You'll add materials, textures, and shaders on top of the mesh to give it color and surface properties like wood grain, metallic shine, or fabric texture.</p>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="navigation-footer">
+                <a href="index.html" class="nav-button">← Back to Home</a>
+                <a href="normals.html" class="nav-button">Next: Normals →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script type="module">
+        import * as THREE from './node_modules/three/build/three.module.js';
+        import './components/wiki-sidebar.js';
+
+        function initScene() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Setup scene
+            const geometry = new THREE.IcosahedronGeometry(1.2, 1);
+
+            // Left: Solid mesh (the finished object)
+            const solidMaterial = new THREE.MeshStandardMaterial({ color: 0x4488ff });
+            const solidMesh = new THREE.Mesh(geometry, solidMaterial);
+            solidMesh.position.x = -3;
+            scene.add(solidMesh);
+
+            // Middle: Wireframe (showing edges)
+            const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+            const wireframeMesh = new THREE.Mesh(geometry, wireframeMaterial);
+            wireframeMesh.position.x = 0;
+            scene.add(wireframeMesh);
+
+            // Right: Vertices (the points)
+            const vertices = geometry.attributes.position;
+            const pointsGeometry = new THREE.BufferGeometry();
+            pointsGeometry.setAttribute('position', vertices);
+            const pointsMaterial = new THREE.PointsMaterial({ color: 0xff0000, size: 0.15 });
+            const points = new THREE.Points(pointsGeometry, pointsMaterial);
+            points.position.x = 3;
+            scene.add(points);
+
+            // Also show wireframe faintly on the points view for context
+            const contextWire = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+                color: 0x444444,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.3
+            }));
+            contextWire.position.x = 3;
+            scene.add(contextWire);
+
+            const light = new THREE.PointLight(0xffffff, 1, 100);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.z = 8;
+
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+
+                solidMesh.rotation.x += 0.01;
+                solidMesh.rotation.y += 0.01;
+                wireframeMesh.rotation.x += 0.01;
+                wireframeMesh.rotation.y += 0.01;
+                points.rotation.x += 0.01;
+                points.rotation.y += 0.01;
+                contextWire.rotation.x += 0.01;
+                contextWire.rotation.y += 0.01;
+
+                renderer.render(scene, camera);
+            }
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
+        initScene();
+    </script>
+</body>
+</html>

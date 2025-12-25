@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UV Maps - Blender Concepts</title>
+    <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <wiki-sidebar></wiki-sidebar>
+        </aside>
+
+        <main class="main-container">
+            <div class="content-area">
+                <div class="canvas-container">
+                    <canvas id="three-canvas"></canvas>
+                </div>
+
+                <aside class="info-panel">
+                    <h1>UV Maps</h1>
+
+                    <div class="tldr-box">
+                        <h2>TL;DR</h2>
+                        <p>Think of gift-wrapping a box - UV maps unfold your 3D surface into a flat pattern so you can paint textures on it, then wrap them back onto your model.</p>
+                    </div>
+
+                    <div class="explanation">
+                        <h2>Understanding UV Mapping</h2>
+                        <p>UV mapping solves a fundamental problem: how do you apply a 2D image (like a photograph or painted texture) onto a 3D surface? The answer is to create a correspondence between your 3D mesh and a 2D texture space.</p>
+
+                        <p><strong>Why "UV"?</strong> In 3D space, we use X, Y, and Z coordinates. For 2D texture space, we use U and V to avoid confusion. U corresponds roughly to horizontal (like X), and V to vertical (like Y), but they exist in the flat texture image.</p>
+
+                        <p>The process works like this:</p>
+
+                        <p>1. <strong>Unwrap:</strong> Your 3D model is "unfolded" into a flat pattern, like cutting open a cardboard box and laying it flat. This creates the UV map.</p>
+
+                        <p>2. <strong>Texture:</strong> You paint or apply an image to this flat UV layout. Each pixel in the texture corresponds to a specific location on your 3D model.</p>
+
+                        <p>3. <strong>Apply:</strong> Blender wraps the texture back onto the 3D surface using the UV coordinates as a guide.</p>
+
+                        <div class="tip-box">
+                            <strong>UV Unwrapping Strategies:</strong>
+                            Simple objects (cubes, cylinders) can use basic projection unwrapping. Organic objects often need seam-based unwrapping - you mark edges as "seams" where the model can be "cut" and unfolded. Good seam placement (hidden areas, natural breaks) is an art form that affects texture quality.
+                        </div>
+
+                        <p>In the visualization, you see a sphere with a grid texture applied. The grid demonstrates how the 2D texture wraps around the 3D surface. Notice:</p>
+
+                        <p><strong>The U and V labels:</strong> These show the coordinate system of the flat texture space.</p>
+
+                        <p><strong>Grid distortion:</strong> The grid squares aren't perfectly uniform on the sphere - they stretch and compress based on how the UV map was created. Minimizing this distortion is a key goal of good UV unwrapping.</p>
+
+                        <p>UV maps are essential for:</p>
+
+                        <p><em>Detailed texturing:</em> Adding specific details like logos, wood grain, or skin pores exactly where you want them.</p>
+
+                        <p><em>Texture painting:</em> Painting directly in 2D texture space gives you precise control that's difficult to achieve with procedural textures.</p>
+
+                        <p><em>Game assets:</em> Most real-time rendering engines rely heavily on UV-mapped textures for performance reasons.</p>
+
+                        <p>While procedural textures (generated mathematically) are powerful, UV mapping remains essential for precise, artistic control over your model's appearance.</p>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="navigation-footer">
+                <a href="materials.html" class="nav-button">← Previous: Materials</a>
+                <a href="lighting.html" class="nav-button">Next: Lighting →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script type="module">
+        import * as THREE from './node_modules/three/build/three.module.js';
+        import './components/wiki-sidebar.js';
+
+        function initScene() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const textureCanvas = document.createElement('canvas');
+            textureCanvas.width = 512;
+            textureCanvas.height = 512;
+            const ctx = textureCanvas.getContext('2d');
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 512, 512);
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2;
+
+            for (let i = 0; i <= 8; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * 64, 0);
+                ctx.lineTo(i * 64, 512);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, i * 64);
+                ctx.lineTo(512, i * 64);
+                ctx.stroke();
+            }
+
+            ctx.fillStyle = '#ff0000';
+            ctx.font = '24px Arial';
+            ctx.fillText('U →', 230, 30);
+            ctx.save();
+            ctx.translate(30, 280);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('V →', 0, 0);
+            ctx.restore();
+
+            const texture = new THREE.CanvasTexture(textureCanvas);
+            const geometry = new THREE.SphereGeometry(2, 32, 32);
+            const material = new THREE.MeshStandardMaterial({ map: texture });
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+
+            const light = new THREE.PointLight(0xffffff, 1, 100);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.z = 5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                sphere.rotation.y += 0.005;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
+        initScene();
+    </script>
+</body>
+</html>

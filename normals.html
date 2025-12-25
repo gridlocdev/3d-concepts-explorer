@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normals - Blender Concepts</title>
+    <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <wiki-sidebar></wiki-sidebar>
+        </aside>
+
+        <main class="main-container">
+            <div class="content-area">
+                <div class="canvas-container">
+                    <canvas id="three-canvas"></canvas>
+                </div>
+
+                <aside class="info-panel">
+                    <h1>Normals</h1>
+
+                    <div class="tldr-box">
+                        <h2>TL;DR</h2>
+                        <p>Normals are invisible arrows pointing out from each face that tell Blender which side is the 'outside' - get them backwards and your model looks inside-out!</p>
+                    </div>
+
+                    <div class="explanation">
+                        <h2>Understanding Normals</h2>
+                        <p>Normals are one of those concepts that seem invisible until something goes wrong - and then they become very obvious! Every face on your mesh has an invisible directional vector (think of it as an arrow) pointing perpendicular to its surface.</p>
+
+                        <p><strong>What normals do:</strong> They tell the rendering engine which side of a face is the "outside" and should be visible. This is crucial for how light interacts with your surface and which side actually gets rendered.</p>
+
+                        <p>Think of a face like a piece of paper - it has two sides, but in 3D graphics, we typically only want to see one of them. The normal determines which side is considered the "front."</p>
+
+                        <div class="tip-box">
+                            <strong>Common Problem:</strong>
+                            If your model appears dark, has black patches, or seems to have holes when it shouldn't, you likely have inverted normals. In Blender, select the problematic faces and use <code>Alt+N</code> → Flip to correct them.
+                        </div>
+
+                        <p>In the visualization, you'll see two cubes:</p>
+
+                        <p><strong>Left cube (green):</strong> Has correct normals pointing outward. Light bounces off it naturally, and all faces render as expected.</p>
+
+                        <p><strong>Right cube (orange):</strong> Has flipped normals pointing inward. Notice how it appears darker or may look like you're seeing the inside of the cube - because you are! The faces are being rendered from the "back" side.</p>
+
+                        <p>Normals also affect smooth shading. When you smooth-shade an object, Blender interpolates the normals across faces to create the illusion of a curved surface. Understanding normals becomes essential when you want precise control over how light and shadow play across your model.</p>
+                    </div>
+                </aside>
+            </div>
+
+            <nav class="navigation-footer">
+                <a href="meshes.html" class="nav-button">← Previous: Meshes</a>
+                <a href="transformations.html" class="nav-button">Next: Transformations →</a>
+            </nav>
+        </main>
+    </div>
+
+    <script type="module">
+        import * as THREE from './node_modules/three/build/three.module.js';
+        import './components/wiki-sidebar.js';
+
+        function initScene() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const geometry = new THREE.BoxGeometry(2, 2, 2);
+
+            // Left: Correct normals (normal rendering)
+            const correctMaterial = new THREE.MeshStandardMaterial({
+                color: 0x00ff88,
+                side: THREE.FrontSide
+            });
+            const correctMesh = new THREE.Mesh(geometry, correctMaterial);
+            correctMesh.position.x = -2.5;
+            scene.add(correctMesh);
+
+            // Right: Flipped normals (back faces only)
+            const flippedMaterial = new THREE.MeshStandardMaterial({
+                color: 0xff6600,
+                side: THREE.BackSide
+            });
+            const flippedMesh = new THREE.Mesh(geometry, flippedMaterial);
+            flippedMesh.position.x = 2.5;
+            scene.add(flippedMesh);
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.set(0, 2, 6);
+            camera.lookAt(0, 0, 0);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                correctMesh.rotation.y += 0.01;
+                flippedMesh.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
+        initScene();
+    </script>
+</body>
+</html>
