@@ -174,8 +174,8 @@
         const concepts = [
             {
                 name: "UV Maps",
-                tldr: "UV maps unwrap 3D surfaces onto 2D space, allowing textures to be applied correctly to 3D models.",
-                explanation: "UV mapping is the process of projecting a 2D texture onto a 3D model's surface. The 'U' and 'V' refer to the horizontal and vertical axes of the 2D texture space (different from X, Y, Z in 3D space). When you unwrap a 3D object, you're essentially cutting it and flattening it out like unfolding a cardboard box. Each vertex on your 3D mesh gets assigned UV coordinates (ranging from 0 to 1) that determine which part of the texture image gets mapped to that point. Good UV mapping ensures textures don't stretch or distort unnaturally on the model.",
+                tldr: "Think of gift-wrapping a box - UV maps are like unfolding the wrapping paper flat so you can paint on it, then wrapping it back around your 3D object.",
+                explanation: "Imagine you want to put a cool design on a 3D cube. You can't just paint directly on it in 3D - you need a flat image! UV mapping is like carefully cutting your 3D object along some edges and laying it flat, like unfolding a cardboard box. Now you have a flat pattern you can paint on (that's your texture image). The 'UV' part is just fancy talk for the flat directions - instead of X and Y (which are used for 3D), we use U and V for the flat texture. When you're done painting, Blender knows how to wrap that flat image back onto your 3D shape perfectly. That's why the sphere below has a grid pattern - we painted a grid on the flat UV map, and Blender wrapped it around!",
                 setupScene: (scene, camera) => {
                     const canvas = document.createElement('canvas');
                     canvas.width = 512;
@@ -229,8 +229,8 @@
             },
             {
                 name: "Materials",
-                tldr: "Materials define how a surface interacts with light - its color, reflectivity, roughness, and other visual properties.",
-                explanation: "In 3D graphics, a material determines how the surface of an object appears. It controls properties like base color, metalness (how metal-like it is), roughness (how smooth or rough the surface is), transparency, and emission (if it glows). Materials work with the lighting in your scene to create realistic appearances. For example, a plastic material might have low metalness and medium roughness, while a polished metal would have high metalness and low roughness. The material is what makes a sphere look like a rubber ball versus a chrome ball bearing, even though they're the same shape.",
+                tldr: "Materials are what make objects look like metal, plastic, glass, or anything else - they control color, shininess, and how light bounces off surfaces.",
+                explanation: "Think of materials as the 'what is this made of?' setting for your 3D objects. The same sphere shape could look like a shiny chrome ball, a rubber ball, or even see-through glass - all depending on its material! You get to play with fun settings like: Color (obviously!), Roughness (is it smooth and shiny like a mirror, or rough like concrete?), Metalness (does it reflect like metal or not?), and Transparency (can you see through it?). Look at the three spheres below - they're all the same shape, but one looks like shiny metal, one looks like rough plastic, and one is see-through. That's the power of materials! In Blender, you'll spend a lot of time tweaking these to make things look realistic.",
                 setupScene: (scene, camera) => {
                     const materials = [
                         new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 0.1, metalness: 0.9 }),
@@ -266,8 +266,8 @@
             },
             {
                 name: "Shaders",
-                tldr: "Shaders are small programs that run on the GPU to calculate the final color of each pixel on a surface.",
-                explanation: "Shaders are the actual code that runs on your graphics card to determine what each pixel looks like. There are two main types: vertex shaders (which process each point of the geometry) and fragment/pixel shaders (which determine the color of each pixel). While materials provide a user-friendly interface with sliders and color pickers, shaders are the underlying code that makes those materials work. Custom shaders allow you to create effects that go beyond standard materials - like animated patterns, special lighting effects, or stylized rendering. They're powerful but require programming knowledge.",
+                tldr: "Shaders are like tiny artists inside your graphics card that paint every single pixel on your 3D models - they can create effects that regular materials can't!",
+                explanation: "Okay, this one's a bit more advanced, but stick with me! You know how materials let you adjust sliders to make things shiny or rough? Well, shaders are the actual instructions running behind the scenes making that happen. Think of shaders as mini-programs that your graphics card uses to color every pixel. The cool part? You can write your own shaders to create wild effects that normal materials can't do - like animated rainbow patterns, trippy distortions, or that 'toon shader' look from cartoons. Below you'll see a colorful, animated pattern - that's a custom shader doing its thing! As a beginner, you'll mostly use pre-made materials, but knowing shaders exist helps you understand what's possible. When someone says 'shader,' they usually mean custom code for special visual effects.",
                 setupScene: (scene, camera) => {
                     const vertexShader = `
                         varying vec3 vPosition;
@@ -321,38 +321,51 @@
             },
             {
                 name: "Meshes",
-                tldr: "A mesh is the fundamental 3D object made of vertices (points), edges (lines), and faces (polygons) that define its shape.",
-                explanation: "A mesh is the core building block of 3D models. It's composed of vertices (individual points in 3D space), edges (lines connecting vertices), and faces (flat polygons, usually triangles or quads, formed by edges). Think of it like a wireframe skeleton that defines the shape of your object. The more vertices and faces a mesh has, the more detailed it can be, but also the more computational power it requires. Simple objects like cubes might have just 8 vertices and 6 faces, while complex character models can have thousands or millions. The mesh geometry is separate from its material - the same mesh could look like metal, plastic, or wood depending on its material.",
+                tldr: "A mesh is the skeleton of your 3D object - made of dots (vertices), lines (edges), and flat surfaces (faces) that create the shape.",
+                explanation: "Everything you create in Blender starts as a mesh - it's basically the skeleton or framework of your 3D object. Imagine building something out of toothpicks (edges) and paper (faces) held together at connection points (vertices). That's a mesh! On the left below, you'll see a solid blue shape. In the middle, you'll see the same shape as a green wireframe - those green lines are the edges showing the structure. On the right, the red dots are the vertices - the corner points where edges meet. A simple cube has just 8 vertices (corners), but a detailed character might have thousands! More vertices = more detail, but also = slower computer. The mesh is just the shape - you add materials on top to make it look like wood, metal, or whatever you want.",
                 setupScene: (scene, camera) => {
-                    const geometry = new THREE.IcosahedronGeometry(1.5, 1);
-                    
+                    const geometry = new THREE.IcosahedronGeometry(1.2, 1);
+
+                    // Left: Solid mesh (the finished object)
                     const solidMaterial = new THREE.MeshStandardMaterial({ color: 0x4488ff });
                     const solidMesh = new THREE.Mesh(geometry, solidMaterial);
-                    solidMesh.position.x = -2;
+                    solidMesh.position.x = -3;
                     scene.add(solidMesh);
-                    
+
+                    // Middle: Wireframe (showing edges)
                     const wireframeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
                     const wireframeMesh = new THREE.Mesh(geometry, wireframeMaterial);
-                    wireframeMesh.position.x = 2;
+                    wireframeMesh.position.x = 0;
                     scene.add(wireframeMesh);
-                    
+
+                    // Right: Vertices (the points)
                     const vertices = geometry.attributes.position;
                     const pointsGeometry = new THREE.BufferGeometry();
                     pointsGeometry.setAttribute('position', vertices);
-                    const pointsMaterial = new THREE.PointsMaterial({ color: 0xff0000, size: 0.1 });
+                    const pointsMaterial = new THREE.PointsMaterial({ color: 0xff0000, size: 0.15 });
                     const points = new THREE.Points(pointsGeometry, pointsMaterial);
-                    points.position.x = 2;
+                    points.position.x = 3;
                     scene.add(points);
-                    
+
+                    // Also show wireframe faintly on the points view for context
+                    const contextWire = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+                        color: 0x444444,
+                        wireframe: true,
+                        transparent: true,
+                        opacity: 0.3
+                    }));
+                    contextWire.position.x = 3;
+                    scene.add(contextWire);
+
                     const light = new THREE.PointLight(0xffffff, 1, 100);
                     light.position.set(5, 5, 5);
                     scene.add(light);
-                    
+
                     const ambientLight = new THREE.AmbientLight(0x404040);
                     scene.add(ambientLight);
-                    
-                    camera.position.z = 6;
-                    
+
+                    camera.position.z = 8;
+
                     return () => {
                         solidMesh.rotation.x += 0.01;
                         solidMesh.rotation.y += 0.01;
@@ -360,13 +373,15 @@
                         wireframeMesh.rotation.y += 0.01;
                         points.rotation.x += 0.01;
                         points.rotation.y += 0.01;
+                        contextWire.rotation.x += 0.01;
+                        contextWire.rotation.y += 0.01;
                     };
                 }
             },
             {
                 name: "Subdivision Surface (Subdivs)",
-                tldr: "Subdivision surface smooths a mesh by splitting each face into smaller faces, creating organic curved surfaces from blocky geometry.",
-                explanation: "Subdivision surface (often called 'SubDiv' or 'Subsurf') is a modifier that takes a simple, low-polygon mesh and automatically generates a much smoother, higher-resolution version. It works by subdividing each face into multiple smaller faces and smoothing the result. This is incredibly useful because you can model with simple, easy-to-manipulate geometry, then add subdivision to get smooth organic shapes. Each subdivision level typically quadruples the face count (2 subdivisions = 16x faces), so it can get very heavy quickly. The beauty is that you keep the simple 'cage' mesh for editing while getting smooth results. It's essential for character modeling and any organic shapes.",
+                tldr: "It's like a magic 'smooth' button - takes your blocky 3D object and automatically makes it round and organic by adding tons of tiny details.",
+                explanation: "Here's one of the coolest tricks in Blender! Imagine trying to model a smooth human head by hand-placing thousands of vertices - nightmare, right? Subdivision Surface (we just call it 'Subsurf' or 'SubDiv') is your best friend. You build something rough and blocky (like a simple cube), then turn on subdivision and BOOM - it becomes smooth and rounded! Look at the comparison below: on the left is a blocky orange cube, and on the right is what happens when you add subdivision - it turns into a smooth green sphere! The magic is that you only have to move the simple blocky version, and the smooth version updates automatically. It's like sculpting with clay, but your rough shape automatically becomes smooth. Every character model you see in movies uses this technique!",
                 setupScene: (scene, camera) => {
                     const baseGeometry = new THREE.BoxGeometry(2, 2, 2);
                     
