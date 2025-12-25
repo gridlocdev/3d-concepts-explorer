@@ -173,153 +173,6 @@
 
         const concepts = [
             {
-                name: "UV Maps",
-                tldr: "Think of gift-wrapping a box - UV maps are like unfolding the wrapping paper flat so you can paint on it, then wrapping it back around your 3D object.",
-                explanation: "Imagine you want to put a cool design on a 3D cube. You can't just paint directly on it in 3D - you need a flat image! UV mapping is like carefully cutting your 3D object along some edges and laying it flat, like unfolding a cardboard box. Now you have a flat pattern you can paint on (that's your texture image). The 'UV' part is just fancy talk for the flat directions - instead of X and Y (which are used for 3D), we use U and V for the flat texture. When you're done painting, Blender knows how to wrap that flat image back onto your 3D shape perfectly. That's why the sphere below has a grid pattern - we painted a grid on the flat UV map, and Blender wrapped it around!",
-                setupScene: (scene, camera) => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = 512;
-                    canvas.height = 512;
-                    const ctx = canvas.getContext('2d');
-                    
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillRect(0, 0, 512, 512);
-                    ctx.strokeStyle = '#000000';
-                    ctx.lineWidth = 2;
-                    
-                    for (let i = 0; i <= 8; i++) {
-                        ctx.beginPath();
-                        ctx.moveTo(i * 64, 0);
-                        ctx.lineTo(i * 64, 512);
-                        ctx.stroke();
-                        ctx.beginPath();
-                        ctx.moveTo(0, i * 64);
-                        ctx.lineTo(512, i * 64);
-                        ctx.stroke();
-                    }
-                    
-                    ctx.fillStyle = '#ff0000';
-                    ctx.font = '24px Arial';
-                    ctx.fillText('U →', 230, 30);
-                    ctx.save();
-                    ctx.translate(30, 280);
-                    ctx.rotate(-Math.PI / 2);
-                    ctx.fillText('V →', 0, 0);
-                    ctx.restore();
-                    
-                    const texture = new THREE.CanvasTexture(canvas);
-                    const geometry = new THREE.SphereGeometry(2, 32, 32);
-                    const material = new THREE.MeshStandardMaterial({ map: texture });
-                    const sphere = new THREE.Mesh(geometry, material);
-                    scene.add(sphere);
-                    
-                    const light = new THREE.PointLight(0xffffff, 1, 100);
-                    light.position.set(5, 5, 5);
-                    scene.add(light);
-                    
-                    const ambientLight = new THREE.AmbientLight(0x404040);
-                    scene.add(ambientLight);
-                    
-                    camera.position.z = 5;
-                    
-                    return () => {
-                        sphere.rotation.y += 0.005;
-                    };
-                }
-            },
-            {
-                name: "Materials",
-                tldr: "Materials are what make objects look like metal, plastic, glass, or anything else - they control color, shininess, and how light bounces off surfaces.",
-                explanation: "Think of materials as the 'what is this made of?' setting for your 3D objects. The same sphere shape could look like a shiny chrome ball, a rubber ball, or even see-through glass - all depending on its material! You get to play with fun settings like: Color (obviously!), Roughness (is it smooth and shiny like a mirror, or rough like concrete?), Metalness (does it reflect like metal or not?), and Transparency (can you see through it?). Look at the three spheres below - they're all the same shape, but one looks like shiny metal, one looks like rough plastic, and one is see-through. That's the power of materials! In Blender, you'll spend a lot of time tweaking these to make things look realistic.",
-                setupScene: (scene, camera) => {
-                    const materials = [
-                        new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 0.1, metalness: 0.9 }),
-                        new THREE.MeshStandardMaterial({ color: 0x00ff00, roughness: 0.8, metalness: 0.2 }),
-                        new THREE.MeshStandardMaterial({ color: 0x0000ff, roughness: 0.3, metalness: 0.0, transparent: true, opacity: 0.6 })
-                    ];
-                    
-                    const geometry = new THREE.SphereGeometry(1, 32, 32);
-                    const spheres = [];
-                    
-                    materials.forEach((material, index) => {
-                        const sphere = new THREE.Mesh(geometry, material);
-                        sphere.position.x = (index - 1) * 2.5;
-                        scene.add(sphere);
-                        spheres.push(sphere);
-                    });
-                    
-                    const light = new THREE.PointLight(0xffffff, 1.5, 100);
-                    light.position.set(5, 5, 5);
-                    scene.add(light);
-                    
-                    const ambientLight = new THREE.AmbientLight(0x303030);
-                    scene.add(ambientLight);
-                    
-                    camera.position.z = 6;
-                    
-                    return () => {
-                        spheres.forEach(sphere => {
-                            sphere.rotation.y += 0.01;
-                        });
-                    };
-                }
-            },
-            {
-                name: "Shaders",
-                tldr: "Shaders are like tiny artists inside your graphics card that paint every single pixel on your 3D models - they can create effects that regular materials can't!",
-                explanation: "Okay, this one's a bit more advanced, but stick with me! You know how materials let you adjust sliders to make things shiny or rough? Well, shaders are the actual instructions running behind the scenes making that happen. Think of shaders as mini-programs that your graphics card uses to color every pixel. The cool part? You can write your own shaders to create wild effects that normal materials can't do - like animated rainbow patterns, trippy distortions, or that 'toon shader' look from cartoons. Below you'll see a colorful, animated pattern - that's a custom shader doing its thing! As a beginner, you'll mostly use pre-made materials, but knowing shaders exist helps you understand what's possible. When someone says 'shader,' they usually mean custom code for special visual effects.",
-                setupScene: (scene, camera) => {
-                    const vertexShader = `
-                        varying vec3 vPosition;
-                        void main() {
-                            vPosition = position;
-                            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                        }
-                    `;
-                    
-                    const fragmentShader = `
-                        uniform float time;
-                        varying vec3 vPosition;
-
-                        void main() {
-                            vec3 color1 = vec3(1.0, 0.0, 0.5);
-                            vec3 color2 = vec3(0.0, 0.5, 1.0);
-
-                            float pattern = sin(vPosition.x * 5.0 + time) * sin(vPosition.y * 5.0 + time) * sin(vPosition.z * 5.0 + time);
-                            vec3 color = mix(color1, color2, pattern * 0.5 + 0.5);
-
-                            gl_FragColor = vec4(color, 1.0);
-                        }
-                    `;
-                    
-                    const material = new THREE.ShaderMaterial({
-                        vertexShader,
-                        fragmentShader,
-                        uniforms: {
-                            time: { value: 0 }
-                        }
-                    });
-                    
-                    const geometry = new THREE.TorusKnotGeometry(1.5, 0.5, 100, 16);
-                    const mesh = new THREE.Mesh(geometry, material);
-                    scene.add(mesh);
-                    
-                    const light = new THREE.PointLight(0xffffff, 1, 100);
-                    light.position.set(5, 5, 5);
-                    scene.add(light);
-                    
-                    camera.position.z = 6;
-                    
-                    let time = 0;
-                    return () => {
-                        time += 0.01;
-                        material.uniforms.time.value = time;
-                        mesh.rotation.x += 0.005;
-                        mesh.rotation.y += 0.01;
-                    };
-                }
-            },
-            {
                 name: "Meshes",
                 tldr: "A mesh is the skeleton of your 3D object - made of dots (vertices), lines (edges), and flat surfaces (faces) that create the shape.",
                 explanation: "Everything you create in Blender starts as a mesh - it's basically the skeleton or framework of your 3D object. Imagine building something out of toothpicks (edges) and paper (faces) held together at connection points (vertices). That's a mesh! On the left below, you'll see a solid blue shape. In the middle, you'll see the same shape as a green wireframe - those green lines are the edges showing the structure. On the right, the red dots are the vertices - the corner points where edges meet. A simple cube has just 8 vertices (corners), but a detailed character might have thousands! More vertices = more detail, but also = slower computer. The mesh is just the shape - you add materials on top to make it look like wood, metal, or whatever you want.",
@@ -379,31 +232,299 @@
                 }
             },
             {
+                name: "Normals",
+                tldr: "Normals are invisible arrows pointing out from each face that tell Blender which side is the 'outside' - get them backwards and your model looks inside-out!",
+                explanation: "Here's a weird one that trips up beginners all the time! Every face on your mesh has an invisible arrow called a 'normal' pointing out from it. Think of it like the face saying 'THIS side is the front!' Blender uses normals to figure out which side of a face to show and how light should bounce off it. If the normals are pointing the wrong way (inward instead of outward), your model will look dark, black, or see-through in weird places - like wearing your shirt inside-out! Below, you'll see two cubes: the left one has correct normals (faces colored bright), and the right one has flipped normals (faces look dark or backwards). In Blender, you can flip normals with Alt+N. This is super important when your model looks broken but the geometry seems fine!",
+                setupScene: (scene, camera) => {
+                    const geometry = new THREE.BoxGeometry(2, 2, 2);
+
+                    // Left: Correct normals (normal rendering)
+                    const correctMaterial = new THREE.MeshStandardMaterial({
+                        color: 0x00ff88,
+                        side: THREE.FrontSide
+                    });
+                    const correctMesh = new THREE.Mesh(geometry, correctMaterial);
+                    correctMesh.position.x = -2.5;
+                    scene.add(correctMesh);
+
+                    // Right: Flipped normals (back faces only)
+                    const flippedMaterial = new THREE.MeshStandardMaterial({
+                        color: 0xff6600,
+                        side: THREE.BackSide
+                    });
+                    const flippedMesh = new THREE.Mesh(geometry, flippedMaterial);
+                    flippedMesh.position.x = 2.5;
+                    scene.add(flippedMesh);
+
+                    // Add normal helpers to show the direction
+                    const correctHelper = new THREE.BoxHelper(correctMesh, 0x00ff88);
+                    scene.add(correctHelper);
+
+                    const light = new THREE.DirectionalLight(0xffffff, 1);
+                    light.position.set(5, 5, 5);
+                    scene.add(light);
+
+                    const ambientLight = new THREE.AmbientLight(0x404040);
+                    scene.add(ambientLight);
+
+                    camera.position.set(0, 2, 6);
+                    camera.lookAt(0, 0, 0);
+
+                    return () => {
+                        correctMesh.rotation.y += 0.01;
+                        flippedMesh.rotation.y += 0.01;
+                    };
+                }
+            },
+            {
+                name: "Transformations",
+                tldr: "The three basic moves in 3D: G to grab/move things, R to rotate them, and S to scale (make bigger or smaller). That's it - you'll use these constantly!",
+                explanation: "These are literally the first things you'll do in Blender! Every time you want to position an object, you'll use one of these three operations. Press G (for Grab) to move things around, R to Rotate them, and S to Scale them bigger or smaller. Here's the cool part: after pressing the key, you can type X, Y, or Z to lock the movement to just that axis. Like 'G then X' moves it only left-right. Below you'll see three cubes showing each transformation: one moving (grab), one spinning (rotate), and one growing and shrinking (scale). In Blender, you'll press these keys hundreds of times per day - they become muscle memory super fast!",
+                setupScene: (scene, camera) => {
+                    const geometry = new THREE.BoxGeometry(1, 1, 1);
+
+                    // Left: Moving/Grab transformation
+                    const moveMaterial = new THREE.MeshStandardMaterial({ color: 0xff6600 });
+                    const moveCube = new THREE.Mesh(geometry, moveMaterial);
+                    moveCube.position.x = -3;
+                    scene.add(moveCube);
+
+                    // Middle: Rotation transformation
+                    const rotateMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff88 });
+                    const rotateCube = new THREE.Mesh(geometry, rotateMaterial);
+                    rotateCube.position.x = 0;
+                    scene.add(rotateCube);
+
+                    // Right: Scale transformation
+                    const scaleMaterial = new THREE.MeshStandardMaterial({ color: 0x4488ff });
+                    const scaleCube = new THREE.Mesh(geometry, scaleMaterial);
+                    scaleCube.position.x = 3;
+                    scene.add(scaleCube);
+
+                    const light = new THREE.PointLight(0xffffff, 1.5, 100);
+                    light.position.set(5, 5, 5);
+                    scene.add(light);
+
+                    const ambientLight = new THREE.AmbientLight(0x404040);
+                    scene.add(ambientLight);
+
+                    camera.position.z = 8;
+
+                    let time = 0;
+                    return () => {
+                        time += 0.02;
+
+                        // Animate movement (G)
+                        moveCube.position.y = Math.sin(time) * 0.5;
+
+                        // Animate rotation (R)
+                        rotateCube.rotation.x += 0.01;
+                        rotateCube.rotation.y += 0.02;
+
+                        // Animate scale (S)
+                        const scale = 1 + Math.sin(time) * 0.3;
+                        scaleCube.scale.set(scale, scale, scale);
+                    };
+                }
+            },
+            {
+                name: "Extrude",
+                tldr: "Extrude is like pulling clay out of your model - select a face and press E to pull it out and create new geometry. It's THE most-used modeling tool!",
+                explanation: "If you only learn one modeling operation, make it Extrude! It's stupidly simple but super powerful. Select a face (or edge, or vertex), press E, and pull - you just created new geometry attached to what you selected! It's like pulling Play-Doh or clay outward. Want to make a leg from a body? Extrude. Want to add a chimney to a roof? Extrude. Want to extend an arm? Extrude. Below, you'll see a shape being built using extrusion - watch how new faces get pulled out from existing ones. Almost everything you model in Blender will involve extruding at some point. After you press E, you can press X, Y, or Z to extrude along just that axis. Simple, but you'll use it constantly!",
+                setupScene: (scene, camera) => {
+                    const extrudeSteps = 3;
+                    const stepWidth = 0.8;
+
+                    // Create a stepped extrusion demonstration
+                    const baseGeometry = new THREE.BoxGeometry(1.5, 0.5, 1.5);
+                    const material = new THREE.MeshStandardMaterial({
+                        color: 0x00ff88,
+                        flatShading: false
+                    });
+
+                    const baseMesh = new THREE.Mesh(baseGeometry, material);
+                    baseMesh.position.y = 0;
+                    scene.add(baseMesh);
+
+                    // Create extruded steps
+                    for (let i = 0; i < extrudeSteps; i++) {
+                        const size = 1.5 - (i + 1) * 0.3;
+                        const stepGeometry = new THREE.BoxGeometry(size, 0.5, size);
+                        const stepMaterial = new THREE.MeshStandardMaterial({
+                            color: 0x00ff88 - (i * 0x001100),
+                            flatShading: false
+                        });
+                        const stepMesh = new THREE.Mesh(stepGeometry, stepMaterial);
+                        stepMesh.position.y = (i + 1) * 0.5;
+                        scene.add(stepMesh);
+                    }
+
+                    // Add wireframe to show geometry
+                    const wireframeMaterial = new THREE.LineBasicMaterial({
+                        color: 0xffffff,
+                        transparent: true,
+                        opacity: 0.3
+                    });
+
+                    const light = new THREE.DirectionalLight(0xffffff, 1);
+                    light.position.set(5, 5, 5);
+                    scene.add(light);
+
+                    const ambientLight = new THREE.AmbientLight(0x606060);
+                    scene.add(ambientLight);
+
+                    camera.position.set(3, 3, 5);
+                    camera.lookAt(0, 1, 0);
+
+                    let rotationAngle = 0;
+                    return () => {
+                        rotationAngle += 0.005;
+                        scene.rotation.y = rotationAngle;
+                    };
+                }
+            },
+            {
+                name: "Loop Cuts",
+                tldr: "Loop cuts add new edge loops around your model (like adding rings around a cylinder) - press Ctrl+R to add more detail exactly where you need it!",
+                explanation: "Want to add detail to one part of your model without making the whole thing more complex? Loop cuts are your answer! Press Ctrl+R, hover over an edge, and you'll see a pink line loop around your model. Scroll your mouse wheel to add more loops, then click to place them. It's like adding growth rings to a tree or rubber bands around a cylinder - it gives you new edges to work with without changing your model's overall shape. Below you'll see a cylinder with several loop cuts added (shown in bright colors). These extra edge loops let you add bumps, dents, or details in specific areas. The more loops you have, the more control you have over the shape, but also the more complex your mesh becomes. Use them strategically!",
+                setupScene: (scene, camera) => {
+                    // Create cylinder with visible loop cuts
+                    const geometry = new THREE.CylinderGeometry(1, 1, 3, 16, 6);
+
+                    const material = new THREE.MeshStandardMaterial({
+                        color: 0x4488ff,
+                        flatShading: false,
+                        wireframe: false
+                    });
+
+                    const cylinder = new THREE.Mesh(geometry, material);
+                    scene.add(cylinder);
+
+                    // Add wireframe to show the loops
+                    const wireframeGeometry = geometry.clone();
+                    const wireframeMaterial = new THREE.MeshBasicMaterial({
+                        color: 0x00ff88,
+                        wireframe: true,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+                    scene.add(wireframe);
+
+                    const light = new THREE.DirectionalLight(0xffffff, 1);
+                    light.position.set(5, 5, 5);
+                    scene.add(light);
+
+                    const ambientLight = new THREE.AmbientLight(0x505050);
+                    scene.add(ambientLight);
+
+                    camera.position.set(3, 2, 4);
+                    camera.lookAt(0, 0, 0);
+
+                    return () => {
+                        cylinder.rotation.y += 0.008;
+                        wireframe.rotation.y += 0.008;
+                    };
+                }
+            },
+            {
+                name: "Bevel",
+                tldr: "Bevel rounds off sharp edges to make things look more realistic - nothing in real life has perfectly sharp edges, so bevel makes your models look less 'CG'!",
+                explanation: "Here's a pro tip: real-world objects don't have perfectly sharp edges. Even a knife has a tiny bit of roundness if you look close enough! Bevel is how you round off edges in Blender to make things look more realistic and catch light better. Select an edge (or vertex) and press Ctrl+B, then move your mouse to control how rounded it gets. The beveled cube below looks way more realistic than the sharp one, right? That's because the rounded edges catch light in a more natural way. Bevel is especially important for hard-surface modeling (like robots, cars, or mechanical objects). It's the difference between something looking like a CG model and looking like it could actually exist. A little bevel goes a long way!",
+                setupScene: (scene, camera) => {
+                    // Sharp cube (left)
+                    const sharpGeometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+                    const sharpMaterial = new THREE.MeshStandardMaterial({
+                        color: 0xff6600,
+                        metalness: 0.3,
+                        roughness: 0.4
+                    });
+                    const sharpCube = new THREE.Mesh(sharpGeometry, sharpMaterial);
+                    sharpCube.position.x = -2;
+                    scene.add(sharpCube);
+
+                    // Beveled cube (right) - using rounded box geometry
+                    const roundedShape = new THREE.Shape();
+                    const radius = 0.15;
+                    const size = 1.5;
+                    const half = size / 2;
+
+                    // Create rounded rectangle path
+                    roundedShape.moveTo(-half + radius, -half);
+                    roundedShape.lineTo(half - radius, -half);
+                    roundedShape.quadraticCurveTo(half, -half, half, -half + radius);
+                    roundedShape.lineTo(half, half - radius);
+                    roundedShape.quadraticCurveTo(half, half, half - radius, half);
+                    roundedShape.lineTo(-half + radius, half);
+                    roundedShape.quadraticCurveTo(-half, half, -half, half - radius);
+                    roundedShape.lineTo(-half, -half + radius);
+                    roundedShape.quadraticCurveTo(-half, -half, -half + radius, -half);
+
+                    const beveledGeometry = new THREE.ExtrudeGeometry(roundedShape, {
+                        depth: size,
+                        bevelEnabled: true,
+                        bevelThickness: radius,
+                        bevelSize: radius,
+                        bevelSegments: 5
+                    });
+
+                    const beveledMaterial = new THREE.MeshStandardMaterial({
+                        color: 0x00ff88,
+                        metalness: 0.3,
+                        roughness: 0.4
+                    });
+                    const beveledCube = new THREE.Mesh(beveledGeometry, beveledMaterial);
+                    beveledCube.position.set(2, 0, -size / 2);
+                    scene.add(beveledCube);
+
+                    const light1 = new THREE.DirectionalLight(0xffffff, 1);
+                    light1.position.set(5, 5, 5);
+                    scene.add(light1);
+
+                    const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+                    light2.position.set(-5, 3, -5);
+                    scene.add(light2);
+
+                    const ambientLight = new THREE.AmbientLight(0x404040);
+                    scene.add(ambientLight);
+
+                    camera.position.set(0, 2, 6);
+                    camera.lookAt(0, 0, 0);
+
+                    return () => {
+                        sharpCube.rotation.x += 0.008;
+                        sharpCube.rotation.y += 0.012;
+                        beveledCube.rotation.x += 0.008;
+                        beveledCube.rotation.y += 0.012;
+                    };
+                }
+            },
+            {
                 name: "Subdivision Surface (Subdivs)",
                 tldr: "It's like a magic 'smooth' button - takes your blocky 3D object and automatically makes it round and organic by adding tons of tiny details.",
                 explanation: "Here's one of the coolest tricks in Blender! Imagine trying to model a smooth human head by hand-placing thousands of vertices - nightmare, right? Subdivision Surface (we just call it 'Subsurf' or 'SubDiv') is your best friend. You build something rough and blocky (like a simple cube), then turn on subdivision and BOOM - it becomes smooth and rounded! Look at the comparison below: on the left is a blocky orange cube, and on the right is what happens when you add subdivision - it turns into a smooth green sphere! The magic is that you only have to move the simple blocky version, and the smooth version updates automatically. It's like sculpting with clay, but your rough shape automatically becomes smooth. Every character model you see in movies uses this technique!",
                 setupScene: (scene, camera) => {
                     const baseGeometry = new THREE.BoxGeometry(2, 2, 2);
-                    
-                    const lowPolyMaterial = new THREE.MeshStandardMaterial({ 
+
+                    const lowPolyMaterial = new THREE.MeshStandardMaterial({
                         color: 0xff6600,
                         flatShading: true
                     });
                     const lowPolyMesh = new THREE.Mesh(baseGeometry, lowPolyMaterial);
                     lowPolyMesh.position.x = -2.5;
                     scene.add(lowPolyMesh);
-                    
+
                     const subdividedGeometry = new THREE.SphereGeometry(1.4, 32, 32);
-                    const subdividedMaterial = new THREE.MeshStandardMaterial({ 
+                    const subdividedMaterial = new THREE.MeshStandardMaterial({
                         color: 0x00ff88
                     });
                     const subdividedMesh = new THREE.Mesh(subdividedGeometry, subdividedMaterial);
                     subdividedMesh.position.x = 2.5;
                     scene.add(subdividedMesh);
-                    
+
                     const wireGeometry = subdividedGeometry.clone();
-                    const wireMaterial = new THREE.MeshBasicMaterial({ 
-                        color: 0xffffff, 
+                    const wireMaterial = new THREE.MeshBasicMaterial({
+                        color: 0xffffff,
                         wireframe: true,
                         transparent: true,
                         opacity: 0.3
@@ -411,16 +532,16 @@
                     const wireMesh = new THREE.Mesh(wireGeometry, wireMaterial);
                     wireMesh.position.x = 2.5;
                     scene.add(wireMesh);
-                    
+
                     const light = new THREE.PointLight(0xffffff, 1.5, 100);
                     light.position.set(5, 5, 5);
                     scene.add(light);
-                    
+
                     const ambientLight = new THREE.AmbientLight(0x404040);
                     scene.add(ambientLight);
-                    
+
                     camera.position.z = 7;
-                    
+
                     return () => {
                         lowPolyMesh.rotation.x += 0.01;
                         lowPolyMesh.rotation.y += 0.01;
@@ -428,6 +549,265 @@
                         subdividedMesh.rotation.y += 0.01;
                         wireMesh.rotation.x += 0.01;
                         wireMesh.rotation.y += 0.01;
+                    };
+                }
+            },
+            {
+                name: "Materials",
+                tldr: "Materials are what make objects look like metal, plastic, glass, or anything else - they control color, shininess, and how light bounces off surfaces.",
+                explanation: "Think of materials as the 'what is this made of?' setting for your 3D objects. The same sphere shape could look like a shiny chrome ball, a rubber ball, or even see-through glass - all depending on its material! You get to play with fun settings like: Color (obviously!), Roughness (is it smooth and shiny like a mirror, or rough like concrete?), Metalness (does it reflect like metal or not?), and Transparency (can you see through it?). Look at the three spheres below - they're all the same shape, but one looks like shiny metal, one looks like rough plastic, and one is see-through. That's the power of materials! In Blender, you'll spend a lot of time tweaking these to make things look realistic.",
+                setupScene: (scene, camera) => {
+                    const materials = [
+                        new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 0.1, metalness: 0.9 }),
+                        new THREE.MeshStandardMaterial({ color: 0x00ff00, roughness: 0.8, metalness: 0.2 }),
+                        new THREE.MeshStandardMaterial({ color: 0x0000ff, roughness: 0.3, metalness: 0.0, transparent: true, opacity: 0.6 })
+                    ];
+
+                    const geometry = new THREE.SphereGeometry(1, 32, 32);
+                    const spheres = [];
+
+                    materials.forEach((material, index) => {
+                        const sphere = new THREE.Mesh(geometry, material);
+                        sphere.position.x = (index - 1) * 2.5;
+                        scene.add(sphere);
+                        spheres.push(sphere);
+                    });
+
+                    const light = new THREE.PointLight(0xffffff, 1.5, 100);
+                    light.position.set(5, 5, 5);
+                    scene.add(light);
+
+                    const ambientLight = new THREE.AmbientLight(0x303030);
+                    scene.add(ambientLight);
+
+                    camera.position.z = 6;
+
+                    return () => {
+                        spheres.forEach(sphere => {
+                            sphere.rotation.y += 0.01;
+                        });
+                    };
+                }
+            },
+            {
+                name: "UV Maps",
+                tldr: "Think of gift-wrapping a box - UV maps are like unfolding the wrapping paper flat so you can paint on it, then wrapping it back around your 3D object.",
+                explanation: "Imagine you want to put a cool design on a 3D cube. You can't just paint directly on it in 3D - you need a flat image! UV mapping is like carefully cutting your 3D object along some edges and laying it flat, like unfolding a cardboard box. Now you have a flat pattern you can paint on (that's your texture image). The 'UV' part is just fancy talk for the flat directions - instead of X and Y (which are used for 3D), we use U and V for the flat texture. When you're done painting, Blender knows how to wrap that flat image back onto your 3D shape perfectly. That's why the sphere below has a grid pattern - we painted a grid on the flat UV map, and Blender wrapped it around!",
+                setupScene: (scene, camera) => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 512;
+                    canvas.height = 512;
+                    const ctx = canvas.getContext('2d');
+                    
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, 512, 512);
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = 2;
+                    
+                    for (let i = 0; i <= 8; i++) {
+                        ctx.beginPath();
+                        ctx.moveTo(i * 64, 0);
+                        ctx.lineTo(i * 64, 512);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(0, i * 64);
+                        ctx.lineTo(512, i * 64);
+                        ctx.stroke();
+                    }
+                    
+                    ctx.fillStyle = '#ff0000';
+                    ctx.font = '24px Arial';
+                    ctx.fillText('U →', 230, 30);
+                    ctx.save();
+                    ctx.translate(30, 280);
+                    ctx.rotate(-Math.PI / 2);
+                    ctx.fillText('V →', 0, 0);
+                    ctx.restore();
+                    
+                    const texture = new THREE.CanvasTexture(canvas);
+                    const geometry = new THREE.SphereGeometry(2, 32, 32);
+                    const material = new THREE.MeshStandardMaterial({ map: texture });
+                    const sphere = new THREE.Mesh(geometry, material);
+                    scene.add(sphere);
+                    
+                    const light = new THREE.PointLight(0xffffff, 1, 100);
+                    light.position.set(5, 5, 5);
+                    scene.add(light);
+                    
+                    const ambientLight = new THREE.AmbientLight(0x404040);
+                    scene.add(ambientLight);
+                    
+                    camera.position.z = 5;
+                    
+                    return () => {
+                        sphere.rotation.y += 0.005;
+                    };
+                }
+            },
+            {
+                name: "Lighting",
+                tldr: "Lights are what make your 3D scene visible - without them everything is pitch black! Different light types (sun, point, spotlight) create totally different moods.",
+                explanation: "Here's something that blows beginners' minds: in 3D, if you don't add lights, you can't see anything! Unlike the real world, your 3D scene starts pitch black. Lighting is HUGE - it's what makes your work look good or bad. You've got different types: Point Lights (like a light bulb, shines in all directions), Sun Lights (like the actual sun, all rays go the same direction), Spotlights (like a flashlight, focused beam), and Area Lights (like a softbox for photography, soft even lighting). The same model can look creepy, cheerful, dramatic, or boring just by changing the lighting! Below you'll see the same object with different lighting setups cycling through. Pro tip: good lighting can make a mediocre model look amazing, but bad lighting makes even great models look terrible. It's that important!",
+                setupScene: (scene, camera) => {
+                    const geometry = new THREE.TorusKnotGeometry(1.2, 0.4, 100, 16);
+                    const material = new THREE.MeshStandardMaterial({
+                        color: 0x4488ff,
+                        roughness: 0.5,
+                        metalness: 0.3
+                    });
+                    const mesh = new THREE.Mesh(geometry, material);
+                    scene.add(mesh);
+
+                    // Create multiple light setups
+                    const lights = [];
+
+                    // Setup 1: Point light (warm)
+                    const pointLight = new THREE.PointLight(0xffaa00, 2, 100);
+                    pointLight.position.set(3, 3, 3);
+                    lights.push(pointLight);
+
+                    // Setup 2: Directional light (cool)
+                    const dirLight = new THREE.DirectionalLight(0x00aaff, 1.5);
+                    dirLight.position.set(-5, 5, 2);
+                    lights.push(dirLight);
+
+                    // Setup 3: Hemisphere light (ambient)
+                    const hemiLight = new THREE.HemisphereLight(0xff00ff, 0x00ffff, 1.5);
+                    lights.push(hemiLight);
+
+                    // Ambient base light
+                    const ambientLight = new THREE.AmbientLight(0x222222);
+                    scene.add(ambientLight);
+
+                    let currentLightIndex = 0;
+                    scene.add(lights[0]);
+
+                    camera.position.z = 5;
+
+                    let lightChangeTimer = 0;
+                    return () => {
+                        mesh.rotation.x += 0.005;
+                        mesh.rotation.y += 0.01;
+
+                        // Change lights every 3 seconds
+                        lightChangeTimer += 0.016;
+                        if (lightChangeTimer > 3) {
+                            lightChangeTimer = 0;
+                            scene.remove(lights[currentLightIndex]);
+                            currentLightIndex = (currentLightIndex + 1) % lights.length;
+                            scene.add(lights[currentLightIndex]);
+                        }
+                    };
+                }
+            },
+            {
+                name: "Camera",
+                tldr: "The camera is your 'eyeball' in the 3D world - it decides what gets shown in your final render. Position it to frame your scene like a photographer!",
+                explanation: "In Blender, you move around freely to see your model from all angles, but your final image comes from the Camera! Think of it like you're the director of a movie - you can walk around the set looking at everything, but what the audience sees is only what the camera sees. You can move and rotate the camera just like any object (G, R, S keys!), and there's a special 'Camera View' (press 0 on the numpad) that shows exactly what will render. Cameras have settings too: focal length (wide-angle vs zoomed-in), depth of field (blurry background like in portrait photos), and framing. Below you'll see a scene with a visible camera object (that pyramid shape with a rectangle). The camera is what decides your composition - what's in frame, what's cut off, and how dramatic the angle is!",
+                setupScene: (scene, camera) => {
+                    // Create a simple scene to photograph
+                    const torusGeometry = new THREE.TorusGeometry(1, 0.4, 16, 100);
+                    const torusMaterial = new THREE.MeshStandardMaterial({
+                        color: 0x00ff88,
+                        roughness: 0.3,
+                        metalness: 0.7
+                    });
+                    const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+                    scene.add(torus);
+
+                    // Create a visual representation of a camera
+                    const cameraHelper = new THREE.CameraHelper(
+                        new THREE.PerspectiveCamera(50, 1, 0.1, 10)
+                    );
+                    cameraHelper.position.set(2, 1.5, 3);
+                    cameraHelper.lookAt(0, 0, 0);
+                    scene.add(cameraHelper);
+
+                    // Add a small camera mesh for visual clarity
+                    const cameraBoxGeometry = new THREE.BoxGeometry(0.3, 0.2, 0.2);
+                    const cameraBoxMaterial = new THREE.MeshBasicMaterial({ color: 0xff6600 });
+                    const cameraBox = new THREE.Mesh(cameraBoxGeometry, cameraBoxMaterial);
+                    cameraBox.position.copy(cameraHelper.position);
+                    scene.add(cameraBox);
+
+                    const light = new THREE.DirectionalLight(0xffffff, 1);
+                    light.position.set(5, 5, 5);
+                    scene.add(light);
+
+                    const ambientLight = new THREE.AmbientLight(0x505050);
+                    scene.add(ambientLight);
+
+                    // Position our view camera to see both the scene and the camera object
+                    camera.position.set(4, 3, 5);
+                    camera.lookAt(0, 0, 0);
+
+                    let angle = 0;
+                    return () => {
+                        torus.rotation.x += 0.01;
+                        torus.rotation.y += 0.005;
+
+                        // Animate the camera helper orbiting
+                        angle += 0.005;
+                        cameraHelper.position.x = Math.cos(angle) * 3;
+                        cameraHelper.position.z = Math.sin(angle) * 3;
+                        cameraHelper.lookAt(0, 0, 0);
+                        cameraBox.position.copy(cameraHelper.position);
+                        cameraHelper.update();
+                    };
+                }
+            },
+            {
+                name: "Shaders",
+                tldr: "Shaders are like tiny artists inside your graphics card that paint every single pixel on your 3D models - they can create effects that regular materials can't!",
+                explanation: "Okay, this one's a bit more advanced, but stick with me! You know how materials let you adjust sliders to make things shiny or rough? Well, shaders are the actual instructions running behind the scenes making that happen. Think of shaders as mini-programs that your graphics card uses to color every pixel. The cool part? You can write your own shaders to create wild effects that normal materials can't do - like animated rainbow patterns, trippy distortions, or that 'toon shader' look from cartoons. Below you'll see a colorful, animated pattern - that's a custom shader doing its thing! As a beginner, you'll mostly use pre-made materials, but knowing shaders exist helps you understand what's possible. When someone says 'shader,' they usually mean custom code for special visual effects.",
+                setupScene: (scene, camera) => {
+                    const vertexShader = `
+                        varying vec3 vPosition;
+                        void main() {
+                            vPosition = position;
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                        }
+                    `;
+
+                    const fragmentShader = `
+                        uniform float time;
+                        varying vec3 vPosition;
+
+                        void main() {
+                            vec3 color1 = vec3(1.0, 0.0, 0.5);
+                            vec3 color2 = vec3(0.0, 0.5, 1.0);
+
+                            float pattern = sin(vPosition.x * 5.0 + time) * sin(vPosition.y * 5.0 + time) * sin(vPosition.z * 5.0 + time);
+                            vec3 color = mix(color1, color2, pattern * 0.5 + 0.5);
+
+                            gl_FragColor = vec4(color, 1.0);
+                        }
+                    `;
+
+                    const material = new THREE.ShaderMaterial({
+                        vertexShader,
+                        fragmentShader,
+                        uniforms: {
+                            time: { value: 0 }
+                        }
+                    });
+
+                    const geometry = new THREE.TorusKnotGeometry(1.5, 0.5, 100, 16);
+                    const mesh = new THREE.Mesh(geometry, material);
+                    scene.add(mesh);
+
+                    const light = new THREE.PointLight(0xffffff, 1, 100);
+                    light.position.set(5, 5, 5);
+                    scene.add(light);
+
+                    camera.position.z = 6;
+
+                    let time = 0;
+                    return () => {
+                        time += 0.01;
+                        material.uniforms.time.value = time;
+                        mesh.rotation.x += 0.005;
+                        mesh.rotation.y += 0.01;
                     };
                 }
             }
