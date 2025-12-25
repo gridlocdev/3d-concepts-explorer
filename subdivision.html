@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <link rel="stylesheet" href="styles/main.css">
 </head>
+
 <body>
     <div class="app-container">
         <aside class="sidebar">
@@ -18,52 +20,77 @@
                 <h1>Subdivision Surface</h1>
 
                 <h2>Overview</h2>
-                <p>It's like a magic 'smooth' button - takes your blocky 3D object and automatically makes it round and organic by intelligently adding geometry.</p>
+                <p>It's like a magic 'smooth' button - takes your blocky 3D object and automatically makes it round and
+                    organic by intelligently adding geometry.</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
                 <h2>Understanding Subdivision Surface</h2>
-                <p>Subdivision Surface (often called SubDiv or Subsurf) is one of the most powerful modifiers in Blender. It represents a fundamental workflow in modern 3D modeling: work with simple geometry, but render with complex, smooth results.</p>
+                <p>Subdivision Surface (often called SubDiv or Subsurf) is one of the most powerful modifiers in
+                    Blender. It represents a fundamental workflow in modern 3D modeling: work with simple geometry, but
+                    render with complex, smooth results.</p>
 
-                <p><strong>How it works:</strong> The modifier takes your low-polygon mesh (the "cage") and algorithmically subdivides it, creating smooth, rounded surfaces. It uses the Catmull-Clark subdivision algorithm, which smooths the mesh while preserving important features.</p>
+                <p><strong>How it works:</strong> The modifier takes your low-polygon mesh (the "cage") and
+                    algorithmically subdivides it, creating smooth, rounded surfaces. It uses the Catmull-Clark
+                    subdivision algorithm, which smooths the mesh while preserving important features.</p>
 
-                <p>The genius of this approach is that you continue modeling with simple, easy-to-manipulate geometry. Moving one vertex on a cube affects the entire smoothed surface in a predictable, organic way. Meanwhile, the final render can have thousands of faces creating perfectly smooth curves.</p>
+                <p>The genius of this approach is that you continue modeling with simple, easy-to-manipulate geometry.
+                    Moving one vertex on a cube affects the entire smoothed surface in a predictable, organic way.
+                    Meanwhile, the final render can have thousands of faces creating perfectly smooth curves.</p>
 
                 <div class="tip-box">
                     <strong>Controlling the Smoothness:</strong>
-                    You can control how subdivision affects your mesh using edge creasing (in Edit Mode, <code>Shift+E</code>) or by adding edge loops closer together. Edges that are close together will remain sharper after subdivision, while widely-spaced edges will smooth out more. This gives you both organic curves and hard edges in the same model.
+                    You can control how subdivision affects your mesh using edge creasing (in Edit Mode,
+                    <code>Shift+E</code>) or by adding edge loops closer together. Edges that are close together will
+                    remain sharper after subdivision, while widely-spaced edges will smooth out more. This gives you
+                    both organic curves and hard edges in the same model.
                 </div>
 
                 <h3>What You're Seeing</h3>
                 <p>In the visualization above:</p>
 
-                <p><strong>Orange cube (left):</strong> This is your low-poly base mesh - simple, blocky, with flat shading showing individual faces clearly.</p>
+                <p><strong>Orange cube (left):</strong> This is your low-poly base mesh - simple, blocky, with flat
+                    shading showing individual faces clearly.</p>
 
-                <p><strong>Green sphere (right):</strong> This represents what happens when you apply subdivision - the cube transforms into a smooth, organic sphere. The white wireframe overlay shows the high-resolution geometry that was automatically generated.</p>
+                <p><strong>Green sphere (right):</strong> This represents what happens when you apply subdivision - the
+                    cube transforms into a smooth, organic sphere. The white wireframe overlay shows the high-resolution
+                    geometry that was automatically generated.</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas-2"></canvas>
                 </div>
 
                 <h3>Controlling Subdivision with Edge Loops</h3>
-                <p>In the visualization above, you can see how adding edge loops allows you to maintain sharp edges even with subdivision:</p>
+                <p>In the visualization above, you can see how adding edge loops allows you to maintain sharp edges even
+                    with subdivision:</p>
 
-                <p><strong>Left (orange):</strong> A cube with subdivision - completely smooth and rounded, similar to a sphere.</p>
+                <p><strong>Left (orange):</strong> A cube with subdivision - completely smooth and rounded, similar to a
+                    sphere.</p>
 
-                <p><strong>Middle (green):</strong> The same subdivided cube but with edge loops placed close to the edges. This creates sharp corners while keeping the faces smooth.</p>
+                <p><strong>Middle (green):</strong> The same subdivided cube but with edge loops placed close to the
+                    edges. This creates sharp corners while keeping the faces smooth.</p>
 
-                <p><strong>Right (blue):</strong> Shows a mixed approach - some edges are kept sharp with tight edge loops while others are allowed to smooth out, giving you both hard and soft edges in the same model.</p>
+                <p><strong>Right (blue):</strong> Shows a mixed approach - some edges are kept sharp with tight edge
+                    loops while others are allowed to smooth out, giving you both hard and soft edges in the same model.
+                </p>
 
-                <p>This technique is the foundation of modern hard-surface modeling. By strategically placing edge loops, you maintain crisp details on mechanical objects while enjoying the benefits of subdivision surface modeling.</p>
+                <p>This technique is the foundation of modern hard-surface modeling. By strategically placing edge
+                    loops, you maintain crisp details on mechanical objects while enjoying the benefits of subdivision
+                    surface modeling.</p>
 
                 <h3>Common Uses</h3>
-                <p><strong>Character modeling:</strong> Almost all organic character models use subdivision surface. Model a simple humanoid form with basic geometry, apply SubDiv, and suddenly you have smooth, lifelike curves.</p>
+                <p><strong>Character modeling:</strong> Almost all organic character models use subdivision surface.
+                    Model a simple humanoid form with basic geometry, apply SubDiv, and suddenly you have smooth,
+                    lifelike curves.</p>
 
-                <p><strong>Product design:</strong> Combine subdivision with strategic edge loops and creasing to create products with both smooth surfaces and crisp details.</p>
+                <p><strong>Product design:</strong> Combine subdivision with strategic edge loops and creasing to create
+                    products with both smooth surfaces and crisp details.</p>
 
-                <p>The subdivision level can be set differently for viewport display (low for performance) versus final renders (high for quality). This means you can work smoothly even with complex models, while still achieving photorealistic results in your final output.</p>
+                <p>The subdivision level can be set differently for viewport display (low for performance) versus final
+                    renders (high for quality). This means you can work smoothly even with complex models, while still
+                    achieving photorealistic results in your final output.</p>
             </div>
 
             <nav class="navigation-footer">
@@ -83,7 +110,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -128,7 +155,8 @@
             const ambientLight = new THREE.AmbientLight(0x404040);
             scene.add(ambientLight);
 
-            camera.position.z = 7;
+            camera.position.set(0, 2, 6);
+            camera.lookAt(0, 0, 0);
 
             function animate() {
                 requestAnimationFrame(animate);
@@ -156,7 +184,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -210,7 +238,8 @@
             const ambientLight = new THREE.AmbientLight(0x404040);
             scene.add(ambientLight);
 
-            camera.position.z = 5;
+            camera.position.set(0, 2, 6);
+            camera.lookAt(0, 0, 0);
 
             function animate() {
                 requestAnimationFrame(animate);
@@ -236,4 +265,5 @@
         initScene2();
     </script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <link rel="stylesheet" href="styles/main.css">
 </head>
+
 <body>
     <div class="app-container">
         <aside class="sidebar">
@@ -18,61 +20,90 @@
                 <h1>Lighting</h1>
 
                 <h2>Overview</h2>
-                <p>Lights make your 3D scene visible and set the mood - without them everything is pitch black! Different light types create completely different atmospheres.</p>
+                <p>Lights make your 3D scene visible and set the mood - without them everything is pitch black!
+                    Different light types create completely different atmospheres.</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
                 <h2>Understanding Lighting</h2>
-                <p>Lighting can make or break your 3D work. The same model can look photorealistic or amateurish, moody or cheerful, dramatic or flat - entirely based on lighting choices. In many ways, lighting is more important than modeling quality for creating compelling imagery.</p>
+                <p>Lighting can make or break your 3D work. The same model can look photorealistic or amateurish, moody
+                    or cheerful, dramatic or flat - entirely based on lighting choices. In many ways, lighting is more
+                    important than modeling quality for creating compelling imagery.</p>
 
-                <p>Unlike the real world, 3D scenes start in complete darkness. Light doesn't exist unless you explicitly add it. This gives you complete control but also complete responsibility.</p>
+                <p>Unlike the real world, 3D scenes start in complete darkness. Light doesn't exist unless you
+                    explicitly add it. This gives you complete control but also complete responsibility.</p>
 
                 <h3>Main Light Types in Blender</h3>
-                <p><strong>Point Light:</strong> Emits light equally in all directions from a single point, like a bare light bulb. The intensity falls off with distance (inverse square law). Good for local light sources like lamps, candles, or magical effects.</p>
+                <p><strong>Point Light:</strong> Emits light equally in all directions from a single point, like a bare
+                    light bulb. The intensity falls off with distance (inverse square law). Good for local light sources
+                    like lamps, candles, or magical effects.</p>
 
-                <p><strong>Sun Light:</strong> Emits parallel rays in one direction, simulating an infinitely distant light source. The sun's rays are essentially parallel when they reach Earth. Doesn't have distance falloff. Perfect for outdoor scenes.</p>
+                <p><strong>Sun Light:</strong> Emits parallel rays in one direction, simulating an infinitely distant
+                    light source. The sun's rays are essentially parallel when they reach Earth. Doesn't have distance
+                    falloff. Perfect for outdoor scenes.</p>
 
-                <p><strong>Spot Light:</strong> Emits a cone of light, like a flashlight or theater spotlight. You can control the cone angle and softness. Great for focused, dramatic lighting.</p>
+                <p><strong>Spot Light:</strong> Emits a cone of light, like a flashlight or theater spotlight. You can
+                    control the cone angle and softness. Great for focused, dramatic lighting.</p>
 
-                <p><strong>Area Light:</strong> Emits light from a rectangular or disk-shaped surface. Creates soft, even lighting similar to photography softboxes or overcast skies. Produces the most natural-looking shadows.</p>
+                <p><strong>Area Light:</strong> Emits light from a rectangular or disk-shaped surface. Creates soft,
+                    even lighting similar to photography softboxes or overcast skies. Produces the most natural-looking
+                    shadows.</p>
 
                 <div class="tip-box">
                     <strong>Three-Point Lighting:</strong>
-                    A classic setup from photography and cinematography: <em>Key light</em> (main light, bright and directional), <em>Fill light</em> (softer light that fills in shadows), and <em>Rim light</em> (from behind, separates subject from background). This setup works for everything from product renders to character portraits.
+                    A classic setup from photography and cinematography: <em>Key light</em> (main light, bright and
+                    directional), <em>Fill light</em> (softer light that fills in shadows), and <em>Rim light</em> (from
+                    behind, separates subject from background). This setup works for everything from product renders to
+                    character portraits.
                 </div>
 
                 <h3>What You're Seeing</h3>
-                <p>In the visualization above, the same object is lit by different light setups that cycle every few seconds:</p>
+                <p>In the visualization above, the same object is lit by different light setups that cycle every few
+                    seconds:</p>
 
-                <p><strong>Warm point light:</strong> Creates dramatic shadows with a warm orange tone, good for intimate scenes.</p>
+                <p><strong>Warm point light:</strong> Creates dramatic shadows with a warm orange tone, good for
+                    intimate scenes.</p>
 
-                <p><strong>Cool directional light:</strong> Provides even lighting with a cool blue tone, simulating daylight or technical lighting.</p>
+                <p><strong>Cool directional light:</strong> Provides even lighting with a cool blue tone, simulating
+                    daylight or technical lighting.</p>
 
-                <p><strong>Hemisphere light:</strong> Creates ambient, colorful lighting that comes from above and below, no harsh shadows.</p>
+                <p><strong>Hemisphere light:</strong> Creates ambient, colorful lighting that comes from above and
+                    below, no harsh shadows.</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas-2"></canvas>
                 </div>
 
                 <h3>Three-Point Lighting Setup</h3>
-                <p>In the visualization above, you can see the classic three-point lighting technique in action on a sphere:</p>
+                <p>In the visualization above, you can see the classic three-point lighting technique in action on a
+                    sphere:</p>
 
-                <p><strong>Key Light (brightest, top-right):</strong> The main light source that defines the primary illumination and creates the dominant shadows. Positioned at about 45 degrees to the subject. This is your "sun" - the light that establishes the scene's overall look.</p>
+                <p><strong>Key Light (brightest, top-right):</strong> The main light source that defines the primary
+                    illumination and creates the dominant shadows. Positioned at about 45 degrees to the subject. This
+                    is your "sun" - the light that establishes the scene's overall look.</p>
 
-                <p><strong>Fill Light (dimmer, front-left):</strong> A softer, less intense light that fills in the shadows created by the key light. It prevents shadows from being pure black and adds depth without flattening the image. Typically 25-50% the intensity of the key light.</p>
+                <p><strong>Fill Light (dimmer, front-left):</strong> A softer, less intense light that fills in the
+                    shadows created by the key light. It prevents shadows from being pure black and adds depth without
+                    flattening the image. Typically 25-50% the intensity of the key light.</p>
 
-                <p><strong>Rim/Back Light (behind subject):</strong> Positioned behind and to the side of the subject, this light creates a bright edge that separates the subject from the background. It adds depth and makes the subject "pop" visually. Also called a rim light or hair light in portrait photography.</p>
+                <p><strong>Rim/Back Light (behind subject):</strong> Positioned behind and to the side of the subject,
+                    this light creates a bright edge that separates the subject from the background. It adds depth and
+                    makes the subject "pop" visually. Also called a rim light or hair light in portrait photography.</p>
 
-                <p>This three-light setup is the foundation of professional lighting in photography, cinematography, and 3D rendering. It creates dimensional, polished results that look professional immediately.</p>
+                <p>This three-light setup is the foundation of professional lighting in photography, cinematography, and
+                    3D rendering. It creates dimensional, polished results that look professional immediately.</p>
 
                 <h3>Lighting Considerations</h3>
-                <p><strong>Color temperature:</strong> Warm lights (orange/yellow) feel cozy or vintage. Cool lights (blue/white) feel modern or clinical. Different light sources naturally have different colors.</p>
+                <p><strong>Color temperature:</strong> Warm lights (orange/yellow) feel cozy or vintage. Cool lights
+                    (blue/white) feel modern or clinical. Different light sources naturally have different colors.</p>
 
-                <p><strong>Intensity:</strong> Real-world lighting varies enormously in intensity. Don't be afraid to use very bright or very dim lights.</p>
+                <p><strong>Intensity:</strong> Real-world lighting varies enormously in intensity. Don't be afraid to
+                    use very bright or very dim lights.</p>
 
-                <p><strong>Shadow quality:</strong> Soft shadows (from large light sources) feel natural and flattering. Hard shadows (from small/distant sources) create drama and define form.</p>
+                <p><strong>Shadow quality:</strong> Soft shadows (from large light sources) feel natural and flattering.
+                    Hard shadows (from small/distant sources) create drama and define form.</p>
             </div>
 
             <nav class="navigation-footer">
@@ -92,7 +123,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -129,7 +160,8 @@
             let currentLightIndex = 0;
             scene.add(lights[0]);
 
-            camera.position.z = 5;
+            camera.position.set(0, 2, 6);
+            camera.lookAt(0, 0, 0);
 
             let lightChangeTimer = 0;
             function animate() {
@@ -163,7 +195,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -200,7 +232,7 @@
             const ambientLight = new THREE.AmbientLight(0x202020);
             scene.add(ambientLight);
 
-            camera.position.set(0, 0.8, 3.5);
+            camera.position.set(0, 2, 6);
             camera.lookAt(0, 0, 0);
 
             function animate() {
@@ -222,4 +254,5 @@
         initScene2();
     </script>
 </body>
+
 </html>

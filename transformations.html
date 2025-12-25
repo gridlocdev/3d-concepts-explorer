@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <link rel="stylesheet" href="styles/main.css">
 </head>
+
 <body>
     <div class="app-container">
         <aside class="sidebar">
@@ -18,24 +20,33 @@
                 <h1>Transformations</h1>
 
                 <h2>Overview</h2>
-                <p>The three basic moves in 3D: G to grab/move things, R to rotate them, and S to scale (make bigger or smaller). These are the fundamental operations you'll use constantly!</p>
+                <p>The three basic moves in 3D: G to grab/move things, R to rotate them, and S to scale (make bigger or
+                    smaller). These are the fundamental operations you'll use constantly!</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
                 <h2>Understanding Transformations</h2>
-                <p>Transformations are the bread and butter of 3D modeling. Every time you position an object in your scene or adjust its size, you're using one of these three fundamental operations.</p>
+                <p>Transformations are the bread and butter of 3D modeling. Every time you position an object in your
+                    scene or adjust its size, you're using one of these three fundamental operations.</p>
 
-                <p><strong>Grab (G):</strong> Moves objects in 3D space. This is technically called "translation" in mathematics, but Blender calls it "Grab" to make it more intuitive. Press <code>G</code> and move your mouse to reposition the selected object.</p>
+                <p><strong>Grab (G):</strong> Moves objects in 3D space. This is technically called "translation" in
+                    mathematics, but Blender calls it "Grab" to make it more intuitive. Press <code>G</code> and move
+                    your mouse to reposition the selected object.</p>
 
-                <p><strong>Rotate (R):</strong> Spins objects around a pivot point. Press <code>R</code> to rotate freely, and the object will follow your mouse movement.</p>
+                <p><strong>Rotate (R):</strong> Spins objects around a pivot point. Press <code>R</code> to rotate
+                    freely, and the object will follow your mouse movement.</p>
 
-                <p><strong>Scale (S):</strong> Makes objects larger or smaller. Press <code>S</code> and move your mouse away from the object to make it bigger, or toward it to make it smaller.</p>
+                <p><strong>Scale (S):</strong> Makes objects larger or smaller. Press <code>S</code> and move your mouse
+                    away from the object to make it bigger, or toward it to make it smaller.</p>
 
                 <div class="tip-box">
                     <strong>Axis Constraints:</strong>
-                    After pressing <code>G</code>, <code>R</code>, or <code>S</code>, you can press <code>X</code>, <code>Y</code>, or <code>Z</code> to constrain the transformation to a single axis. For example, <code>G</code> then <code>X</code> moves the object only along the X-axis. This gives you precise control over transformations.
+                    After pressing <code>G</code>, <code>R</code>, or <code>S</code>, you can press <code>X</code>,
+                    <code>Y</code>, or <code>Z</code> to constrain the transformation to a single axis. For example,
+                    <code>G</code> then <code>X</code> moves the object only along the X-axis. This gives you precise
+                    control over transformations.
                 </div>
 
                 <h3>What You're Seeing</h3>
@@ -54,18 +65,26 @@
                 <h3>Axis-Constrained vs Free Transformations</h3>
                 <p>In the visualization above, you can see how axis constraints provide precision:</p>
 
-                <p><strong>Left (orange):</strong> Free rotation - the cube rotates on multiple axes simultaneously, creating complex motion. This gives you creative freedom but less predictability.</p>
+                <p><strong>Left (orange):</strong> Free rotation - the cube rotates on multiple axes simultaneously,
+                    creating complex motion. This gives you creative freedom but less predictability.</p>
 
-                <p><strong>Middle (green):</strong> Y-axis constrained rotation - the cube only spins around its vertical axis, like a spinning top. Perfect for when you need controlled, predictable movement.</p>
+                <p><strong>Middle (green):</strong> Y-axis constrained rotation - the cube only spins around its
+                    vertical axis, like a spinning top. Perfect for when you need controlled, predictable movement.</p>
 
-                <p><strong>Right (blue):</strong> Z-axis constrained movement - the cube only moves up and down. Notice how constraining to a single axis makes the transformation precise and intentional.</p>
+                <p><strong>Right (blue):</strong> Z-axis constrained movement - the cube only moves up and down. Notice
+                    how constraining to a single axis makes the transformation precise and intentional.</p>
 
-                <p>Using axis constraints (X, Y, or Z after pressing G, R, or S) is essential for precision modeling. It prevents accidental movements and makes your workflow faster and more predictable.</p>
+                <p>Using axis constraints (X, Y, or Z after pressing G, R, or S) is essential for precision modeling. It
+                    prevents accidental movements and makes your workflow faster and more predictable.</p>
 
                 <h3>Practical Application</h3>
-                <p>These operations become muscle memory quickly. You'll find yourself thinking "G-Z to move it up" or "S-Shift-Z to scale only in the X-Y plane" without conscious effort. They're applicable not just to objects, but also to individual vertices, edges, and faces in Edit Mode.</p>
+                <p>These operations become muscle memory quickly. You'll find yourself thinking "G-Z to move it up" or
+                    "S-Shift-Z to scale only in the X-Y plane" without conscious effort. They're applicable not just to
+                    objects, but also to individual vertices, edges, and faces in Edit Mode.</p>
 
-                <p>Combined with axis constraints and numerical input (you can type exact values after pressing the hotkey), transformations give you both intuitive manipulation and precise control over your 3D scene.</p>
+                <p>Combined with axis constraints and numerical input (you can type exact values after pressing the
+                    hotkey), transformations give you both intuitive manipulation and precise control over your 3D
+                    scene.</p>
             </div>
 
             <nav class="navigation-footer">
@@ -85,7 +104,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -121,7 +140,8 @@
             const ambientLight = new THREE.AmbientLight(0x404040);
             scene.add(ambientLight);
 
-            camera.position.z = 8;
+            camera.position.set(0, 2, 6);
+            camera.lookAt(0, 0, 0);
 
             let time = 0;
             function animate() {
@@ -157,7 +177,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -193,7 +213,8 @@
             const ambientLight = new THREE.AmbientLight(0x404040);
             scene.add(ambientLight);
 
-            camera.position.z = 6;
+            camera.position.set(0, 2, 6);
+            camera.lookAt(0, 0, 0);
 
             let time = 0;
             function animate() {
@@ -227,4 +248,5 @@
         initScene2();
     </script>
 </body>
+
 </html>

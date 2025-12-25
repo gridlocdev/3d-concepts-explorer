@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <link rel="stylesheet" href="styles/main.css">
 </head>
+
 <body>
     <div class="app-container">
         <aside class="sidebar">
@@ -18,52 +20,75 @@
                 <h1>Meshes</h1>
 
                 <h2>Overview</h2>
-                <p>A mesh is the skeleton of your 3D object - made of dots (vertices), lines (edges), and flat surfaces (faces) that create the shape.</p>
+                <p>A mesh is the skeleton of your 3D object - made of dots (vertices), lines (edges), and flat surfaces
+                    (faces) that create the shape.</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
                 <h2>Understanding Meshes</h2>
-                <p>Everything you create in Blender starts as a mesh - it's the fundamental building block of 3D modeling. Think of a mesh as the skeletal framework of your object, similar to how a building has a frame of steel beams before the walls are added.</p>
+                <p>Everything you create in Blender starts as a mesh - it's the fundamental building block of 3D
+                    modeling. Think of a mesh as the skeletal framework of your object, similar to how a building has a
+                    frame of steel beams before the walls are added.</p>
 
                 <p>A mesh is composed of three basic elements:</p>
 
-                <p><strong>Vertices (dots):</strong> These are the corner points where edges meet. They're the fundamental building blocks - you can think of them as the joints in a skeleton.</p>
+                <p><strong>Vertices (dots):</strong> These are the corner points where edges meet. They're the
+                    fundamental building blocks - you can think of them as the joints in a skeleton.</p>
 
-                <p><strong>Edges (lines):</strong> These connect vertices together, forming the outline of your shape. They're like the bones connecting the joints.</p>
+                <p><strong>Edges (lines):</strong> These connect vertices together, forming the outline of your shape.
+                    They're like the bones connecting the joints.</p>
 
-                <p><strong>Faces (surfaces):</strong> These are flat surfaces bounded by edges. When you fill in the space between edges, you create a face - this is what becomes visible when you render your object.</p>
+                <p><strong>Faces (surfaces):</strong> These are flat surfaces bounded by edges. When you fill in the
+                    space between edges, you create a face - this is what becomes visible when you render your object.
+                </p>
 
                 <div class="tip-box">
                     <strong>Pro Tip:</strong>
-                    The complexity of your mesh directly impacts performance. A simple cube has just 8 vertices, but a detailed character model might have thousands. More detail means more realism, but also requires more computing power to manipulate and render.
+                    The complexity of your mesh directly impacts performance. A simple cube has just 8 vertices, but a
+                    detailed character model might have thousands. More detail means more realism, but also requires
+                    more computing power to manipulate and render.
                 </div>
 
                 <h3>What You're Seeing</h3>
                 <p>In the visualization above, you can see the same object displayed three different ways:</p>
 
-                <p><strong>Solid mesh (blue):</strong> This is what your finished object looks like with faces visible.</p>
+                <p><strong>Solid mesh (blue):</strong> This is what your finished object looks like with faces visible.
+                </p>
 
-                <p><strong>Wireframe (green):</strong> This shows only the edges, revealing the underlying structure of your mesh.</p>
+                <p><strong>Wireframe (green):</strong> This shows only the edges, revealing the underlying structure of
+                    your mesh.</p>
 
-                <p><strong>Vertices (red dots):</strong> These highlight just the vertices, showing you the control points of your mesh.</p>
+                <p><strong>Vertices (red dots):</strong> These highlight just the vertices, showing you the control
+                    points of your mesh.</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas-2"></canvas>
                 </div>
 
                 <h3>Mesh Complexity: Low-Poly vs High-Poly</h3>
-                <p>In the visualization above, you can see how mesh complexity dramatically affects the final appearance:</p>
+                <p>In the visualization above, you can see how mesh complexity dramatically affects the final
+                    appearance:</p>
 
-                <p><strong>Left (orange) - Low-Poly Sphere:</strong> Built with just 8 segments horizontally and vertically (320 triangles). You can clearly see the faceted structure. Perfect for game assets, stylized art, or when you need performance. Models render faster and are easier to edit, but curved surfaces appear angular.</p>
+                <p><strong>Left (orange) - Low-Poly Sphere:</strong> Built with just 8 segments horizontally and
+                    vertically (320 triangles). You can clearly see the faceted structure. Perfect for game assets,
+                    stylized art, or when you need performance. Models render faster and are easier to edit, but curved
+                    surfaces appear angular.</p>
 
-                <p><strong>Right (green) - High-Poly Sphere:</strong> Built with 32 segments (2,048 triangles). Creates a perfectly smooth sphere that's indistinguishable from a true mathematical sphere. Required for close-up renders and detailed sculpting, but requires more memory and processing power.</p>
+                <p><strong>Right (green) - High-Poly Sphere:</strong> Built with 32 segments (2,048 triangles). Creates
+                    a perfectly smooth sphere that's indistinguishable from a true mathematical sphere. Required for
+                    close-up renders and detailed sculpting, but requires more memory and processing power.</p>
 
-                <p>The key insight: more geometry isn't always better. Use only as much detail as you need for your specific purpose. A character's face needs high detail, but the back of their shoe doesn't. This is why game developers carefully budget polygons - placing detail where it matters most while keeping total counts manageable for real-time performance.</p>
+                <p>The key insight: more geometry isn't always better. Use only as much detail as you need for your
+                    specific purpose. A character's face needs high detail, but the back of their shoe doesn't. This is
+                    why game developers carefully budget polygons - placing detail where it matters most while keeping
+                    total counts manageable for real-time performance.</p>
 
                 <h3>The Mesh as Foundation</h3>
-                <p>Understanding that the mesh is just the shape - separate from its appearance - is crucial. You'll add materials, textures, and shaders on top of the mesh to give it color and surface properties like wood grain, metallic shine, or fabric texture.</p>
+                <p>Understanding that the mesh is just the shape - separate from its appearance - is crucial. You'll add
+                    materials, textures, and shaders on top of the mesh to give it color and surface properties like
+                    wood grain, metallic shine, or fabric texture.</p>
 
                 <p>The mesh defines the geometry and form. Everything else builds upon this foundation.</p>
             </div>
@@ -85,7 +110,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -135,7 +160,8 @@
             const ambientLight = new THREE.AmbientLight(0x404040);
             scene.add(ambientLight);
 
-            camera.position.z = 8;
+            camera.position.set(0, 2, 6);
+            camera.lookAt(0, 0, 0);
 
             // Animation
             function animate() {
@@ -169,7 +195,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -211,7 +237,8 @@
             const ambientLight = new THREE.AmbientLight(0x404040);
             scene.add(ambientLight);
 
-            camera.position.z = 7;
+            camera.position.set(0, 2, 6);
+            camera.lookAt(0, 0, 0);
 
             function animate() {
                 requestAnimationFrame(animate);
@@ -237,4 +264,5 @@
         initScene2();
     </script>
 </body>
+
 </html>

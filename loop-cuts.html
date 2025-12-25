@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <link rel="stylesheet" href="styles/main.css">
 </head>
+
 <body>
     <div class="app-container">
         <aside class="sidebar">
@@ -18,34 +20,46 @@
                 <h1>Loop Cuts</h1>
 
                 <h2>Overview</h2>
-                <p>Loop cuts add new edge loops around your model (like adding rings around a cylinder) - press <code>Ctrl+R</code> (Windows/Linux) or <code>Cmd+R</code> (macOS) to add more detail exactly where you need it!</p>
+                <p>Loop cuts add new edge loops around your model (like adding rings around a cylinder) - press
+                    <code>Ctrl+R</code> (Windows/Linux) or <code>Cmd+R</code> (macOS) to add more detail exactly where
+                    you need it!</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
                 <h2>Understanding Loop Cuts</h2>
-                <p>Loop cuts are your precision tool for adding topology exactly where you need it. Rather than subdividing your entire mesh and adding complexity everywhere, loop cuts let you surgically insert new edge loops in specific locations.</p>
+                <p>Loop cuts are your precision tool for adding topology exactly where you need it. Rather than
+                    subdividing your entire mesh and adding complexity everywhere, loop cuts let you surgically insert
+                    new edge loops in specific locations.</p>
 
-                <p><strong>What is a loop cut?</strong> An edge loop is a connected sequence of edges that forms a complete loop around your mesh. A loop cut creates a new edge loop that circles around your geometry.</p>
+                <p><strong>What is a loop cut?</strong> An edge loop is a connected sequence of edges that forms a
+                    complete loop around your mesh. A loop cut creates a new edge loop that circles around your
+                    geometry.</p>
 
                 <p>To create loop cuts:</p>
                 <p>1. Enter Edit Mode (<code>Tab</code>)<br>
-                2. Press <code>Ctrl+R</code> (Windows/Linux) or <code>Cmd+R</code> (macOS)<br>
-                3. Hover over an edge - you'll see a pink preview line loop around your model<br>
-                4. Scroll your mouse wheel to add multiple loops at once<br>
-                5. Click to place the loop(s), then move your mouse to slide them into position<br>
-                6. Click again to confirm (or press <code>Enter</code>)</p>
+                    2. Press <code>Ctrl+R</code> (Windows/Linux) or <code>Cmd+R</code> (macOS)<br>
+                    3. Hover over an edge - you'll see a pink preview line loop around your model<br>
+                    4. Scroll your mouse wheel to add multiple loops at once<br>
+                    5. Click to place the loop(s), then move your mouse to slide them into position<br>
+                    6. Click again to confirm (or press <code>Enter</code>)</p>
 
                 <div class="tip-box">
                     <strong>Strategic Topology:</strong>
-                    Loop cuts are essential for controlling where your mesh can deform. When animating characters, you need extra loops at joints (elbows, knees) to allow proper bending. For hard surface modeling, loop cuts help you define where edges should be sharp versus smooth.
+                    Loop cuts are essential for controlling where your mesh can deform. When animating characters, you
+                    need extra loops at joints (elbows, knees) to allow proper bending. For hard surface modeling, loop
+                    cuts help you define where edges should be sharp versus smooth.
                 </div>
 
                 <h3>What You're Seeing</h3>
-                <p>In the visualization above, you can see a cylinder with multiple horizontal edge loops shown in green wireframe. Each of these rings represents a loop cut. Notice how they provide evenly-spaced control over the cylinder's form without adding unnecessary complexity to other areas.</p>
+                <p>In the visualization above, you can see a cylinder with multiple horizontal edge loops shown in green
+                    wireframe. Each of these rings represents a loop cut. Notice how they provide evenly-spaced control
+                    over the cylinder's form without adding unnecessary complexity to other areas.</p>
 
-                <p>Think of loop cuts like the growth rings in a tree or the latitude lines on a globe - they add detail in a structured, predictable way. This is much cleaner than randomly adding edges, which can create messy topology.</p>
+                <p>Think of loop cuts like the growth rings in a tree or the latitude lines on a globe - they add detail
+                    in a structured, predictable way. This is much cleaner than randomly adding edges, which can create
+                    messy topology.</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas-2"></canvas>
@@ -54,18 +68,27 @@
                 <h3>Good vs Poor Topology</h3>
                 <p>In the visualization above, you can see the dramatic difference topology makes:</p>
 
-                <p><strong>Left (green) - Good Topology:</strong> Uses evenly-spaced loop cuts that flow naturally around the form. When bent or deformed, this mesh will maintain smooth, predictable curves. The edges follow the natural contours.</p>
+                <p><strong>Left (green) - Good Topology:</strong> Uses evenly-spaced loop cuts that flow naturally
+                    around the form. When bent or deformed, this mesh will maintain smooth, predictable curves. The
+                    edges follow the natural contours.</p>
 
-                <p><strong>Middle (orange) - Random Edges:</strong> Has edges added haphazardly without following loops. This creates triangles and n-gons (faces with more than 4 sides), which deform unpredictably and can cause rendering artifacts.</p>
+                <p><strong>Middle (orange) - Random Edges:</strong> Has edges added haphazardly without following loops.
+                    This creates triangles and n-gons (faces with more than 4 sides), which deform unpredictably and can
+                    cause rendering artifacts.</p>
 
-                <p><strong>Right (blue) - Strategic Loops:</strong> Shows how loop cuts placed at key areas (like joints on a character) provide control exactly where you need it for animation and deformation.</p>
+                <p><strong>Right (blue) - Strategic Loops:</strong> Shows how loop cuts placed at key areas (like joints
+                    on a character) provide control exactly where you need it for animation and deformation.</p>
 
-                <p>Clean topology with proper loop cuts is the difference between amateur and professional 3D work. It makes models easier to edit, animate properly, and subdivide cleanly.</p>
+                <p>Clean topology with proper loop cuts is the difference between amateur and professional 3D work. It
+                    makes models easier to edit, animate properly, and subdivide cleanly.</p>
 
                 <h3>Why Loop Cuts Matter</h3>
-                <p>Loop cuts maintain good topology (the flow of edges) while adding detail. Good topology is crucial for both modeling (it affects how tools like subdivision work) and animation (it determines how your model deforms).</p>
+                <p>Loop cuts maintain good topology (the flow of edges) while adding detail. Good topology is crucial
+                    for both modeling (it affects how tools like subdivision work) and animation (it determines how your
+                    model deforms).</p>
 
-                <p>You'll use loop cuts constantly when modeling organic forms, preparing models for animation, or anywhere you need localized detail without affecting the rest of your mesh.</p>
+                <p>You'll use loop cuts constantly when modeling organic forms, preparing models for animation, or
+                    anywhere you need localized detail without affecting the rest of your mesh.</p>
             </div>
 
             <nav class="navigation-footer">
@@ -85,7 +108,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -124,7 +147,7 @@
             const ambientLight = new THREE.AmbientLight(0x505050);
             scene.add(ambientLight);
 
-            camera.position.set(3, 2, 4);
+            camera.position.set(0, 2, 6);
             camera.lookAt(0, 0, 0);
 
             function animate() {
@@ -149,7 +172,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -213,7 +236,7 @@
             const ambientLight = new THREE.AmbientLight(0x505050);
             scene.add(ambientLight);
 
-            camera.position.set(0, 1.5, 4.5);
+            camera.position.set(0, 2, 6);
             camera.lookAt(0, 0, 0);
 
             function animate() {
@@ -240,4 +263,5 @@
         initScene2();
     </script>
 </body>
+
 </html>

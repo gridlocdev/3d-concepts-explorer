@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <link rel="stylesheet" href="styles/main.css">
 </head>
+
 <body>
     <div class="app-container">
         <aside class="sidebar">
@@ -18,34 +20,51 @@
                 <h1>Camera</h1>
 
                 <h2>Overview</h2>
-                <p>The camera is your 'eyeball' in the 3D world - it determines what gets shown in your final render. Position it thoughtfully to frame your scene like a photographer!</p>
+                <p>The camera is your 'eyeball' in the 3D world - it determines what gets shown in your final render.
+                    Position it thoughtfully to frame your scene like a photographer!</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
                 <h2>Understanding the Camera</h2>
-                <p>In Blender, you navigate freely around your 3D scene, viewing it from any angle. But when it comes time to render an image or animation, only one viewpoint matters: the camera's.</p>
+                <p>In Blender, you navigate freely around your 3D scene, viewing it from any angle. But when it comes
+                    time to render an image or animation, only one viewpoint matters: the camera's.</p>
 
-                <p>Think of it like filmmaking - you can walk around the movie set looking at everything, but the audience only sees what the camera captures. Understanding this distinction is crucial for creating compelling final images.</p>
+                <p>Think of it like filmmaking - you can walk around the movie set looking at everything, but the
+                    audience only sees what the camera captures. Understanding this distinction is crucial for creating
+                    compelling final images.</p>
 
                 <h3>Camera Controls</h3>
-                <p>The camera is just another object in your scene. You can move it with <code>G</code>, rotate it with <code>R</code>, and even animate its position over time. Press <code>Numpad 0</code> to switch to Camera View, showing exactly what will be rendered.</p>
+                <p>The camera is just another object in your scene. You can move it with <code>G</code>, rotate it with
+                    <code>R</code>, and even animate its position over time. Press <code>Numpad 0</code> to switch to
+                    Camera View, showing exactly what will be rendered.</p>
 
                 <h3>Important Camera Properties</h3>
-                <p><strong>Focal Length:</strong> Measured in millimeters, this controls the field of view. Lower values (18mm-35mm) create wide-angle shots with more distortion, showing more of the scene. Higher values (85mm-200mm) create telephoto shots with compression, good for portraits. 50mm approximates human vision.</p>
+                <p><strong>Focal Length:</strong> Measured in millimeters, this controls the field of view. Lower values
+                    (18mm-35mm) create wide-angle shots with more distortion, showing more of the scene. Higher values
+                    (85mm-200mm) create telephoto shots with compression, good for portraits. 50mm approximates human
+                    vision.</p>
 
-                <p><strong>Sensor Size:</strong> Combined with focal length, this determines the exact field of view. Default settings (36mm) match full-frame cameras.</p>
+                <p><strong>Sensor Size:</strong> Combined with focal length, this determines the exact field of view.
+                    Default settings (36mm) match full-frame cameras.</p>
 
-                <p><strong>Depth of Field:</strong> Like real cameras, you can make some areas sharp while others are blurry. Enable it in camera settings, set a focus distance, and adjust the f-stop (lower f-stop = more blur, like f/1.4 for portraits; higher f-stop = more in focus, like f/22 for landscapes).</p>
+                <p><strong>Depth of Field:</strong> Like real cameras, you can make some areas sharp while others are
+                    blurry. Enable it in camera settings, set a focus distance, and adjust the f-stop (lower f-stop =
+                    more blur, like f/1.4 for portraits; higher f-stop = more in focus, like f/22 for landscapes).</p>
 
                 <div class="tip-box">
                     <strong>Composition Principles:</strong>
-                    Apply photography rules: <em>Rule of thirds</em> (place interesting elements off-center), <em>Leading lines</em> (use geometry to guide the viewer's eye), <em>Headroom</em> (proper spacing above subjects). Enable composition guides in Camera View (press <code>N</code> to open properties, look for guides like thirds or golden ratio).
+                    Apply photography rules: <em>Rule of thirds</em> (place interesting elements off-center),
+                    <em>Leading lines</em> (use geometry to guide the viewer's eye), <em>Headroom</em> (proper spacing
+                    above subjects). Enable composition guides in Camera View (press <code>N</code> to open properties,
+                    look for guides like thirds or golden ratio).
                 </div>
 
                 <h3>What You're Seeing</h3>
-                <p>In the visualization above, you can see both a torus (the subject) and a camera object (the orange box with the camera frustum visualization). The camera orbits around the subject, showing how camera position dramatically changes what's captured.</p>
+                <p>In the visualization above, you can see both a torus (the subject) and a camera object (the orange
+                    box with the camera frustum visualization). The camera orbits around the subject, showing how camera
+                    position dramatically changes what's captured.</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas-2"></canvas>
@@ -54,22 +73,31 @@
                 <h3>Focal Length Comparison</h3>
                 <p>In the visualization above, you see the same scene captured with three different focal lengths:</p>
 
-                <p><strong>Left (18mm - Wide Angle):</strong> A very wide field of view that shows more of the scene. Notice the slight perspective distortion - objects at the edges appear stretched. Great for architecture, landscapes, and cramped spaces.</p>
+                <p><strong>Left (18mm - Wide Angle):</strong> A very wide field of view that shows more of the scene.
+                    Notice the slight perspective distortion - objects at the edges appear stretched. Great for
+                    architecture, landscapes, and cramped spaces.</p>
 
-                <p><strong>Middle (50mm - Normal):</strong> Approximates human vision. Natural perspective with minimal distortion. This is the "standard" lens for general-purpose photography.</p>
+                <p><strong>Middle (50mm - Normal):</strong> Approximates human vision. Natural perspective with minimal
+                    distortion. This is the "standard" lens for general-purpose photography.</p>
 
-                <p><strong>Right (135mm - Telephoto):</strong> A narrow field of view that shows less of the scene but with compressed perspective. The background appears closer to the subject. Perfect for portraits and product shots.</p>
+                <p><strong>Right (135mm - Telephoto):</strong> A narrow field of view that shows less of the scene but
+                    with compressed perspective. The background appears closer to the subject. Perfect for portraits and
+                    product shots.</p>
 
-                <p>Notice how the object appears similar in size across all three views (the camera position adjusts to compensate), but the background and perspective compression differ dramatically.</p>
+                <p>Notice how the object appears similar in size across all three views (the camera position adjusts to
+                    compensate), but the background and perspective compression differ dramatically.</p>
 
                 <h3>Camera Movement in Animation</h3>
                 <p><strong>Static camera:</strong> Professional and stable, lets the audience focus on the subject.</p>
 
                 <p><strong>Orbiting camera:</strong> Dynamic, reveals the three-dimensionality of objects.</p>
 
-                <p><strong>Following camera:</strong> Tracks moving subjects, common in product visualization and character animation.</p>
+                <p><strong>Following camera:</strong> Tracks moving subjects, common in product visualization and
+                    character animation.</p>
 
-                <p>Your camera choices affect the emotional impact of your work. Low angles make subjects feel powerful or imposing. High angles make them feel small or vulnerable. Dutch angles (tilted) create unease or dynamism.</p>
+                <p>Your camera choices affect the emotional impact of your work. Low angles make subjects feel powerful
+                    or imposing. High angles make them feel small or vulnerable. Dutch angles (tilted) create unease or
+                    dynamism.</p>
             </div>
 
             <nav class="navigation-footer">
@@ -89,7 +117,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -127,7 +155,7 @@
             const ambientLight = new THREE.AmbientLight(0x505050);
             scene.add(ambientLight);
 
-            camera.position.set(4, 3, 5);
+            camera.position.set(0, 2, 6);
             camera.lookAt(0, 0, 0);
 
             let angle = 0;
@@ -161,7 +189,7 @@
             scene.background = new THREE.Color(0x1a1a1a);
 
             const camera = new THREE.PerspectiveCamera(
-                75,
+                50,
                 canvas.clientWidth / canvas.clientHeight,
                 0.1,
                 1000
@@ -252,4 +280,5 @@
         initScene2();
     </script>
 </body>
+
 </html>
