@@ -15,47 +15,45 @@
 
         <main class="main-container">
             <div class="content-area">
+                <h1>Bevel</h1>
+
+                <h2>Overview</h2>
+                <p>Bevel rounds off sharp edges to make things look more realistic - nothing in real life has perfectly sharp edges, so bevel makes your models look less 'CG'!</p>
+
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
-                <aside class="info-panel">
-                    <h1>Bevel</h1>
+                <h2>Understanding Beveling</h2>
+                <p>Here's a crucial insight that separates amateur 3D work from professional: <em>nothing in the real world has perfectly sharp edges</em>. Even objects that appear sharp - a knife blade, a fresh sheet of metal, the corner of a building - have microscopic roundness when viewed up close.</p>
 
-                    <div class="tldr-box">
-                        <h2>TL;DR</h2>
-                        <p>Bevel rounds off sharp edges to make things look more realistic - nothing in real life has perfectly sharp edges, so bevel makes your models look less 'CG'!</p>
-                    </div>
+                <p><strong>Why this matters:</strong> Sharp edges don't catch light the way real objects do. When light hits a perfectly sharp edge in 3D, it creates an unnaturally harsh highlight. Beveling those edges - even slightly - allows light to play across the surface more naturally, immediately making your model look more realistic.</p>
 
-                    <div class="explanation">
-                        <h2>Understanding Beveling</h2>
-                        <p>Here's a crucial insight that separates amateur 3D work from professional: <em>nothing in the real world has perfectly sharp edges</em>. Even objects that appear sharp - a knife blade, a fresh sheet of metal, the corner of a building - have microscopic roundness when viewed up close.</p>
+                <p>To bevel in Blender:</p>
+                <p>1. Select edges (or vertices) in Edit Mode<br>
+                2. Press <code>Ctrl+B</code> to activate bevel<br>
+                3. Move your mouse to control the width of the bevel<br>
+                4. Scroll your mouse wheel to add more segments (smoother rounding)<br>
+                5. Click to confirm</p>
 
-                        <p><strong>Why this matters:</strong> Sharp edges don't catch light the way real objects do. When light hits a perfectly sharp edge in 3D, it creates an unnaturally harsh highlight. Beveling those edges - even slightly - allows light to play across the surface more naturally, immediately making your model look more realistic.</p>
+                <div class="tip-box">
+                    <strong>Hard Surface Modeling:</strong>
+                    Beveling is absolutely essential for hard surface work - mechanical objects, vehicles, architecture, product design. A good rule of thumb: if it would hurt to get hit by it in real life, it probably needs a bevel in your 3D model. Even subtle bevels (0.5-2mm on real-world scale objects) make a huge difference.
+                </div>
 
-                        <p>To bevel in Blender:</p>
-                        <p>1. Select edges (or vertices) in Edit Mode<br>
-                        2. Press <code>Ctrl+B</code> to activate bevel<br>
-                        3. Move your mouse to control the width of the bevel<br>
-                        4. Scroll your mouse wheel to add more segments (smoother rounding)<br>
-                        5. Click to confirm</p>
+                <h3>What You're Seeing</h3>
+                <p>In the visualization above, compare the two cubes:</p>
 
-                        <div class="tip-box">
-                            <strong>Hard Surface Modeling:</strong>
-                            Beveling is absolutely essential for hard surface work - mechanical objects, vehicles, architecture, product design. A good rule of thumb: if it would hurt to get hit by it in real life, it probably needs a bevel in your 3D model. Even subtle bevels (0.5-2mm on real-world scale objects) make a huge difference.
-                        </div>
+                <p><strong>Orange cube (left):</strong> Has perfectly sharp edges. Notice how the highlights are harsh and thin, and the object has that telltale "CG" look.</p>
 
-                        <p>In the visualization, compare the two cubes:</p>
+                <p><strong>Green cube (right):</strong> Has beveled edges. The rounded corners catch light across a wider area, creating more natural highlights and giving the object visual weight and realism.</p>
 
-                        <p><strong>Orange cube (left):</strong> Has perfectly sharp edges. Notice how the highlights are harsh and thin, and the object has that telltale "CG" look.</p>
+                <p>The difference becomes even more pronounced under different lighting conditions. Beveled edges create subtle gradations in shading that make objects feel solid and tangible.</p>
 
-                        <p><strong>Green cube (right):</strong> Has beveled edges. The rounded corners catch light across a wider area, creating more natural highlights and giving the object visual weight and realism.</p>
+                <!-- TODO: Add a second example showing different bevel widths and segment counts to demonstrate control options -->
 
-                        <p>The difference becomes even more pronounced under different lighting conditions. Beveled edges create subtle gradations in shading that make objects feel solid and tangible.</p>
-
-                        <p><strong>How much to bevel?</strong> It depends on the material and wear. New, manufactured objects might have very subtle bevels. Worn or soft materials (wood, plastic) might have more pronounced rounding. Metal edges could be anywhere on this spectrum depending on the object's history.</p>
-                    </div>
-                </aside>
+                <h3>How Much to Bevel</h3>
+                <p>It depends on the material and wear. New, manufactured objects might have very subtle bevels. Worn or soft materials (wood, plastic) might have more pronounced rounding. Metal edges could be anywhere on this spectrum depending on the object's history.</p>
             </div>
 
             <nav class="navigation-footer">

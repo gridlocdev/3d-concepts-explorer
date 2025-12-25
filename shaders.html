@@ -15,60 +15,55 @@
 
         <main class="main-container">
             <div class="content-area">
+                <h1>Shaders</h1>
+
+                <h2>Overview</h2>
+                <p>Shaders are programs that run on your graphics card to determine how every pixel on your 3D models should be colored - they enable effects that regular materials can't achieve!</p>
+
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
-                <aside class="info-panel">
-                    <h1>Shaders</h1>
+                <h2>Understanding Shaders</h2>
+                <p>Shaders represent a deeper level of control over your 3D graphics. While materials in Blender provide sliders for properties like roughness and metallic, shaders are the actual programs running behind the scenes that calculate those properties.</p>
 
-                    <div class="tldr-box">
-                        <h2>TL;DR</h2>
-                        <p>Shaders are programs that run on your graphics card to determine how every pixel on your 3D models should be colored - they enable effects that regular materials can't achieve!</p>
-                    </div>
+                <p><strong>What shaders do:</strong> For every pixel that needs to be rendered, the shader calculates what color it should be based on factors like lighting, viewing angle, material properties, and custom logic you provide.</p>
 
-                    <div class="explanation">
-                        <h2>Understanding Shaders</h2>
-                        <p>Shaders represent a deeper level of control over your 3D graphics. While materials in Blender provide sliders for properties like roughness and metallic, shaders are the actual programs running behind the scenes that calculate those properties.</p>
+                <p>In Blender's Shader Editor, you work with a node-based system. Each node performs a specific calculation (get the surface normal, sample a texture, mix two colors), and you connect them to build complex material behaviors. This is visual shader programming.</p>
 
-                        <p><strong>What shaders do:</strong> For every pixel that needs to be rendered, the shader calculates what color it should be based on factors like lighting, viewing angle, material properties, and custom logic you provide.</p>
+                <h3>Types of Shader Nodes</h3>
+                <p><strong>BSDF nodes:</strong> (Bidirectional Scattering Distribution Function) Define how light scatters off surfaces. The Principled BSDF you use in materials is actually a sophisticated shader that combines multiple simpler shaders.</p>
 
-                        <p>In Blender's Shader Editor, you work with a node-based system. Each node performs a specific calculation (get the surface normal, sample a texture, mix two colors), and you connect them to build complex material behaviors. This is visual shader programming.</p>
+                <p><strong>Texture nodes:</strong> Sample images or generate procedural patterns (noise, gradients, etc.).</p>
 
-                        <p><strong>Types of shader nodes:</strong></p>
+                <p><strong>Math nodes:</strong> Perform calculations, allowing you to create dynamic, responsive materials.</p>
 
-                        <p><strong>BSDF nodes:</strong> (Bidirectional Scattering Distribution Function) Define how light scatters off surfaces. The Principled BSDF you use in materials is actually a sophisticated shader that combines multiple simpler shaders.</p>
+                <p><strong>Input nodes:</strong> Provide information about the surface (position, normal direction, UV coordinates, etc.).</p>
 
-                        <p><strong>Texture nodes:</strong> Sample images or generate procedural patterns (noise, gradients, etc.).</p>
+                <div class="tip-box">
+                    <strong>Custom Shader Effects:</strong>
+                    Want materials that change color based on viewing angle? Use a Fresnel node. Need animated patterns? Connect a noise texture to a time value. Want cartoon-style cel shading? Use ColorRamp nodes to posterize lighting. Shaders unlock these creative possibilities.
+                </div>
 
-                        <p><strong>Math nodes:</strong> Perform calculations, allowing you to create dynamic, responsive materials.</p>
+                <h3>What You're Seeing</h3>
+                <p>In the visualization above, you see a torus knot with a custom animated shader. The colorful, flowing pattern is created by shader code that calculates colors based on the surface position and time. This effect would be impossible with static materials alone.</p>
 
-                        <p><strong>Input nodes:</strong> Provide information about the surface (position, normal direction, UV coordinates, etc.).</p>
+                <p>The pattern uses:</p>
+                <p>• Position data (where on the surface each pixel is)<br>
+                • Time data (to create animation)<br>
+                • Sine functions (to create wave patterns)<br>
+                • Color mixing (blending between two colors)</p>
 
-                        <div class="tip-box">
-                            <strong>Custom Shader Effects:</strong>
-                            Want materials that change color based on viewing angle? Use a Fresnel node. Need animated patterns? Connect a noise texture to a time value. Want cartoon-style cel shading? Use ColorRamp nodes to posterize lighting. Shaders unlock these creative possibilities.
-                        </div>
+                <!-- TODO: Add a second example showing a practical shader use case like Fresnel-based rim lighting or procedural scratches -->
 
-                        <p>In the visualization, you see a torus knot with a custom animated shader. The colorful, flowing pattern is created by shader code that calculates colors based on the surface position and time. This effect would be impossible with static materials alone.</p>
+                <h3>When to Use Shaders</h3>
+                <p><strong>Special effects:</strong> Holographic materials, force fields, magical effects, stylized rendering.</p>
 
-                        <p>The pattern uses:</p>
-                        <p>• Position data (where on the surface each pixel is)<br>
-                        • Time data (to create animation)<br>
-                        • Sine functions (to create wave patterns)<br>
-                        • Color mixing (blending between two colors)</p>
+                <p><strong>Procedural variation:</strong> Materials that vary based on position, orientation, or random values without requiring texture maps.</p>
 
-                        <p><strong>When to use shaders:</strong></p>
+                <p><strong>Performance optimization:</strong> Procedural shaders can be more efficient than large texture files.</p>
 
-                        <p><em>Special effects:</em> Holographic materials, force fields, magical effects, stylized rendering.</p>
-
-                        <p><em>Procedural variation:</em> Materials that vary based on position, orientation, or random values without requiring texture maps.</p>
-
-                        <p><em>Performance optimization:</em> Procedural shaders can be more efficient than large texture files.</p>
-
-                        <p>While beginners typically work with pre-made materials, understanding that shaders exist helps you recognize what's possible. As you advance, shader knowledge becomes essential for creating unique, compelling visuals.</p>
-                    </div>
-                </aside>
+                <p>While beginners typically work with pre-made materials, understanding that shaders exist helps you recognize what's possible. As you advance, shader knowledge becomes essential for creating unique, compelling visuals.</p>
             </div>
 
             <nav class="navigation-footer">

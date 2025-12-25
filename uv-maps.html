@@ -15,54 +15,50 @@
 
         <main class="main-container">
             <div class="content-area">
+                <h1>UV Maps</h1>
+
+                <h2>Overview</h2>
+                <p>Think of gift-wrapping a box - UV maps unfold your 3D surface into a flat pattern so you can paint textures on it, then wrap them back onto your model.</p>
+
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
-                <aside class="info-panel">
-                    <h1>UV Maps</h1>
+                <h2>Understanding UV Mapping</h2>
+                <p>UV mapping solves a fundamental problem: how do you apply a 2D image (like a photograph or painted texture) onto a 3D surface? The answer is to create a correspondence between your 3D mesh and a 2D texture space.</p>
 
-                    <div class="tldr-box">
-                        <h2>TL;DR</h2>
-                        <p>Think of gift-wrapping a box - UV maps unfold your 3D surface into a flat pattern so you can paint textures on it, then wrap them back onto your model.</p>
-                    </div>
+                <p><strong>Why "UV"?</strong> In 3D space, we use X, Y, and Z coordinates. For 2D texture space, we use U and V to avoid confusion. U corresponds roughly to horizontal (like X), and V to vertical (like Y), but they exist in the flat texture image.</p>
 
-                    <div class="explanation">
-                        <h2>Understanding UV Mapping</h2>
-                        <p>UV mapping solves a fundamental problem: how do you apply a 2D image (like a photograph or painted texture) onto a 3D surface? The answer is to create a correspondence between your 3D mesh and a 2D texture space.</p>
+                <p>The process works like this:</p>
 
-                        <p><strong>Why "UV"?</strong> In 3D space, we use X, Y, and Z coordinates. For 2D texture space, we use U and V to avoid confusion. U corresponds roughly to horizontal (like X), and V to vertical (like Y), but they exist in the flat texture image.</p>
+                <p>1. <strong>Unwrap:</strong> Your 3D model is "unfolded" into a flat pattern, like cutting open a cardboard box and laying it flat. This creates the UV map.</p>
 
-                        <p>The process works like this:</p>
+                <p>2. <strong>Texture:</strong> You paint or apply an image to this flat UV layout. Each pixel in the texture corresponds to a specific location on your 3D model.</p>
 
-                        <p>1. <strong>Unwrap:</strong> Your 3D model is "unfolded" into a flat pattern, like cutting open a cardboard box and laying it flat. This creates the UV map.</p>
+                <p>3. <strong>Apply:</strong> Blender wraps the texture back onto the 3D surface using the UV coordinates as a guide.</p>
 
-                        <p>2. <strong>Texture:</strong> You paint or apply an image to this flat UV layout. Each pixel in the texture corresponds to a specific location on your 3D model.</p>
+                <div class="tip-box">
+                    <strong>UV Unwrapping Strategies:</strong>
+                    Simple objects (cubes, cylinders) can use basic projection unwrapping. Organic objects often need seam-based unwrapping - you mark edges as "seams" where the model can be "cut" and unfolded. Good seam placement (hidden areas, natural breaks) is an art form that affects texture quality.
+                </div>
 
-                        <p>3. <strong>Apply:</strong> Blender wraps the texture back onto the 3D surface using the UV coordinates as a guide.</p>
+                <h3>What You're Seeing</h3>
+                <p>In the visualization above, you see a sphere with a grid texture applied. The grid demonstrates how the 2D texture wraps around the 3D surface. Notice:</p>
 
-                        <div class="tip-box">
-                            <strong>UV Unwrapping Strategies:</strong>
-                            Simple objects (cubes, cylinders) can use basic projection unwrapping. Organic objects often need seam-based unwrapping - you mark edges as "seams" where the model can be "cut" and unfolded. Good seam placement (hidden areas, natural breaks) is an art form that affects texture quality.
-                        </div>
+                <p><strong>The U and V labels:</strong> These show the coordinate system of the flat texture space - U runs horizontally, V runs vertically.</p>
 
-                        <p>In the visualization, you see a sphere with a grid texture applied. The grid demonstrates how the 2D texture wraps around the 3D surface. Notice:</p>
+                <p><strong>Grid distortion:</strong> The grid squares aren't perfectly uniform on the sphere - they stretch and compress based on how the UV map was created. Minimizing this distortion is a key goal of good UV unwrapping.</p>
 
-                        <p><strong>The U and V labels:</strong> These show the coordinate system of the flat texture space.</p>
+                <!-- TODO: Add a second example showing a cube with proper UV unwrapping vs poor UV unwrapping to demonstrate seam placement -->
 
-                        <p><strong>Grid distortion:</strong> The grid squares aren't perfectly uniform on the sphere - they stretch and compress based on how the UV map was created. Minimizing this distortion is a key goal of good UV unwrapping.</p>
+                <h3>Why UV Maps Matter</h3>
+                <p><strong>Detailed texturing:</strong> Adding specific details like logos, wood grain, or skin pores exactly where you want them.</p>
 
-                        <p>UV maps are essential for:</p>
+                <p><strong>Texture painting:</strong> Painting directly in 2D texture space gives you precise control that's difficult to achieve with procedural textures.</p>
 
-                        <p><em>Detailed texturing:</em> Adding specific details like logos, wood grain, or skin pores exactly where you want them.</p>
+                <p><strong>Game assets:</strong> Most real-time rendering engines rely heavily on UV-mapped textures for performance reasons.</p>
 
-                        <p><em>Texture painting:</em> Painting directly in 2D texture space gives you precise control that's difficult to achieve with procedural textures.</p>
-
-                        <p><em>Game assets:</em> Most real-time rendering engines rely heavily on UV-mapped textures for performance reasons.</p>
-
-                        <p>While procedural textures (generated mathematically) are powerful, UV mapping remains essential for precise, artistic control over your model's appearance.</p>
-                    </div>
-                </aside>
+                <p>While procedural textures (generated mathematically) are powerful, UV mapping remains essential for precise, artistic control over your model's appearance.</p>
             </div>
 
             <nav class="navigation-footer">

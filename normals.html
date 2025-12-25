@@ -15,40 +15,38 @@
 
         <main class="main-container">
             <div class="content-area">
+                <h1>Normals</h1>
+
+                <h2>Overview</h2>
+                <p>Normals are invisible arrows pointing out from each face that tell Blender which side is the 'outside' - get them backwards and your model looks inside-out!</p>
+
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
-                <aside class="info-panel">
-                    <h1>Normals</h1>
+                <h2>Understanding Normals</h2>
+                <p>Normals are one of those concepts that seem invisible until something goes wrong - and then they become very obvious! Every face on your mesh has an invisible directional vector (think of it as an arrow) pointing perpendicular to its surface.</p>
 
-                    <div class="tldr-box">
-                        <h2>TL;DR</h2>
-                        <p>Normals are invisible arrows pointing out from each face that tell Blender which side is the 'outside' - get them backwards and your model looks inside-out!</p>
-                    </div>
+                <p><strong>What normals do:</strong> They tell the rendering engine which side of a face is the "outside" and should be visible. This is crucial for how light interacts with your surface and which side actually gets rendered.</p>
 
-                    <div class="explanation">
-                        <h2>Understanding Normals</h2>
-                        <p>Normals are one of those concepts that seem invisible until something goes wrong - and then they become very obvious! Every face on your mesh has an invisible directional vector (think of it as an arrow) pointing perpendicular to its surface.</p>
+                <p>Think of a face like a piece of paper - it has two sides, but in 3D graphics, we typically only want to see one of them. The normal determines which side is considered the "front."</p>
 
-                        <p><strong>What normals do:</strong> They tell the rendering engine which side of a face is the "outside" and should be visible. This is crucial for how light interacts with your surface and which side actually gets rendered.</p>
+                <div class="tip-box">
+                    <strong>Common Problem:</strong>
+                    If your model appears dark, has black patches, or seems to have holes when it shouldn't, you likely have inverted normals. In Blender, select the problematic faces and use <code>Alt+N</code> → Flip to correct them.
+                </div>
 
-                        <p>Think of a face like a piece of paper - it has two sides, but in 3D graphics, we typically only want to see one of them. The normal determines which side is considered the "front."</p>
+                <h3>What You're Seeing</h3>
+                <p>In the visualization above, you'll see two cubes:</p>
 
-                        <div class="tip-box">
-                            <strong>Common Problem:</strong>
-                            If your model appears dark, has black patches, or seems to have holes when it shouldn't, you likely have inverted normals. In Blender, select the problematic faces and use <code>Alt+N</code> → Flip to correct them.
-                        </div>
+                <p><strong>Left cube (green):</strong> Has correct normals pointing outward. Light bounces off it naturally, and all faces render as expected.</p>
 
-                        <p>In the visualization, you'll see two cubes:</p>
+                <p><strong>Right cube (orange):</strong> Has flipped normals pointing inward. Notice how it appears darker or may look like you're seeing the inside of the cube - because you are! The faces are being rendered from the "back" side.</p>
 
-                        <p><strong>Left cube (green):</strong> Has correct normals pointing outward. Light bounces off it naturally, and all faces render as expected.</p>
+                <!-- TODO: Add a second example showing smooth shading vs flat shading and how normals interpolation affects appearance -->
 
-                        <p><strong>Right cube (orange):</strong> Has flipped normals pointing inward. Notice how it appears darker or may look like you're seeing the inside of the cube - because you are! The faces are being rendered from the "back" side.</p>
-
-                        <p>Normals also affect smooth shading. When you smooth-shade an object, Blender interpolates the normals across faces to create the illusion of a curved surface. Understanding normals becomes essential when you want precise control over how light and shadow play across your model.</p>
-                    </div>
-                </aside>
+                <h3>Normals and Shading</h3>
+                <p>Normals also affect smooth shading. When you smooth-shade an object, Blender interpolates the normals across faces to create the illusion of a curved surface. Understanding normals becomes essential when you want precise control over how light and shadow play across your model.</p>
             </div>
 
             <nav class="navigation-footer">

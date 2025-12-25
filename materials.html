@@ -15,50 +15,47 @@
 
         <main class="main-container">
             <div class="content-area">
+                <h1>Materials</h1>
+
+                <h2>Overview</h2>
+                <p>Materials define what your objects look like - whether they appear as metal, plastic, glass, or any other substance. They control color, shininess, and how light interacts with surfaces.</p>
+
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
-                <aside class="info-panel">
-                    <h1>Materials</h1>
+                <h2>Understanding Materials</h2>
+                <p>If meshes are the shape of your object, materials are its surface appearance. The same sphere geometry can look like a chrome ball bearing, a rubber toy, or a glass marble - entirely depending on its material properties.</p>
 
-                    <div class="tldr-box">
-                        <h2>TL;DR</h2>
-                        <p>Materials define what your objects look like - whether they appear as metal, plastic, glass, or any other substance. They control color, shininess, and how light interacts with surfaces.</p>
-                    </div>
+                <p>Materials in Blender use a physically-based rendering (PBR) system, which means they simulate how light behaves in the real world. This makes creating realistic materials more intuitive, as the parameters correspond to real physical properties.</p>
 
-                    <div class="explanation">
-                        <h2>Understanding Materials</h2>
-                        <p>If meshes are the shape of your object, materials are its surface appearance. The same sphere geometry can look like a chrome ball bearing, a rubber toy, or a glass marble - entirely depending on its material properties.</p>
+                <h3>Key Material Properties</h3>
+                <p><strong>Base Color:</strong> The fundamental color of the surface. This is what most people think of as the "color" of an object.</p>
 
-                        <p>Materials in Blender use a physically-based rendering (PBR) system, which means they simulate how light behaves in the real world. This makes creating realistic materials more intuitive, as the parameters correspond to real physical properties.</p>
+                <p><strong>Metallic:</strong> Determines whether the surface behaves like metal (value of 1.0) or like a non-metal/dielectric (value of 0.0). Metals reflect their surroundings differently than non-metals. This is typically binary - either 0 or 1, rarely in between.</p>
 
-                        <p><strong>Key material properties:</strong></p>
+                <p><strong>Roughness:</strong> Controls how smooth or rough the surface appears. A value of 0 creates a perfect mirror, while 1.0 creates a completely diffuse, matte surface. Most real materials fall somewhere in between.</p>
 
-                        <p><strong>Base Color:</strong> The fundamental color of the surface. This is what most people think of as the "color" of an object.</p>
+                <p><strong>Specular:</strong> Controls the strength of reflections on non-metallic surfaces. Most non-metals have a specular value around 0.5.</p>
 
-                        <p><strong>Metallic:</strong> Determines whether the surface behaves like metal (value of 1.0) or like a non-metal/dielectric (value of 0.0). Metals reflect their surroundings differently than non-metals. This is typically binary - either 0 or 1, rarely in between.</p>
+                <div class="tip-box">
+                    <strong>Material Realism:</strong>
+                    Study real materials and their properties. Plastic is typically non-metallic with medium to high roughness. Polished wood is non-metallic with low roughness. Brushed aluminum is metallic with medium roughness. Understanding these patterns helps you create convincing materials quickly.
+                </div>
 
-                        <p><strong>Roughness:</strong> Controls how smooth or rough the surface appears. A value of 0 creates a perfect mirror, while 1.0 creates a completely diffuse, matte surface. Most real materials fall somewhere in between.</p>
+                <h3>What You're Seeing</h3>
+                <p>In the visualization above, you see three spheres with identical geometry but different materials:</p>
 
-                        <p><strong>Specular:</strong> Controls the strength of reflections on non-metallic surfaces. Most non-metals have a specular value around 0.5.</p>
+                <p><strong>Red sphere (left):</strong> Metallic (0.9) and smooth (low roughness ~0.1). It reflects the environment like polished metal.</p>
 
-                        <div class="tip-box">
-                            <strong>Material Realism:</strong>
-                            Study real materials and their properties. Plastic is typically non-metallic with medium to high roughness. Polished wood is non-metallic with low roughness. Brushed aluminum is metallic with medium roughness. Understanding these patterns helps you create convincing materials quickly.
-                        </div>
+                <p><strong>Green sphere (center):</strong> Non-metallic (0.2) and rough (high roughness ~0.8). It has a matte, diffuse appearance like rubber or unglazed ceramic.</p>
 
-                        <p>In the visualization, you see three spheres with identical geometry but different materials:</p>
+                <p><strong>Blue sphere (right):</strong> Non-metallic (0.0) with medium roughness (0.3) and transparency (opacity 0.6). It simulates a translucent material like frosted glass.</p>
 
-                        <p><strong>Red sphere:</strong> Metallic (0.9) and smooth (low roughness ~0.1). It reflects the environment like polished metal.</p>
+                <!-- TODO: Add a second example showing how the same object looks with drastically different materials (wood vs metal vs plastic) -->
 
-                        <p><strong>Green sphere:</strong> Non-metallic (0.2) and rough (high roughness ~0.8). It has a matte, diffuse appearance like rubber or unglazed ceramic.</p>
-
-                        <p><strong>Blue sphere:</strong> Non-metallic (0.0) with medium roughness (0.3) and transparency (opacity 0.6). It simulates a translucent material like frosted glass.</p>
-
-                        <p>Materials can become incredibly complex with texture mapping, normal maps, and node-based shading, but these fundamental properties form the foundation of all material definitions.</p>
-                    </div>
-                </aside>
+                <h3>Building Complex Materials</h3>
+                <p>Materials can become incredibly complex with texture mapping, normal maps, and node-based shading, but these fundamental properties form the foundation of all material definitions.</p>
             </div>
 
             <nav class="navigation-footer">

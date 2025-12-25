@@ -15,46 +15,42 @@
 
         <main class="main-container">
             <div class="content-area">
+                <h1>Subdivision Surface</h1>
+
+                <h2>Overview</h2>
+                <p>It's like a magic 'smooth' button - takes your blocky 3D object and automatically makes it round and organic by intelligently adding geometry.</p>
+
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
-                <aside class="info-panel">
-                    <h1>Subdivision Surface</h1>
+                <h2>Understanding Subdivision Surface</h2>
+                <p>Subdivision Surface (often called SubDiv or Subsurf) is one of the most powerful modifiers in Blender. It represents a fundamental workflow in modern 3D modeling: work with simple geometry, but render with complex, smooth results.</p>
 
-                    <div class="tldr-box">
-                        <h2>TL;DR</h2>
-                        <p>It's like a magic 'smooth' button - takes your blocky 3D object and automatically makes it round and organic by intelligently adding geometry.</p>
-                    </div>
+                <p><strong>How it works:</strong> The modifier takes your low-polygon mesh (the "cage") and algorithmically subdivides it, creating smooth, rounded surfaces. It uses the Catmull-Clark subdivision algorithm, which smooths the mesh while preserving important features.</p>
 
-                    <div class="explanation">
-                        <h2>Understanding Subdivision Surface</h2>
-                        <p>Subdivision Surface (often called SubDiv or Subsurf) is one of the most powerful modifiers in Blender. It represents a fundamental workflow in modern 3D modeling: work with simple geometry, but render with complex, smooth results.</p>
+                <p>The genius of this approach is that you continue modeling with simple, easy-to-manipulate geometry. Moving one vertex on a cube affects the entire smoothed surface in a predictable, organic way. Meanwhile, the final render can have thousands of faces creating perfectly smooth curves.</p>
 
-                        <p><strong>How it works:</strong> The modifier takes your low-polygon mesh (the "cage") and algorithmically subdivides it, creating smooth, rounded surfaces. It uses the Catmull-Clark subdivision algorithm, which smooths the mesh while preserving important features.</p>
+                <div class="tip-box">
+                    <strong>Controlling the Smoothness:</strong>
+                    You can control how subdivision affects your mesh using edge creasing (<code>Shift+E</code>) or by adding edge loops closer together. Edges that are close together will remain sharper after subdivision, while widely-spaced edges will smooth out more. This gives you both organic curves and hard edges in the same model.
+                </div>
 
-                        <p>The genius of this approach is that you continue modeling with simple, easy-to-manipulate geometry. Moving one vertex on a cube affects the entire smoothed surface in a predictable, organic way. Meanwhile, the final render can have thousands of faces creating perfectly smooth curves.</p>
+                <h3>What You're Seeing</h3>
+                <p>In the visualization above:</p>
 
-                        <div class="tip-box">
-                            <strong>Controlling the Smoothness:</strong>
-                            You can control how subdivision affects your mesh using edge creasing (<code>Shift+E</code>) or by adding edge loops closer together. Edges that are close together will remain sharper after subdivision, while widely-spaced edges will smooth out more. This gives you both organic curves and hard edges in the same model.
-                        </div>
+                <p><strong>Orange cube (left):</strong> This is your low-poly base mesh - simple, blocky, with flat shading showing individual faces clearly.</p>
 
-                        <p>In the visualization:</p>
+                <p><strong>Green sphere (right):</strong> This represents what happens when you apply subdivision - the cube transforms into a smooth, organic sphere. The white wireframe overlay shows the high-resolution geometry that was automatically generated.</p>
 
-                        <p><strong>Orange cube (left):</strong> This is your low-poly base mesh - simple, blocky, with flat shading showing individual faces clearly.</p>
+                <!-- TODO: Add a second example showing edge creasing and edge loops to control subdivision smoothness -->
 
-                        <p><strong>Green sphere (right):</strong> This represents what happens when you apply subdivision - the cube transforms into a smooth, organic sphere. The white wireframe overlay shows the high-resolution geometry that was automatically generated.</p>
+                <h3>Common Uses</h3>
+                <p><strong>Character modeling:</strong> Almost all organic character models use subdivision surface. Model a simple humanoid form with basic geometry, apply SubDiv, and suddenly you have smooth, lifelike curves.</p>
 
-                        <p><strong>Common uses:</strong></p>
+                <p><strong>Product design:</strong> Combine subdivision with strategic edge loops and creasing to create products with both smooth surfaces and crisp details.</p>
 
-                        <p><em>Character modeling:</em> Almost all organic character models use subdivision surface. Model a simple humanoid form with basic geometry, apply SubDiv, and suddenly you have smooth, lifelike curves.</p>
-
-                        <p><em>Product design:</em> Combine subdivision with strategic edge loops and creasing to create products with both smooth surfaces and crisp details.</p>
-
-                        <p>The subdivision level can be set differently for viewport display (low for performance) versus final renders (high for quality). This means you can work smoothly even with complex models, while still achieving photorealistic results in your final output.</p>
-                    </div>
-                </aside>
+                <p>The subdivision level can be set differently for viewport display (low for performance) versus final renders (high for quality). This means you can work smoothly even with complex models, while still achieving photorealistic results in your final output.</p>
             </div>
 
             <nav class="navigation-footer">

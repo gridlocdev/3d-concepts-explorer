@@ -15,46 +15,44 @@
 
         <main class="main-container">
             <div class="content-area">
+                <h1>Transformations</h1>
+
+                <h2>Overview</h2>
+                <p>The three basic moves in 3D: G to grab/move things, R to rotate them, and S to scale (make bigger or smaller). These are the fundamental operations you'll use constantly!</p>
+
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
                 </div>
 
-                <aside class="info-panel">
-                    <h1>Transformations</h1>
+                <h2>Understanding Transformations</h2>
+                <p>Transformations are the bread and butter of 3D modeling. Every time you position an object in your scene or adjust its size, you're using one of these three fundamental operations.</p>
 
-                    <div class="tldr-box">
-                        <h2>TL;DR</h2>
-                        <p>The three basic moves in 3D: G to grab/move things, R to rotate them, and S to scale (make bigger or smaller). These are the fundamental operations you'll use constantly!</p>
-                    </div>
+                <p><strong>Grab (G):</strong> Moves objects in 3D space. This is technically called "translation" in mathematics, but Blender calls it "Grab" to make it more intuitive. Press <code>G</code> and move your mouse to reposition the selected object.</p>
 
-                    <div class="explanation">
-                        <h2>Understanding Transformations</h2>
-                        <p>Transformations are the bread and butter of 3D modeling. Every time you position an object in your scene or adjust its size, you're using one of these three fundamental operations.</p>
+                <p><strong>Rotate (R):</strong> Spins objects around a pivot point. Press <code>R</code> to rotate freely, and the object will follow your mouse movement.</p>
 
-                        <p><strong>Grab (G):</strong> Moves objects in 3D space. This is technically called "translation" in mathematics, but Blender calls it "Grab" to make it more intuitive. Press <code>G</code> and move your mouse to reposition the selected object.</p>
+                <p><strong>Scale (S):</strong> Makes objects larger or smaller. Press <code>S</code> and move your mouse away from the object to make it bigger, or toward it to make it smaller.</p>
 
-                        <p><strong>Rotate (R):</strong> Spins objects around a pivot point. Press <code>R</code> to rotate freely, and the object will follow your mouse movement.</p>
+                <div class="tip-box">
+                    <strong>Axis Constraints:</strong>
+                    After pressing <code>G</code>, <code>R</code>, or <code>S</code>, you can press <code>X</code>, <code>Y</code>, or <code>Z</code> to constrain the transformation to a single axis. For example, <code>G</code> then <code>X</code> moves the object only along the X-axis. This gives you precise control over transformations.
+                </div>
 
-                        <p><strong>Scale (S):</strong> Makes objects larger or smaller. Press <code>S</code> and move your mouse away from the object to make it bigger, or toward it to make it smaller.</p>
+                <h3>What You're Seeing</h3>
+                <p>In the visualization above, you can see three cubes demonstrating each transformation:</p>
 
-                        <div class="tip-box">
-                            <strong>Axis Constraints:</strong>
-                            After pressing <code>G</code>, <code>R</code>, or <code>S</code>, you can press <code>X</code>, <code>Y</code>, or <code>Z</code> to constrain the transformation to a single axis. For example, <code>G</code> then <code>X</code> moves the object only along the X-axis. This gives you precise control over transformations.
-                        </div>
+                <p><strong>Orange cube (left):</strong> Demonstrates Grab by moving up and down along the Y-axis.</p>
 
-                        <p>In the visualization:</p>
+                <p><strong>Green cube (center):</strong> Shows Rotation by continuously spinning.</p>
 
-                        <p><strong>Orange cube:</strong> Demonstrates Grab by moving up and down along the Y-axis.</p>
+                <p><strong>Blue cube (right):</strong> Illustrates Scale by growing and shrinking.</p>
 
-                        <p><strong>Green cube:</strong> Shows Rotation by continuously spinning.</p>
+                <!-- TODO: Add a second example showing axis-constrained transformations vs free transformations -->
 
-                        <p><strong>Blue cube:</strong> Illustrates Scale by growing and shrinking.</p>
+                <h3>Practical Application</h3>
+                <p>These operations become muscle memory quickly. You'll find yourself thinking "G-Z to move it up" or "S-Shift-Z to scale only in the X-Y plane" without conscious effort. They're applicable not just to objects, but also to individual vertices, edges, and faces in Edit Mode.</p>
 
-                        <p>These operations become muscle memory quickly. You'll find yourself thinking "G-Z to move it up" or "S-Shift-Z to scale only in the X-Y plane" without conscious effort. They're applicable not just to objects, but also to individual vertices, edges, and faces in Edit Mode.</p>
-
-                        <p>Combined with axis constraints and numerical input (you can type exact values after pressing the hotkey), transformations give you both intuitive manipulation and precise control over your 3D scene.</p>
-                    </div>
-                </aside>
+                <p>Combined with axis constraints and numerical input (you can type exact values after pressing the hotkey), transformations give you both intuitive manipulation and precise control over your 3D scene.</p>
             </div>
 
             <nav class="navigation-footer">
