@@ -49,7 +49,18 @@
 
                 <p><strong>Vertices (red dots):</strong> These highlight just the vertices, showing you the control points of your mesh.</p>
 
-                <!-- TODO: Add a second example showing how mesh complexity affects the final result - compare a low-poly sphere vs high-poly sphere -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Mesh Complexity: Low-Poly vs High-Poly</h3>
+                <p>In the visualization above, you can see how mesh complexity dramatically affects the final appearance:</p>
+
+                <p><strong>Left (orange) - Low-Poly Sphere:</strong> Built with just 8 segments horizontally and vertically (320 triangles). You can clearly see the faceted structure. Perfect for game assets, stylized art, or when you need performance. Models render faster and are easier to edit, but curved surfaces appear angular.</p>
+
+                <p><strong>Right (green) - High-Poly Sphere:</strong> Built with 32 segments (2,048 triangles). Creates a perfectly smooth sphere that's indistinguishable from a true mathematical sphere. Required for close-up renders and detailed sculpting, but requires more memory and processing power.</p>
+
+                <p>The key insight: more geometry isn't always better. Use only as much detail as you need for your specific purpose. A character's face needs high detail, but the back of their shoe doesn't. This is why game developers carefully budget polygons - placing detail where it matters most while keeping total counts manageable for real-time performance.</p>
 
                 <h3>The Mesh as Foundation</h3>
                 <p>Understanding that the mesh is just the shape - separate from its appearance - is crucial. You'll add materials, textures, and shaders on top of the mesh to give it color and surface properties like wood grain, metallic shine, or fabric texture.</p>
@@ -152,7 +163,78 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Left: Low-poly sphere
+            const lowPolyGeometry = new THREE.SphereGeometry(1.3, 8, 8);
+            const lowPolyMaterial = new THREE.MeshStandardMaterial({ color: 0xff6600 });
+            const lowPolySphere = new THREE.Mesh(lowPolyGeometry, lowPolyMaterial);
+            lowPolySphere.position.x = -2;
+            scene.add(lowPolySphere);
+
+            // Wireframe for low-poly to show structure
+            const lowPolyWireGeometry = lowPolyGeometry.clone();
+            const lowPolyWireMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.3
+            });
+            const lowPolyWire = new THREE.Mesh(lowPolyWireGeometry, lowPolyWireMaterial);
+            lowPolyWire.position.x = -2;
+            scene.add(lowPolyWire);
+
+            // Right: High-poly sphere
+            const highPolyGeometry = new THREE.SphereGeometry(1.3, 32, 32);
+            const highPolyMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff88 });
+            const highPolySphere = new THREE.Mesh(highPolyGeometry, highPolyMaterial);
+            highPolySphere.position.x = 2;
+            scene.add(highPolySphere);
+
+            const light = new THREE.PointLight(0xffffff, 1, 100);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.z = 7;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                lowPolySphere.rotation.x += 0.01;
+                lowPolySphere.rotation.y += 0.01;
+                lowPolyWire.rotation.x += 0.01;
+                lowPolyWire.rotation.y += 0.01;
+                highPolySphere.rotation.x += 0.01;
+                highPolySphere.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>

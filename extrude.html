@@ -46,7 +46,20 @@
 
                 <p>Notice how each level maintains connection to the level below it - this is the power of extrusion creating unified, seamless geometry.</p>
 
-                <!-- TODO: Add a second example showing extrusion of individual faces vs edges vs vertices -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Extrude Types: Faces, Edges, and Vertices</h3>
+                <p>The visualization above demonstrates the three types of extrusion:</p>
+
+                <p><strong>Left (orange) - Face Extrude:</strong> The top face of the cube is extruded upward, creating a protruding column. This is the most common type and creates new faces automatically.</p>
+
+                <p><strong>Middle (green) - Edge Extrude:</strong> A single edge is selected and extruded, creating a new face between the original edge and the new edge. Perfect for creating fins, borders, or extending geometry along a direction.</p>
+
+                <p><strong>Right (blue) - Vertex Extrude:</strong> Individual vertices are extruded, creating edges from the original vertices to the new ones. This gives you maximum control for creating branches or tentacle-like geometry.</p>
+
+                <p>Each type serves different modeling needs. Face extrusion builds volume, edge extrusion adds details, and vertex extrusion creates branching structures.</p>
 
                 <h3>Common Use Cases</h3>
                 <p><strong>Building forms:</strong> Start with a simple cube, extrude one face to create a protrusion, and keep extruding to build complex shapes organically.</p>
@@ -137,7 +150,117 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Left: Face Extrude - cube with extruded top face
+            const faceGroup = new THREE.Group();
+            const baseCube1 = new THREE.Mesh(
+                new THREE.BoxGeometry(1.2, 1.2, 1.2),
+                new THREE.MeshStandardMaterial({ color: 0xff6600 })
+            );
+            faceGroup.add(baseCube1);
+
+            const extrudedFace = new THREE.Mesh(
+                new THREE.BoxGeometry(0.6, 0.8, 0.6),
+                new THREE.MeshStandardMaterial({ color: 0xff8833 })
+            );
+            extrudedFace.position.y = 1;
+            faceGroup.add(extrudedFace);
+            faceGroup.position.x = -2.5;
+            scene.add(faceGroup);
+
+            // Middle: Edge Extrude - cube with extruded edge creating a fin
+            const edgeGroup = new THREE.Group();
+            const baseCube2 = new THREE.Mesh(
+                new THREE.BoxGeometry(1.2, 1.2, 1.2),
+                new THREE.MeshStandardMaterial({ color: 0x00ff88 })
+            );
+            edgeGroup.add(baseCube2);
+
+            // Create a fin-like extrusion from an edge
+            const finGeometry = new THREE.BoxGeometry(1.2, 0.8, 0.1);
+            const fin = new THREE.Mesh(
+                finGeometry,
+                new THREE.MeshStandardMaterial({ color: 0x33ffaa })
+            );
+            fin.position.set(0, 0.6, 0.65);
+            edgeGroup.add(fin);
+            edgeGroup.position.x = 0;
+            scene.add(edgeGroup);
+
+            // Right: Vertex Extrude - cube with vertices extruded upward
+            const vertexGroup = new THREE.Group();
+            const baseCube3 = new THREE.Mesh(
+                new THREE.BoxGeometry(1.2, 1.2, 1.2),
+                new THREE.MeshStandardMaterial({ color: 0x4488ff })
+            );
+            vertexGroup.add(baseCube3);
+
+            // Create spike-like extrusions from vertices
+            const spikeGeometry = new THREE.ConeGeometry(0.1, 0.8, 8);
+            const spikeMaterial = new THREE.MeshStandardMaterial({ color: 0x66aaff });
+
+            const corners = [
+                [-0.6, 0.6, -0.6],
+                [0.6, 0.6, -0.6],
+                [-0.6, 0.6, 0.6],
+                [0.6, 0.6, 0.6]
+            ];
+
+            corners.forEach(([x, y, z]) => {
+                const spike = new THREE.Mesh(spikeGeometry, spikeMaterial);
+                spike.position.set(x, y + 0.4, z);
+                vertexGroup.add(spike);
+            });
+            vertexGroup.position.x = 2.5;
+            scene.add(vertexGroup);
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x606060);
+            scene.add(ambientLight);
+
+            camera.position.set(0, 2.5, 4.5);
+            camera.lookAt(0, 0, 0);
+
+            let rotationAngle = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                rotationAngle += 0.005;
+
+                faceGroup.rotation.y = rotationAngle;
+                edgeGroup.rotation.y = rotationAngle;
+                vertexGroup.rotation.y = rotationAngle;
+
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>

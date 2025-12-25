@@ -52,7 +52,20 @@
 
                 <p><strong>Blue sphere (right):</strong> Non-metallic (0.0) with medium roughness (0.3) and transparency (opacity 0.6). It simulates a translucent material like frosted glass.</p>
 
-                <!-- TODO: Add a second example showing how the same object looks with drastically different materials (wood vs metal vs plastic) -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Same Shape, Different Materials</h3>
+                <p>In the visualization above, the same sphere geometry is shown with three drastically different materials to demonstrate how materials define appearance:</p>
+
+                <p><strong>Left (bronze/brown) - Rough Plastic:</strong> High roughness (0.9), non-metallic (0.0), matte brown color. Diffuse, no reflections, absorbs light. This simulates materials like rubber, chalk, or unfinished wood - materials that scatter light in all directions.</p>
+
+                <p><strong>Middle (silver) - Polished Metal:</strong> Low roughness (0.1), metallic (1.0), silver color. Sharp reflections, shows the environment. Notice how it reflects light differently than non-metals - metals reflect their surroundings tinted by their base color, while non-metals maintain their color and add white specular highlights.</p>
+
+                <p><strong>Right (red) - Glossy Plastic:</strong> Low roughness (0.2), non-metallic (0.0), bright red color. Sharp but colored reflections. This is typical of glossy paint, polished plastic, or lacquered surfaces - smooth non-metals with clear coatings.</p>
+
+                <p>The same exact geometry produces completely different visual results. Materials are what make a sphere look like a billiard ball, a Christmas ornament, or a clay sculpture. Mastering materials means understanding these physical properties and how they combine to create the surfaces you see every day.</p>
 
                 <h3>Building Complex Materials</h3>
                 <p>Materials can become incredibly complex with texture mapping, normal maps, and node-based shading, but these fundamental properties form the foundation of all material definitions.</p>
@@ -126,7 +139,81 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const geometry = new THREE.SphereGeometry(1, 32, 32);
+
+            // Left: Rough plastic (matte, non-metallic)
+            const plasticMaterial = new THREE.MeshStandardMaterial({
+                color: 0x8b4513,
+                roughness: 0.9,
+                metalness: 0.0
+            });
+            const plasticSphere = new THREE.Mesh(geometry, plasticMaterial);
+            plasticSphere.position.x = -2.5;
+            scene.add(plasticSphere);
+
+            // Middle: Polished metal (reflective, metallic)
+            const metalMaterial = new THREE.MeshStandardMaterial({
+                color: 0xcccccc,
+                roughness: 0.1,
+                metalness: 1.0
+            });
+            const metalSphere = new THREE.Mesh(geometry, metalMaterial);
+            metalSphere.position.x = 0;
+            scene.add(metalSphere);
+
+            // Right: Glossy plastic (smooth, non-metallic)
+            const glossyMaterial = new THREE.MeshStandardMaterial({
+                color: 0xff0000,
+                roughness: 0.2,
+                metalness: 0.0
+            });
+            const glossySphere = new THREE.Mesh(geometry, glossyMaterial);
+            glossySphere.position.x = 2.5;
+            scene.add(glossySphere);
+
+            const light = new THREE.PointLight(0xffffff, 1.5, 100);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x303030);
+            scene.add(ambientLight);
+
+            camera.position.z = 4.5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                plasticSphere.rotation.y += 0.01;
+                metalSphere.rotation.y += 0.01;
+                glossySphere.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>

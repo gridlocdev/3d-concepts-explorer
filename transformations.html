@@ -47,7 +47,20 @@
 
                 <p><strong>Blue cube (right):</strong> Illustrates Scale by growing and shrinking.</p>
 
-                <!-- TODO: Add a second example showing axis-constrained transformations vs free transformations -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Axis-Constrained vs Free Transformations</h3>
+                <p>In the visualization above, you can see how axis constraints provide precision:</p>
+
+                <p><strong>Left (orange):</strong> Free rotation - the cube rotates on multiple axes simultaneously, creating complex motion. This gives you creative freedom but less predictability.</p>
+
+                <p><strong>Middle (green):</strong> Y-axis constrained rotation - the cube only spins around its vertical axis, like a spinning top. Perfect for when you need controlled, predictable movement.</p>
+
+                <p><strong>Right (blue):</strong> Z-axis constrained movement - the cube only moves up and down. Notice how constraining to a single axis makes the transformation precise and intentional.</p>
+
+                <p>Using axis constraints (X, Y, or Z after pressing G, R, or S) is essential for precision modeling. It prevents accidental movements and makes your workflow faster and more predictable.</p>
 
                 <h3>Practical Application</h3>
                 <p>These operations become muscle memory quickly. You'll find yourself thinking "G-Z to move it up" or "S-Shift-Z to scale only in the X-Y plane" without conscious effort. They're applicable not just to objects, but also to individual vertices, edges, and faces in Edit Mode.</p>
@@ -138,7 +151,80 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+
+            // Left: Free rotation (unconstrained)
+            const freeMaterial = new THREE.MeshStandardMaterial({ color: 0xff6600 });
+            const freeCube = new THREE.Mesh(geometry, freeMaterial);
+            freeCube.position.x = -3;
+            scene.add(freeCube);
+
+            // Middle: Y-axis constrained rotation
+            const yAxisMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff88 });
+            const yAxisCube = new THREE.Mesh(geometry, yAxisMaterial);
+            yAxisCube.position.x = 0;
+            scene.add(yAxisCube);
+
+            // Right: Z-axis constrained movement
+            const zAxisMaterial = new THREE.MeshStandardMaterial({ color: 0x4488ff });
+            const zAxisCube = new THREE.Mesh(geometry, zAxisMaterial);
+            zAxisCube.position.x = 3;
+            scene.add(zAxisCube);
+
+            const light = new THREE.PointLight(0xffffff, 1.5, 100);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.z = 6;
+
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.02;
+
+                // Free rotation - rotates on multiple axes
+                freeCube.rotation.x += 0.01;
+                freeCube.rotation.y += 0.015;
+                freeCube.rotation.z += 0.008;
+
+                // Y-axis constrained - only rotates around Y
+                yAxisCube.rotation.y += 0.02;
+
+                // Z-axis constrained movement - only moves up/down
+                zAxisCube.position.y = Math.sin(time) * 0.8;
+
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>

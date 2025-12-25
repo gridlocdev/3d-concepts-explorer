@@ -52,7 +52,20 @@
 
                 <p><strong>Hemisphere light:</strong> Creates ambient, colorful lighting that comes from above and below, no harsh shadows.</p>
 
-                <!-- TODO: Add a second example showing a static three-point lighting setup to demonstrate the classic technique -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Three-Point Lighting Setup</h3>
+                <p>In the visualization above, you can see the classic three-point lighting technique in action on a sphere:</p>
+
+                <p><strong>Key Light (brightest, top-right):</strong> The main light source that defines the primary illumination and creates the dominant shadows. Positioned at about 45 degrees to the subject. This is your "sun" - the light that establishes the scene's overall look.</p>
+
+                <p><strong>Fill Light (dimmer, front-left):</strong> A softer, less intense light that fills in the shadows created by the key light. It prevents shadows from being pure black and adds depth without flattening the image. Typically 25-50% the intensity of the key light.</p>
+
+                <p><strong>Rim/Back Light (behind subject):</strong> Positioned behind and to the side of the subject, this light creates a bright edge that separates the subject from the background. It adds depth and makes the subject "pop" visually. Also called a rim light or hair light in portrait photography.</p>
+
+                <p>This three-light setup is the foundation of professional lighting in photography, cinematography, and 3D rendering. It creates dimensional, polished results that look professional immediately.</p>
 
                 <h3>Lighting Considerations</h3>
                 <p><strong>Color temperature:</strong> Warm lights (orange/yellow) feel cozy or vintage. Cool lights (blue/white) feel modern or clinical. Different light sources naturally have different colors.</p>
@@ -144,7 +157,69 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            const geometry = new THREE.SphereGeometry(1.5, 64, 64);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x888888,
+                roughness: 0.7,
+                metalness: 0.1
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+
+            // Key Light - main light (bright, from upper right)
+            const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            keyLight.position.set(5, 5, 3);
+            scene.add(keyLight);
+
+            // Fill Light - softer, fills shadows (dimmer, from left)
+            const fillLight = new THREE.DirectionalLight(0xaaccff, 0.5);
+            fillLight.position.set(-3, 2, 3);
+            scene.add(fillLight);
+
+            // Rim/Back Light - creates edge highlight (from behind)
+            const rimLight = new THREE.DirectionalLight(0xffffaa, 0.8);
+            rimLight.position.set(-2, 1, -4);
+            scene.add(rimLight);
+
+            // Minimal ambient to prevent pure black
+            const ambientLight = new THREE.AmbientLight(0x202020);
+            scene.add(ambientLight);
+
+            camera.position.set(0, 0.8, 3.5);
+            camera.lookAt(0, 0, 0);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                sphere.rotation.y += 0.003;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>

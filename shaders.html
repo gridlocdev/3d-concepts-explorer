@@ -54,7 +54,20 @@
                 • Sine functions (to create wave patterns)<br>
                 • Color mixing (blending between two colors)</p>
 
-                <!-- TODO: Add a second example showing a practical shader use case like Fresnel-based rim lighting or procedural scratches -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Practical Shader: Fresnel Rim Lighting</h3>
+                <p>The visualization above shows a practical shader technique called Fresnel-based rim lighting:</p>
+
+                <p><strong>What is Fresnel:</strong> The Fresnel effect describes how reflections become stronger at grazing angles. When you look at a surface straight-on, you see mostly the surface color. When you look at it edge-on, you see more reflections. This is why the horizon over water appears brighter.</p>
+
+                <p><strong>Rim Lighting Application:</strong> By using the Fresnel effect in a shader, we can add a glowing edge to objects. Notice how the sphere has a bright rim where its surface curves away from the camera. This technique is used extensively in sci-fi effects, character highlights, and to make objects "pop" against backgrounds.</p>
+
+                <p><strong>The shader calculates:</strong> The angle between the camera view and the surface normal at each point. Where these are perpendicular (at edges), it adds the bright rim color. Where they're parallel (facing the camera), it shows the base color.</p>
+
+                <p>This single shader technique can transform ordinary objects into eye-catching elements. It's commonly used for force fields, energy shields, highlights on characters, and making UI elements visible against varying backgrounds.</p>
 
                 <h3>When to Use Shaders</h3>
                 <p><strong>Special effects:</strong> Holographic materials, force fields, magical effects, stylized rendering.</p>
@@ -148,7 +161,85 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Fresnel rim lighting shader
+            const vertexShader = `
+                varying vec3 vNormal;
+                varying vec3 vViewPosition;
+
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                    vViewPosition = -mvPosition.xyz;
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `;
+
+            const fragmentShader = `
+                varying vec3 vNormal;
+                varying vec3 vViewPosition;
+
+                void main() {
+                    vec3 viewDir = normalize(vViewPosition);
+                    vec3 normal = normalize(vNormal);
+
+                    // Fresnel effect
+                    float fresnel = pow(1.0 - max(0.0, dot(viewDir, normal)), 3.0);
+
+                    // Base color and rim color
+                    vec3 baseColor = vec3(0.1, 0.2, 0.4);
+                    vec3 rimColor = vec3(0.0, 0.8, 1.0);
+
+                    // Mix based on fresnel
+                    vec3 finalColor = mix(baseColor, rimColor, fresnel);
+
+                    gl_FragColor = vec4(finalColor, 1.0);
+                }
+            `;
+
+            const material = new THREE.ShaderMaterial({
+                vertexShader,
+                fragmentShader
+            });
+
+            const geometry = new THREE.SphereGeometry(2, 64, 64);
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            camera.position.z = 4;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                mesh.rotation.x += 0.003;
+                mesh.rotation.y += 0.005;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>

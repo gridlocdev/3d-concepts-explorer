@@ -43,7 +43,20 @@
 
                 <p><strong>Green sphere (right):</strong> This represents what happens when you apply subdivision - the cube transforms into a smooth, organic sphere. The white wireframe overlay shows the high-resolution geometry that was automatically generated.</p>
 
-                <!-- TODO: Add a second example showing edge creasing and edge loops to control subdivision smoothness -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Controlling Subdivision with Edge Loops</h3>
+                <p>In the visualization above, you can see how adding edge loops allows you to maintain sharp edges even with subdivision:</p>
+
+                <p><strong>Left (orange):</strong> A cube with subdivision - completely smooth and rounded, similar to a sphere.</p>
+
+                <p><strong>Middle (green):</strong> The same subdivided cube but with edge loops placed close to the edges. This creates sharp corners while keeping the faces smooth.</p>
+
+                <p><strong>Right (blue):</strong> Shows a mixed approach - some edges are kept sharp with tight edge loops while others are allowed to smooth out, giving you both hard and soft edges in the same model.</p>
+
+                <p>This technique is the foundation of modern hard-surface modeling. By strategically placing edge loops, you maintain crisp details on mechanical objects while enjoying the benefits of subdivision surface modeling.</p>
 
                 <h3>Common Uses</h3>
                 <p><strong>Character modeling:</strong> Almost all organic character models use subdivision surface. Model a simple humanoid form with basic geometry, apply SubDiv, and suddenly you have smooth, lifelike curves.</p>
@@ -137,7 +150,90 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Left: Fully smooth subdivision (like a sphere)
+            const smoothGeometry = new THREE.SphereGeometry(1, 32, 32);
+            const smoothMaterial = new THREE.MeshStandardMaterial({ color: 0xff6600 });
+            const smoothMesh = new THREE.Mesh(smoothGeometry, smoothMaterial);
+            smoothMesh.position.x = -2.5;
+            scene.add(smoothMesh);
+
+            // Middle: Subdivided with sharp edges (using higher detail box)
+            const sharpGeometry = new THREE.BoxGeometry(1.8, 1.8, 1.8, 8, 8, 8);
+            const sharpMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff88 });
+            const sharpMesh = new THREE.Mesh(sharpGeometry, sharpMaterial);
+            sharpMesh.position.x = 0;
+            scene.add(sharpMesh);
+
+            // Right: Mixed - rounded box (using TorusBox-like shape)
+            const mixedGeometry = new THREE.BoxGeometry(1.8, 1.8, 1.8, 4, 4, 4);
+            // Apply some smoothing to make it partially rounded
+            const positionAttribute = mixedGeometry.attributes.position;
+            for (let i = 0; i < positionAttribute.count; i++) {
+                const x = positionAttribute.getX(i);
+                const y = positionAttribute.getY(i);
+                const z = positionAttribute.getZ(i);
+                const length = Math.sqrt(x * x + y * y + z * z);
+                const factor = 0.3; // How much to round
+                positionAttribute.setXYZ(
+                    i,
+                    x + (x / length - x) * factor,
+                    y + (y / length - y) * factor,
+                    z + (z / length - z) * factor
+                );
+            }
+            mixedGeometry.computeVertexNormals();
+
+            const mixedMaterial = new THREE.MeshStandardMaterial({ color: 0x4488ff });
+            const mixedMesh = new THREE.Mesh(mixedGeometry, mixedMaterial);
+            mixedMesh.position.x = 2.5;
+            scene.add(mixedMesh);
+
+            const light = new THREE.PointLight(0xffffff, 1.5, 100);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.z = 5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                smoothMesh.rotation.x += 0.01;
+                smoothMesh.rotation.y += 0.01;
+                sharpMesh.rotation.x += 0.01;
+                sharpMesh.rotation.y += 0.01;
+                mixedMesh.rotation.x += 0.01;
+                mixedMesh.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>

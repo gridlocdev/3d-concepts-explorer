@@ -43,7 +43,20 @@
 
                 <p><strong>Right cube (orange):</strong> Has flipped normals pointing inward. Notice how it appears darker or may look like you're seeing the inside of the cube - because you are! The faces are being rendered from the "back" side.</p>
 
-                <!-- TODO: Add a second example showing smooth shading vs flat shading and how normals interpolation affects appearance -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Smooth vs Flat Shading</h3>
+                <p>In the visualization above, you can see the dramatic effect normal interpolation has on appearance:</p>
+
+                <p><strong>Left (orange) - Flat Shading:</strong> Each face uses its own normal, perpendicular to that face. This creates hard edges between faces - you can clearly see every polygon. The shading changes abruptly at each edge. Perfect for mechanical objects, faceted gems, or low-poly stylized art.</p>
+
+                <p><strong>Right (green) - Smooth Shading:</strong> The normals at vertices are averaged between adjacent faces, then interpolated across each face. This creates the illusion of a curved, smooth surface even though the geometry is the same. The shading transitions gradually, making the sphere appear round.</p>
+
+                <p>Smooth shading doesn't add geometry - it's purely a lighting trick achieved through normal interpolation. The mesh has the same number of faces either way. This is why smooth shading is so powerful: you get curved-looking surfaces without the performance cost of millions of polygons.</p>
+
+                <p>You can combine both techniques: smooth shade most of an object but mark certain edges as "sharp" to preserve hard corners. This is how you model things like a smartphone (smooth rounded sides, but sharp screen edges).</p>
 
                 <h3>Normals and Shading</h3>
                 <p>Normals also affect smooth shading. When you smooth-shade an object, Blender interpolates the normals across faces to create the illusion of a curved surface. Understanding normals becomes essential when you want precise control over how light and shadow play across your model.</p>
@@ -121,7 +134,71 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Left: Flat shading (faceted appearance)
+            const flatGeometry = new THREE.IcosahedronGeometry(1.5, 1);
+            const flatMaterial = new THREE.MeshStandardMaterial({
+                color: 0xff6600,
+                flatShading: true
+            });
+            const flatMesh = new THREE.Mesh(flatGeometry, flatMaterial);
+            flatMesh.position.x = -2;
+            scene.add(flatMesh);
+
+            // Right: Smooth shading (interpolated normals)
+            const smoothGeometry = new THREE.IcosahedronGeometry(1.5, 1);
+            const smoothMaterial = new THREE.MeshStandardMaterial({
+                color: 0x00ff88,
+                flatShading: false
+            });
+            const smoothMesh = new THREE.Mesh(smoothGeometry, smoothMaterial);
+            smoothMesh.position.x = 2;
+            scene.add(smoothMesh);
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.set(0, 0.8, 4.5);
+            camera.lookAt(0, 0, 0);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                flatMesh.rotation.y += 0.01;
+                flatMesh.rotation.x += 0.005;
+                smoothMesh.rotation.y += 0.01;
+                smoothMesh.rotation.x += 0.005;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>

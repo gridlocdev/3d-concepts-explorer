@@ -49,7 +49,18 @@
 
                 <p><strong>Grid distortion:</strong> The grid squares aren't perfectly uniform on the sphere - they stretch and compress based on how the UV map was created. Minimizing this distortion is a key goal of good UV unwrapping.</p>
 
-                <!-- TODO: Add a second example showing a cube with proper UV unwrapping vs poor UV unwrapping to demonstrate seam placement -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Good vs Poor UV Unwrapping</h3>
+                <p>In the visualization above, you can see two cubes with the same checkerboard texture but different UV unwrapping:</p>
+
+                <p><strong>Left (white/black) - Good UV Unwrapping:</strong> The texture appears uniform across all faces with minimal distortion. Seams are placed at edges where they're less noticeable. The checkerboard squares are consistent in size and shape.</p>
+
+                <p><strong>Right (white/black) - Poor UV Unwrapping:</strong> Notice the stretched and compressed checkerboard pattern. The texture is distorted because the UV coordinates don't properly account for the 3D surface. Some faces have seams cutting through visible areas.</p>
+
+                <p>Good UV unwrapping requires strategic seam placement. Hide seams in areas that won't be seen (undersides, edges, natural breaks in the model). Poor seam placement creates visible distortion and texture misalignment that immediately reveals the model's digital nature.</p>
 
                 <h3>Why UV Maps Matter</h3>
                 <p><strong>Detailed texturing:</strong> Adding specific details like logos, wood grain, or skin pores exactly where you want them.</p>
@@ -147,7 +158,95 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Create checkerboard texture
+            const checkerCanvas = document.createElement('canvas');
+            checkerCanvas.width = 512;
+            checkerCanvas.height = 512;
+            const ctx = checkerCanvas.getContext('2d');
+
+            const squareSize = 64;
+            for (let y = 0; y < 8; y++) {
+                for (let x = 0; x < 8; x++) {
+                    ctx.fillStyle = (x + y) % 2 === 0 ? '#ffffff' : '#000000';
+                    ctx.fillRect(x * squareSize, y * squareSize, squareSize, squareSize);
+                }
+            }
+
+            const checkerTexture = new THREE.CanvasTexture(checkerCanvas);
+            checkerTexture.wrapS = THREE.RepeatWrapping;
+            checkerTexture.wrapT = THREE.RepeatWrapping;
+
+            // Left: Good UV unwrapping (proper box unwrap)
+            const goodGeometry = new THREE.BoxGeometry(2, 2, 2);
+            const goodMaterial = new THREE.MeshStandardMaterial({ map: checkerTexture.clone() });
+            const goodCube = new THREE.Mesh(goodGeometry, goodMaterial);
+            goodCube.position.x = -2;
+            scene.add(goodCube);
+
+            // Right: Poor UV unwrapping (distorted UVs)
+            const poorGeometry = new THREE.BoxGeometry(2, 2, 2);
+            // Distort the UVs to simulate poor unwrapping
+            const uvAttribute = poorGeometry.attributes.uv;
+            for (let i = 0; i < uvAttribute.count; i++) {
+                const u = uvAttribute.getX(i);
+                const v = uvAttribute.getY(i);
+                // Apply distortion
+                uvAttribute.setXY(
+                    i,
+                    u * (0.5 + Math.random() * 0.8),
+                    v * (0.5 + Math.random() * 0.8)
+                );
+            }
+
+            const poorMaterial = new THREE.MeshStandardMaterial({ map: checkerTexture.clone() });
+            const poorCube = new THREE.Mesh(poorGeometry, poorMaterial);
+            poorCube.position.x = 2;
+            scene.add(poorCube);
+
+            const light = new THREE.PointLight(0xffffff, 1, 100);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            camera.position.z = 4.5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                goodCube.rotation.x += 0.008;
+                goodCube.rotation.y += 0.012;
+                poorCube.rotation.x += 0.008;
+                poorCube.rotation.y += 0.012;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>

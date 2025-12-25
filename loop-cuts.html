@@ -47,7 +47,20 @@
 
                 <p>Think of loop cuts like the growth rings in a tree or the latitude lines on a globe - they add detail in a structured, predictable way. This is much cleaner than randomly adding edges, which can create messy topology.</p>
 
-                <!-- TODO: Add a second example comparing a mesh with good loop cut placement vs poor edge placement -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Good vs Poor Topology</h3>
+                <p>In the visualization above, you can see the dramatic difference topology makes:</p>
+
+                <p><strong>Left (green) - Good Topology:</strong> Uses evenly-spaced loop cuts that flow naturally around the form. When bent or deformed, this mesh will maintain smooth, predictable curves. The edges follow the natural contours.</p>
+
+                <p><strong>Middle (orange) - Random Edges:</strong> Has edges added haphazardly without following loops. This creates triangles and n-gons (faces with more than 4 sides), which deform unpredictably and can cause rendering artifacts.</p>
+
+                <p><strong>Right (blue) - Strategic Loops:</strong> Shows how loop cuts placed at key areas (like joints on a character) provide control exactly where you need it for animation and deformation.</p>
+
+                <p>Clean topology with proper loop cuts is the difference between amateur and professional 3D work. It makes models easier to edit, animate properly, and subdivide cleanly.</p>
 
                 <h3>Why Loop Cuts Matter</h3>
                 <p>Loop cuts maintain good topology (the flow of edges) while adding detail. Good topology is crucial for both modeling (it affects how tools like subdivision work) and animation (it determines how your model deforms).</p>
@@ -130,7 +143,101 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Left: Good topology with proper loop cuts
+            const goodGeometry = new THREE.CylinderGeometry(0.8, 0.8, 2.5, 12, 6);
+            const goodMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff88, wireframe: false });
+            const goodWireMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true, transparent: true, opacity: 0.8 });
+            const goodCylinder = new THREE.Mesh(goodGeometry, goodMaterial);
+            const goodWire = new THREE.Mesh(goodGeometry.clone(), goodWireMaterial);
+            goodCylinder.position.x = -2.5;
+            goodWire.position.x = -2.5;
+            scene.add(goodCylinder);
+            scene.add(goodWire);
+
+            // Middle: Poor topology with random edges (simulated with irregular geometry)
+            const poorGeometry = new THREE.CylinderGeometry(0.8, 0.8, 2.5, 7, 3);
+            // Make it irregular
+            const positions = poorGeometry.attributes.position;
+            for (let i = 0; i < positions.count; i++) {
+                const x = positions.getX(i);
+                const y = positions.getY(i);
+                const z = positions.getZ(i);
+                positions.setXYZ(
+                    i,
+                    x + (Math.random() - 0.5) * 0.15,
+                    y,
+                    z + (Math.random() - 0.5) * 0.15
+                );
+            }
+            poorGeometry.computeVertexNormals();
+
+            const poorMaterial = new THREE.MeshStandardMaterial({ color: 0xff6600, wireframe: false, flatShading: true });
+            const poorWireMaterial = new THREE.MeshBasicMaterial({ color: 0xff6600, wireframe: true, transparent: true, opacity: 0.8 });
+            const poorCylinder = new THREE.Mesh(poorGeometry, poorMaterial);
+            const poorWire = new THREE.Mesh(poorGeometry.clone(), poorWireMaterial);
+            poorCylinder.position.x = 0;
+            poorWire.position.x = 0;
+            scene.add(poorCylinder);
+            scene.add(poorWire);
+
+            // Right: Strategic loop cuts (more detail in specific areas)
+            const strategicGeometry = new THREE.CylinderGeometry(0.8, 0.8, 2.5, 12, 8);
+            const strategicMaterial = new THREE.MeshStandardMaterial({ color: 0x4488ff, wireframe: false });
+            const strategicWireMaterial = new THREE.MeshBasicMaterial({ color: 0x4488ff, wireframe: true, transparent: true, opacity: 0.8 });
+            const strategicCylinder = new THREE.Mesh(strategicGeometry, strategicMaterial);
+            const strategicWire = new THREE.Mesh(strategicGeometry.clone(), strategicWireMaterial);
+            strategicCylinder.position.x = 2.5;
+            strategicWire.position.x = 2.5;
+            scene.add(strategicCylinder);
+            scene.add(strategicWire);
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x505050);
+            scene.add(ambientLight);
+
+            camera.position.set(0, 1.5, 4.5);
+            camera.lookAt(0, 0, 0);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                goodCylinder.rotation.y += 0.008;
+                goodWire.rotation.y += 0.008;
+                poorCylinder.rotation.y += 0.008;
+                poorWire.rotation.y += 0.008;
+                strategicCylinder.rotation.y += 0.008;
+                strategicWire.rotation.y += 0.008;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>

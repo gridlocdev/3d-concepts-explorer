@@ -47,7 +47,20 @@
                 <h3>What You're Seeing</h3>
                 <p>In the visualization above, you can see both a torus (the subject) and a camera object (the orange box with the camera frustum visualization). The camera orbits around the subject, showing how camera position dramatically changes what's captured.</p>
 
-                <!-- TODO: Add a second example showing different focal lengths (wide-angle vs telephoto) to demonstrate field of view differences -->
+                <div class="canvas-container">
+                    <canvas id="three-canvas-2"></canvas>
+                </div>
+
+                <h3>Focal Length Comparison</h3>
+                <p>In the visualization above, you see the same scene captured with three different focal lengths:</p>
+
+                <p><strong>Left (18mm - Wide Angle):</strong> A very wide field of view that shows more of the scene. Notice the slight perspective distortion - objects at the edges appear stretched. Great for architecture, landscapes, and cramped spaces.</p>
+
+                <p><strong>Middle (50mm - Normal):</strong> Approximates human vision. Natural perspective with minimal distortion. This is the "standard" lens for general-purpose photography.</p>
+
+                <p><strong>Right (135mm - Telephoto):</strong> A narrow field of view that shows less of the scene but with compressed perspective. The background appears closer to the subject. Perfect for portraits and product shots.</p>
+
+                <p>Notice how the object appears similar in size across all three views (the camera position adjusts to compensate), but the background and perspective compression differ dramatically.</p>
 
                 <h3>Camera Movement in Animation</h3>
                 <p><strong>Static camera:</strong> Professional and stable, lets the audience focus on the subject.</p>
@@ -142,7 +155,101 @@
             animate();
         }
 
+        function initScene2() {
+            const canvas = document.getElementById('three-canvas-2');
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a1a);
+
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                1000
+            );
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+            // Create a ground plane for reference
+            const groundGeometry = new THREE.PlaneGeometry(20, 20);
+            const groundMaterial = new THREE.MeshStandardMaterial({
+                color: 0x333333,
+                side: THREE.DoubleSide
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = Math.PI / 2;
+            ground.position.y = -1.5;
+            scene.add(ground);
+
+            // Create foreground object (sphere)
+            const foregroundGeometry = new THREE.SphereGeometry(0.6, 32, 32);
+            const foregroundMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff88 });
+            const foregroundSphere = new THREE.Mesh(foregroundGeometry, foregroundMaterial);
+            foregroundSphere.position.set(0, 0, 0);
+            scene.add(foregroundSphere);
+
+            // Create background objects (cubes at different distances)
+            for (let i = 0; i < 3; i++) {
+                const bgGeometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+                const bgMaterial = new THREE.MeshStandardMaterial({ color: 0xff6600 });
+                const bgCube = new THREE.Mesh(bgGeometry, bgMaterial);
+                bgCube.position.set((i - 1) * 2, 0, -4 - i * 2);
+                scene.add(bgCube);
+            }
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x505050);
+            scene.add(ambientLight);
+
+            // We'll cycle through three different FOV values
+            const fovValues = [
+                { fov: 90, name: '18mm (Wide)', distance: 2.5 },      // Wide angle
+                { fov: 45, name: '50mm (Normal)', distance: 4 },    // Normal
+                { fov: 20, name: '135mm (Tele)', distance: 6.5 }     // Telephoto
+            ];
+
+            let currentFovIndex = 0;
+            let transitionTime = 0;
+            const transitionDuration = 3; // seconds
+
+            camera.position.set(0, 1, fovValues[0].distance);
+            camera.lookAt(0, 0, 0);
+            camera.fov = fovValues[0].fov;
+            camera.updateProjectionMatrix();
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                transitionTime += 0.016; // ~60fps
+
+                if (transitionTime >= transitionDuration) {
+                    transitionTime = 0;
+                    currentFovIndex = (currentFovIndex + 1) % fovValues.length;
+
+                    camera.fov = fovValues[currentFovIndex].fov;
+                    camera.position.z = fovValues[currentFovIndex].distance;
+                    camera.updateProjectionMatrix();
+                }
+
+                foregroundSphere.rotation.y += 0.01;
+
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            });
+
+            animate();
+        }
+
         initScene();
+        initScene2();
     </script>
 </body>
 </html>
