@@ -24,7 +24,7 @@
                     Position it thoughtfully to frame your scene like a photographer!</p>
 
                 <div class="canvas-container">
-                    <canvas id="three-canvas"></canvas>
+                    <canvas width="500px" height="300px" id="three-canvas"></canvas>
                 </div>
 
                 <h2>Understanding the Camera</h2>
@@ -38,7 +38,8 @@
                 <h3>Camera Controls</h3>
                 <p>The camera is just another object in your scene. You can move it with <code>G</code>, rotate it with
                     <code>R</code>, and even animate its position over time. Press <code>Numpad 0</code> to switch to
-                    Camera View, showing exactly what will be rendered.</p>
+                    Camera View, showing exactly what will be rendered.
+                </p>
 
                 <h3>Important Camera Properties</h3>
                 <p><strong>Focal Length:</strong> Measured in millimeters, this controls the field of view. Lower values
@@ -62,16 +63,17 @@
                 </div>
 
                 <h3>What You're Seeing</h3>
-                <p>In the visualization above, you can see both a torus (the subject) and a camera object (the orange
+                <p>In the visualization at the start, you can see both a torus (the subject) and a camera object (the
+                    orange
                     box with the camera frustum visualization). The camera orbits around the subject, showing how camera
                     position dramatically changes what's captured.</p>
+
+                <h3>Focal Length Comparison</h3>
+                <p>In the visualization below, you see the same scene captured with three different focal lengths:</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas-2"></canvas>
                 </div>
-
-                <h3>Focal Length Comparison</h3>
-                <p>In the visualization above, you see the same scene captured with three different focal lengths:</p>
 
                 <p><strong>Left (18mm - Wide Angle):</strong> A very wide field of view that shows more of the scene.
                     Notice the slight perspective distortion - objects at the edges appear stretched. Great for

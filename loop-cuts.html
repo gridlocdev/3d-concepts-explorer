@@ -22,7 +22,8 @@
                 <h2>Overview</h2>
                 <p>Loop cuts add new edge loops around your model (like adding rings around a cylinder) - press
                     <code>Ctrl+R</code> (Windows/Linux) or <code>Cmd+R</code> (macOS) to add more detail exactly where
-                    you need it!</p>
+                    you need it!
+                </p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
@@ -53,7 +54,8 @@
                 </div>
 
                 <h3>What You're Seeing</h3>
-                <p>In the visualization above, you can see a cylinder with multiple horizontal edge loops shown in green
+                <p>In the visualization at the start, you can see a cylinder with multiple horizontal edge loops shown
+                    in green
                     wireframe. Each of these rings represents a loop cut. Notice how they provide evenly-spaced control
                     over the cylinder's form without adding unnecessary complexity to other areas.</p>
 
@@ -61,12 +63,12 @@
                     in a structured, predictable way. This is much cleaner than randomly adding edges, which can create
                     messy topology.</p>
 
+                <h3>Good vs Poor Topology</h3>
+                <p>In the visualization below, you can see the dramatic difference topology makes:</p>
+
                 <div class="canvas-container">
                     <canvas id="three-canvas-2"></canvas>
                 </div>
-
-                <h3>Good vs Poor Topology</h3>
-                <p>In the visualization above, you can see the dramatic difference topology makes:</p>
 
                 <p><strong>Left (green) - Good Topology:</strong> Uses evenly-spaced loop cuts that flow naturally
                     around the form. When bent or deformed, this mesh will maintain smooth, predictable curves. The

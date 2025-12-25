@@ -55,7 +55,8 @@
                 </div>
 
                 <h3>What You're Seeing</h3>
-                <p>In the visualization above, you see a sphere with a grid texture applied. The grid demonstrates how
+                <p>In the visualization at the start, you see a sphere with a grid texture applied. The grid
+                    demonstrates how
                     the 2D texture wraps around the 3D surface. Notice:</p>
 
                 <p><strong>The U and V labels:</strong> These show the coordinate system of the flat texture space - U
@@ -65,13 +66,13 @@
                     stretch and compress based on how the UV map was created. Minimizing this distortion is a key goal
                     of good UV unwrapping.</p>
 
+                <h3>Good vs Poor UV Unwrapping</h3>
+                <p>In the visualization below, you can see two cubes with the same checkerboard texture but different UV
+                    unwrapping:</p>
+
                 <div class="canvas-container">
                     <canvas id="three-canvas-2"></canvas>
                 </div>
-
-                <h3>Good vs Poor UV Unwrapping</h3>
-                <p>In the visualization above, you can see two cubes with the same checkerboard texture but different UV
-                    unwrapping:</p>
 
                 <p><strong>Left (white/black) - Good UV Unwrapping:</strong> The texture appears uniform across all
                     faces with minimal distortion. Seams are placed at edges where they're less noticeable. The

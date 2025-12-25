@@ -47,7 +47,7 @@
                 </div>
 
                 <h3>What You're Seeing</h3>
-                <p>In the visualization above, you'll see two cubes:</p>
+                <p>In the visualization at the start, you'll see two cubes:</p>
 
                 <p><strong>Left cube (green):</strong> Has correct normals pointing outward. Light bounces off it
                     naturally, and all faces render as expected.</p>
@@ -56,13 +56,14 @@
                     darker or may look like you're seeing the inside of the cube - because you are! The faces are being
                     rendered from the "back" side.</p>
 
+
+                <h3>Smooth vs Flat Shading</h3>
+                <p>In the visualization below, you can see the dramatic effect normal interpolation has on appearance:
+                </p>
+
                 <div class="canvas-container">
                     <canvas id="three-canvas-2"></canvas>
                 </div>
-
-                <h3>Smooth vs Flat Shading</h3>
-                <p>In the visualization above, you can see the dramatic effect normal interpolation has on appearance:
-                </p>
 
                 <p><strong>Left (orange) - Flat Shading:</strong> Each face uses its own normal, perpendicular to that
                     face. This creates hard edges between faces - you can clearly see every polygon. The shading changes
