@@ -134,11 +134,11 @@
             scaleCube.position.x = 3;
             scene.add(scaleCube);
 
-            const light = new THREE.PointLight(0xffffff, 1.5, 100);
+            const light = new THREE.DirectionalLight(0xffffff, 1);
             light.position.set(5, 5, 5);
             scene.add(light);
 
-            const ambientLight = new THREE.AmbientLight(0x404040);
+            const ambientLight = new THREE.AmbientLight(0x606060);
             scene.add(ambientLight);
 
             camera.position.set(0, 2, 6);
@@ -190,28 +190,28 @@
             const geometry = new THREE.BoxGeometry(1, 1, 1);
 
             // Left: Free rotation (unconstrained)
-            const freeMaterial = new THREE.MeshStandardMaterial({ color: 0xff6600 });
+            const freeMaterial = new THREE.MeshStandardMaterial({ color: 0xffaa00 }); // Yellow-orange
             const freeCube = new THREE.Mesh(geometry, freeMaterial);
             freeCube.position.x = -3;
             scene.add(freeCube);
 
             // Middle: Y-axis constrained rotation
-            const yAxisMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff88 });
+            const yAxisMaterial = new THREE.MeshStandardMaterial({ color: 0x00dddd }); // Cyan
             const yAxisCube = new THREE.Mesh(geometry, yAxisMaterial);
             yAxisCube.position.x = 0;
             scene.add(yAxisCube);
 
             // Right: Z-axis constrained movement
-            const zAxisMaterial = new THREE.MeshStandardMaterial({ color: 0x4488ff });
+            const zAxisMaterial = new THREE.MeshStandardMaterial({ color: 0xff00ff }); // Magenta
             const zAxisCube = new THREE.Mesh(geometry, zAxisMaterial);
             zAxisCube.position.x = 3;
             scene.add(zAxisCube);
 
-            const light = new THREE.PointLight(0xffffff, 1.5, 100);
+            const light = new THREE.DirectionalLight(0xffffff, 1);
             light.position.set(5, 5, 5);
             scene.add(light);
 
-            const ambientLight = new THREE.AmbientLight(0x404040);
+            const ambientLight = new THREE.AmbientLight(0x606060);
             scene.add(ambientLight);
 
             camera.position.set(0, 2, 6);

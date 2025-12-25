@@ -145,11 +145,11 @@
                 spheres.push(sphere);
             });
 
-            const light = new THREE.PointLight(0xffffff, 1.5, 100);
+            const light = new THREE.DirectionalLight(0xffffff, 1);
             light.position.set(5, 5, 5);
             scene.add(light);
 
-            const ambientLight = new THREE.AmbientLight(0x303030);
+            const ambientLight = new THREE.AmbientLight(0x606060);
             scene.add(ambientLight);
 
             camera.position.set(0, 2, 6);
@@ -219,11 +219,11 @@
             glossySphere.position.x = 2.5;
             scene.add(glossySphere);
 
-            const light = new THREE.PointLight(0xffffff, 1.5, 100);
+            const light = new THREE.DirectionalLight(0xffffff, 1);
             light.position.set(5, 5, 5);
             scene.add(light);
 
-            const ambientLight = new THREE.AmbientLight(0x303030);
+            const ambientLight = new THREE.AmbientLight(0x606060);
             scene.add(ambientLight);
 
             camera.position.set(0, 2, 6);
