@@ -4,7 +4,7 @@ port := "5180"
 default:
     @just --list
 
-# Serve src/ at http://localhost:5180/ while developing (no build step)
+# Serve src/ at http://localhost:5180/ with live reload (no build step)
 serve port=port:
     python3 tools/serve.py {{port}} src
 
