@@ -4,7 +4,7 @@ An interactive learning guide for fundamental 3D modeling concepts that apply in
 
 ## Structure
 
-This is now a multi-page wiki-style application with the following structure:
+A multi-page wiki-style site. Everything the web server serves lives in `src/` (paths below are relative to it); `tools/` and the `justfile` are for development and builds.
 
 ### Main Pages
 - `index.html` - Landing page with overview and links to all concepts
@@ -34,7 +34,7 @@ This is now a multi-page wiki-style application with the following structure:
 
 ### Assets
 - `static/` - Icons and other static assets
-- `node_modules/` - Three.js library
+- `vendor/three/` - three.js (version in `VERSION`), loaded through an import map in each page's `<head>`, so pages import it as `three` with no bundler
 
 ## Features
 
@@ -46,10 +46,21 @@ This is now a multi-page wiki-style application with the following structure:
 
 ## Development
 
-To run locally:
-1. Ensure Three.js is installed: `pnpm install`
-2. Open `index.html` in a web browser
-3. Use a local server for best results (e.g., `python -m http.server` or VSCode Live Server)
+No npm install or bundler: the site is plain HTML, CSS and ES modules in `src/`.
+
+1. Run `just serve` (or `python3 tools/serve.py`), which serves `src/` with caching off
+2. Open http://localhost:5180/
+
+Pages must be served over HTTP, not opened as files, because they load ES modules.
+
+To update three.js, run `just vendor-three <version>` (for example `just vendor-three 0.182.0`).
+
+## Building
+
+`just build` writes `dist/`: a copy of `src/` without the archived `index-old.html`. Upload the contents of `dist/` to any static web server. `just preview` builds and serves `dist/` at http://localhost:5180/ so you can check it first. `dist/` is ignored by git.
+
+### Tools
+- `tools/serve.py` - Local static server with caching off: `python3 tools/serve.py [port] [folder]` (folder defaults to `src`)
 
 ## Navigation
 
