@@ -43,6 +43,11 @@ a {
     flex: 1;
     height: 100vh;
     overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+
+body:has(.lightbox[open]) .main-container {
+    overflow: hidden;
 }
 
 /* Concept pages */
@@ -107,6 +112,7 @@ a {
 }
 
 .view {
+    position: relative;
     aspect-ratio: 4 / 3;
     background: var(--stage);
     border-radius: 6px;
@@ -117,19 +123,129 @@ a {
     aspect-ratio: 2 / 1;
 }
 
-.view canvas {
+.view canvas,
+.lightbox-stage canvas {
     display: block;
     width: 100%;
     height: 100%;
 }
 
-.view canvas.draggable {
+canvas.draggable {
     cursor: grab;
     touch-action: none;
 }
 
-.view canvas.draggable:active {
+canvas.draggable:active {
     cursor: grabbing;
+}
+
+.icon-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.icon-btn:hover {
+    background: rgb(255 255 255 / 0.1);
+    color: var(--heading);
+}
+
+.icon-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.icon-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.view .expand {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgb(13 13 13 / 0.7);
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.view .expand:hover {
+    background: rgb(40 40 40 / 0.9);
+}
+
+.panel:hover .expand,
+.view .expand:focus-visible {
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .view .expand {
+        opacity: 1;
+    }
+}
+
+/* Expanded panel: a modal with the scene at full size */
+
+.lightbox {
+    --aspect: 4 / 3;
+    --fit: min(94vw, (100dvh - 180px) * var(--aspect));
+    width: var(--fit);
+    max-width: none;
+    max-height: none;
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+}
+
+.lightbox::backdrop {
+    background: rgb(0 0 0 / 0.8);
+}
+
+.lightbox-bar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 6px 6px 16px;
+}
+
+.lightbox-title {
+    flex: 1;
+    min-width: 0;
+    color: var(--heading);
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.lightbox-count {
+    color: var(--muted);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    margin-right: 8px;
+}
+
+.lightbox-stage {
+    aspect-ratio: var(--aspect);
+    background: var(--stage);
+}
+
+.lightbox-caption {
+    padding: 10px 16px 14px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 .panel figcaption {

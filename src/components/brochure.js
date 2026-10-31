@@ -51,6 +51,84 @@ export function createBrochure() {
         return env;
     }
 
+    // The expanded view: one <dialog> per page. Expanding a panel moves its
+    // canvas into the dialog, so the scene keeps its spin, drag and timing.
+    let lightbox = null;
+    let expanded = null;
+
+    function makeLightbox() {
+        const d = document.createElement('dialog');
+        d.className = 'lightbox';
+        d.innerHTML = `
+            <div class="lightbox-bar">
+                <h2 class="lightbox-title"></h2>
+                <span class="lightbox-count"></span>
+                <button type="button" class="icon-btn" data-step="-1" aria-label="Previous model" title="Previous (←)">${ICONS.prev}</button>
+                <button type="button" class="icon-btn" data-step="1" aria-label="Next model" title="Next (→)">${ICONS.next}</button>
+                <button type="button" class="icon-btn" data-close autofocus aria-label="Close" title="Close (Esc)">${ICONS.close}</button>
+            </div>
+            <div class="lightbox-stage"></div>
+            <p class="lightbox-caption"></p>`;
+        d.addEventListener('click', e => {
+            if (e.target === d) return d.close(); // the backdrop
+            const btn = e.target.closest('button');
+            if (btn?.dataset.step) step(Number(btn.dataset.step));
+            else if (btn?.hasAttribute('data-close')) d.close();
+        });
+        d.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') step(-1);
+            else if (e.key === 'ArrowRight') step(1);
+        });
+        d.addEventListener('close', () => {
+            const p = collapse();
+            // After the dialog's own focus restore, which picks the button
+            // that opened it, not the panel the user stepped to.
+            setTimeout(() => p?.el.querySelector('.expand').focus());
+        });
+        document.body.append(d);
+        scope.add(() => d.remove());
+        return d;
+    }
+
+    function expand(p) {
+        lightbox ??= makeLightbox();
+        collapse();
+        expanded = p;
+        const view = p.el.querySelector('.view');
+        lightbox.style.setProperty('--aspect', view.clientWidth / view.clientHeight);
+        lightbox.querySelector('.lightbox-stage').append(p.canvas);
+
+        const caption = p.el.querySelector('figcaption')?.cloneNode(true);
+        const title = caption?.querySelector('b');
+        title?.remove();
+        lightbox.querySelector('.lightbox-title').textContent = title?.textContent ?? '';
+        lightbox.querySelector('.lightbox-caption').innerHTML = caption?.innerHTML ?? '';
+        const order = ordered();
+        lightbox.querySelector('.lightbox-count').textContent = `${order.indexOf(p) + 1} / ${order.length}`;
+        for (const btn of lightbox.querySelectorAll('[data-step]')) btn.hidden = order.length < 2;
+        if (!lightbox.open) lightbox.showModal();
+    }
+
+    function collapse() {
+        const p = expanded;
+        if (!p) return null;
+        expanded = null;
+        p.dragging = null;
+        p.el.querySelector('.view').prepend(p.canvas);
+        return p;
+    }
+
+    function step(by) {
+        const order = ordered();
+        const i = order.indexOf(expanded);
+        expand(order[(i + by + order.length) % order.length]);
+    }
+
+    // Panels in page order, which can differ from the order scenes add them.
+    function ordered() {
+        return panels.slice().sort((a, b) => a.el.compareDocumentPosition(b.el) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
+    }
+
     // opts: cam [x,y,z], target [x,y,z], fov, spin (rad/s, 0 for none),
     // drag (false to lock), lights (false for none)
     function panel(id, setup, opts = {}) {
@@ -60,7 +138,13 @@ export function createBrochure() {
             return;
         }
         const canvas = document.createElement('canvas');
-        el.querySelector('.view').append(canvas);
+        const expandBtn = document.createElement('button');
+        expandBtn.type = 'button';
+        expandBtn.className = 'icon-btn expand';
+        expandBtn.title = 'Expand';
+        expandBtn.setAttribute('aria-label', `Expand ${el.querySelector('figcaption b')?.textContent ?? 'model'}`);
+        expandBtn.innerHTML = ICONS.expand;
+        el.querySelector('.view').append(canvas, expandBtn);
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(COLORS.stage);
         const root = new THREE.Group();
@@ -79,6 +163,7 @@ export function createBrochure() {
             update: null,
         };
         p.update = setup(p) || null;
+        expandBtn.addEventListener('click', () => expand(p));
 
         if (opts.drag !== false) {
             canvas.classList.add('draggable');
@@ -111,7 +196,8 @@ export function createBrochure() {
         renderer.setScissorTest(true);
 
         for (const p of panels) {
-            if (!p.visible) continue;
+            // While one panel is expanded, it is the only one on screen.
+            if (expanded ? p !== expanded : !p.visible) continue;
             const w = Math.max(1, Math.round(p.canvas.clientWidth * dpr()));
             const h = Math.max(1, Math.round(p.canvas.clientHeight * dpr()));
             if (p.canvas.width !== w || p.canvas.height !== h) {
@@ -138,6 +224,14 @@ export function createBrochure() {
 
     return { panel, stop: scope.stop };
 }
+
+const icon = path => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
+const ICONS = {
+    expand: icon('<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>'),
+    close: icon('<path d="M18 6 6 18M6 6l12 12"/>'),
+    prev: icon('<path d="m15 18-6-6 6-6"/>'),
+    next: icon('<path d="m9 18 6-6-6-6"/>'),
+};
 
 function fitCamera(camera, aspect) {
     if (camera.isPerspectiveCamera) {
