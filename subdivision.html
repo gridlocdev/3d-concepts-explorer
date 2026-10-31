@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subdivision Surface - Blender Concepts</title>
+    <title>Subdivision Surface - 3D Concepts</title>
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <link rel="stylesheet" href="styles/main.css">
 </head>
@@ -28,11 +28,11 @@
                 </div>
 
                 <h2>Understanding Subdivision Surface</h2>
-                <p>Subdivision Surface (often called SubDiv or Subsurf) is one of the most powerful modifiers in
-                    Blender. It represents a fundamental workflow in modern 3D modeling: work with simple geometry, but
+                <p>Subdivision Surface (often called SubDiv or Subsurf) is one of the most powerful tools in 3D
+                    modeling. It represents a fundamental workflow in modern 3D modeling: work with simple geometry, but
                     render with complex, smooth results.</p>
 
-                <p><strong>How it works:</strong> The modifier takes your low-polygon mesh (the "cage") and
+                <p><strong>How it works:</strong> Usually applied as a non-destructive modifier, it takes your low-polygon mesh (the "cage") and
                     algorithmically subdivides it, creating smooth, rounded surfaces. It uses the Catmull-Clark
                     subdivision algorithm, which smooths the mesh while preserving important features.</p>
 
@@ -42,8 +42,8 @@
 
                 <div class="tip-box">
                     <strong>Controlling the Smoothness:</strong>
-                    You can control how subdivision affects your mesh using edge creasing (in Edit Mode,
-                    <code>Shift+E</code>) or by adding edge loops closer together. Edges that are close together will
+                    You can control how subdivision affects your mesh using edge creasing (marking edges
+                    that should stay sharp) or by adding edge loops closer together. Edges that are close together will
                     remain sharper after subdivision, while widely-spaced edges will smooth out more. This gives you
                     both organic curves and hard edges in the same model.
                 </div>

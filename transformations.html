@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transformations - Blender Concepts</title>
+    <title>Transformations - 3D Concepts</title>
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <link rel="stylesheet" href="styles/main.css">
 </head>
@@ -20,7 +20,7 @@
                 <h1>Transformations</h1>
 
                 <h2>Overview</h2>
-                <p>The three basic moves in 3D: G to grab/move things, R to rotate them, and S to scale (make bigger or
+                <p>The three basic moves in 3D: move (translate) things, rotate them, and scale them (make bigger or
                     smaller). These are the fundamental operations you'll use constantly!</p>
 
                 <div class="canvas-container">
@@ -31,28 +31,28 @@
                 <p>Transformations are the bread and butter of 3D modeling. Every time you position an object in your
                     scene or adjust its size, you're using one of these three fundamental operations.</p>
 
-                <p><strong>Grab (G):</strong> Moves objects in 3D space. This is technically called "translation" in
-                    mathematics, but Blender calls it "Grab" to make it more intuitive. Press <code>G</code> and move
-                    your mouse to reposition the selected object.</p>
+                <p><strong>Move (Translate):</strong> Changes an object's position in 3D space. The mathematical name
+                    is "translation"; tools call it Move, Translate or Grab. You drag the selection with the mouse or
+                    with a move gizmo (arrows along each axis) to reposition it.</p>
 
-                <p><strong>Rotate (R):</strong> Spins objects around a pivot point. Press <code>R</code> to rotate
-                    freely, and the object will follow your mouse movement.</p>
+                <p><strong>Rotate:</strong> Spins objects around a pivot point. Rotating freely makes the object follow
+                    your mouse; the rotate gizmo's rings turn it around one axis at a time.</p>
 
-                <p><strong>Scale (S):</strong> Makes objects larger or smaller. Press <code>S</code> and move your mouse
-                    away from the object to make it bigger, or toward it to make it smaller.</p>
+                <p><strong>Scale:</strong> Makes objects larger or smaller relative to their pivot point. Scaling
+                    evenly keeps the proportions; scaling along one axis stretches or squashes the object.</p>
 
                 <div class="tip-box">
                     <strong>Axis Constraints:</strong>
-                    After pressing <code>G</code>, <code>R</code>, or <code>S</code>, you can press <code>X</code>,
-                    <code>Y</code>, or <code>Z</code> to constrain the transformation to a single axis. For example,
-                    <code>G</code> then <code>X</code> moves the object only along the X-axis. This gives you precise
-                    control over transformations.
+                    Every modeling tool lets you constrain a transformation to a single axis - by dragging one handle of
+                    the gizmo, or with a modifier key. For example, constraining a move to the X-axis slides the object
+                    only left and right, however you move the mouse. This gives you precise control over
+                    transformations.
                 </div>
 
                 <h3>What You're Seeing</h3>
                 <p>In the visualization at the start, you can see three cubes demonstrating each transformation:</p>
 
-                <p><strong>Orange cube (left):</strong> Demonstrates Grab by moving up and down along the Y-axis.</p>
+                <p><strong>Orange cube (left):</strong> Demonstrates Move by moving up and down along the Y-axis.</p>
 
                 <p><strong>Green cube (center):</strong> Shows Rotation by continuously spinning.</p>
 
@@ -75,16 +75,17 @@
                 <p><strong>Right (blue):</strong> Z-axis constrained movement - the cube only moves up and down. Notice
                     how constraining to a single axis makes the transformation precise and intentional.</p>
 
-                <p>Using axis constraints (X, Y, or Z after pressing G, R, or S) is essential for precision modeling. It
-                    prevents accidental movements and makes your workflow faster and more predictable.</p>
+                <p>Using axis constraints is essential for precision modeling. It prevents accidental movements and
+                    makes your workflow faster and more predictable.</p>
 
                 <h3>Practical Application</h3>
-                <p>These operations become muscle memory quickly. You'll find yourself thinking "G-Z to move it up" or
-                    "S-Shift-Z to scale only in the X-Y plane" without conscious effort. They're applicable not just to
-                    objects, but also to individual vertices, edges, and faces in Edit Mode.</p>
+                <p>These operations become muscle memory quickly. Beyond single axes, most tools also let you constrain
+                    to a plane - for example scaling only in the X-Y plane so an object gets wider without getting
+                    taller. Transformations apply not just to whole objects, but also to individual vertices, edges, and
+                    faces when you're editing a mesh's components.</p>
 
-                <p>Combined with axis constraints and numerical input (you can type exact values after pressing the
-                    hotkey), transformations give you both intuitive manipulation and precise control over your 3D
+                <p>Combined with axis constraints and numerical input (typing exact values for position, rotation or
+                    scale), transformations give you both intuitive manipulation and precise control over your 3D
                     scene.</p>
             </div>
 
@@ -116,7 +117,7 @@
 
             const geometry = new THREE.BoxGeometry(1, 1, 1);
 
-            // Left: Moving/Grab transformation
+            // Left: Move transformation
             const moveMaterial = new THREE.MeshStandardMaterial({ color: 0xff6600 });
             const moveCube = new THREE.Mesh(geometry, moveMaterial);
             moveCube.position.x = -3;

@@ -1,6 +1,6 @@
-# Blender Concepts Explorer
+# 3D Concepts Explorer
 
-An interactive learning guide for fundamental 3D modeling concepts in Blender, featuring live Three.js visualizations.
+An interactive learning guide for fundamental 3D modeling concepts that apply in any modeling tool, featuring live Three.js visualizations.
 
 ## Structure
 
@@ -10,7 +10,7 @@ This is now a multi-page wiki-style application with the following structure:
 - `index.html` - Landing page with overview and links to all concepts
 - `meshes.html` - Understanding vertices, edges, and faces
 - `normals.html` - Surface orientation and lighting
-- `transformations.html` - Grab, Rotate, and Scale operations
+- `transformations.html` - Move, Rotate, and Scale operations
 - `extrude.html` - Creating new geometry
 - `loop-cuts.html` - Adding edge loops for detail
 - `bevel.html` - Rounding edges for realism

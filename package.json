@@ -1,5 +1,5 @@
 {
-  "name": "blender-basic-concepts",
+  "name": "3d-modeling-concepts-demo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,6 +15,6 @@
     "three": "^0.182.0"
   },
   "devDependencies": {
-    "vite": "^7.3.1"
+    "vite": "^7.3.7"
   }
 }

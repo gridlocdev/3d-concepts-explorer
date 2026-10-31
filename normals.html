@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Normals - Blender Concepts</title>
+    <title>Normals - 3D Concepts</title>
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <link rel="stylesheet" href="styles/main.css">
 </head>
@@ -20,7 +20,7 @@
                 <h1>Normals</h1>
 
                 <h2>Overview</h2>
-                <p>Normals are invisible arrows pointing out from each face that tell Blender which side is the
+                <p>Normals are invisible arrows pointing out from each face that tell the renderer which side is the
                     'outside' - get them backwards and your model looks inside-out!</p>
 
                 <div class="canvas-container">
@@ -42,8 +42,8 @@
                 <div class="tip-box">
                     <strong>Common Problem:</strong>
                     If your model appears dark, has black patches, or seems to have holes when it shouldn't, you likely
-                    have inverted normals. In Blender, enter Edit Mode (<code>Tab</code>), select the problematic faces,
-                    and use <code>Alt+N</code> (Windows/Linux) or <code>Option+N</code> (macOS) → Flip to correct them.
+                    have inverted normals. Select the problematic faces and use your tool's Flip (or Reverse) Normals
+                    command to correct them, or have it recalculate all normals to point outward.
                 </div>
 
                 <h3>What You're Seeing</h3>
@@ -83,7 +83,7 @@
                     sharp screen edges).</p>
 
                 <h3>Normals and Shading</h3>
-                <p>Normals also affect smooth shading. When you smooth-shade an object, Blender interpolates the normals
+                <p>Normals also affect smooth shading. When you smooth-shade an object, the renderer interpolates the normals
                     across faces to create the illusion of a curved surface. Understanding normals becomes essential
                     when you want precise control over how light and shadow play across your model.</p>
             </div>

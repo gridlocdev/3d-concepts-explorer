@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Extrude - Blender Concepts</title>
+    <title>Extrude - 3D Concepts</title>
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <link rel="stylesheet" href="styles/main.css">
 </head>
@@ -20,8 +20,8 @@
                 <h1>Extrude</h1>
 
                 <h2>Overview</h2>
-                <p>Extrude is like pulling clay out of your model - select a face and press E to pull it out and create
-                    new geometry. It's the most-used modeling tool!</p>
+                <p>Extrude is like pulling clay out of your model - select a face and extrude it to pull it out and
+                    create new geometry. It's the most-used modeling tool!</p>
 
                 <div class="canvas-container">
                     <canvas id="three-canvas"></canvas>
@@ -37,18 +37,17 @@
                     to the original form.</p>
 
                 <p>The process is beautifully simple:</p>
-                <p>1. Enter Edit Mode (<code>Tab</code>)<br>
+                <p>1. Switch to editing the mesh's components (vertices, edges, faces)<br>
                     2. Select a face, edge, or vertex<br>
-                    3. Press <code>E</code> to activate extrude<br>
-                    4. Move your mouse to pull the geometry outward<br>
-                    5. Click to confirm (or press <code>Enter</code>)</p>
+                    3. Run the Extrude tool<br>
+                    4. Drag to pull the new geometry outward (or type an exact distance)<br>
+                    5. Confirm</p>
 
                 <div class="tip-box">
                     <strong>Axis-Constrained Extrusion:</strong>
-                    Just like with transformations, you can press <code>X</code>, <code>Y</code>, or <code>Z</code>
-                    after pressing <code>E</code> to extrude along a specific axis. For example, <code>E</code> then
-                    <code>Z</code> extrudes straight up along the Z-axis, perfect for creating walls or vertical
-                    features.
+                    Just like with transformations, you can constrain an extrusion to a single axis. By default most
+                    tools extrude a face along its normal (straight out from the surface); constraining it to the
+                    vertical axis instead extrudes straight up, perfect for creating walls or vertical features.
                 </div>
 
                 <h3>What You're Seeing</h3>

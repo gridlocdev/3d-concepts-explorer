@@ -111,7 +111,7 @@ class WikiSidebar extends HTMLElement {
             </style>
 
             <div class="sidebar-header">
-                <h1 class="sidebar-title">Blender Concepts</h1>
+                <h1 class="sidebar-title">3D Concepts</h1>
                 <p class="sidebar-subtitle">Interactive Learning Guide</p>
             </div>
 
