@@ -23,6 +23,11 @@ This is now a multi-page wiki-style application with the following structure:
 
 ### Components
 - `components/wiki-sidebar.js` - Shared Web Component for navigation sidebar
+- `components/app.js` - Loaded by every page. Starts the page's scenes, then swaps pages in place when you click a link to another page (fetches it, replaces `<main>`, restarts scenes). The sidebar and three.js stay loaded, so pages switch instantly without a blank flash. Falls back to a normal page load if anything goes wrong.
+- `components/scene-scope.js` - Tracks a page's animation frames, window listeners and WebGL renderers so they can be stopped and freed on a page swap
+
+### Scenes
+- `scenes/<page>.js` - The three.js demos for `<page>.html`. Each exports `start()`, which builds the scenes and returns a `stop()` function. Use `scope.raf`, `scope.on(window, ...)` and `scope.renderer(...)` instead of `requestAnimationFrame`, `window.addEventListener` and `new THREE.WebGLRenderer` so `stop()` can clean them up.
 
 ### Styles
 - `styles/main.css` - Shared styles for all pages
