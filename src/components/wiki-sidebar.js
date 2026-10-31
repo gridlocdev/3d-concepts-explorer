@@ -11,19 +11,14 @@ class WikiSidebar extends HTMLElement {
     render() {
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
-        const concepts = [
-            { name: 'Meshes', file: 'meshes.html' },
-            { name: 'Normals', file: 'normals.html' },
-            { name: 'Transformations', file: 'transformations.html' },
-            { name: 'Extrude', file: 'extrude.html' },
-            { name: 'Loop Cuts', file: 'loop-cuts.html' },
-            { name: 'Bevel', file: 'bevel.html' },
-            { name: 'Subdivision Surface', file: 'subdivision.html' },
-            { name: 'Materials', file: 'materials.html' },
-            { name: 'UV Maps', file: 'uv-maps.html' },
-            { name: 'Lighting', file: 'lighting.html' },
-            { name: 'Camera', file: 'camera.html' },
-            { name: 'Shaders', file: 'shaders.html' }
+        // In the order you meet them: build a shape, refine it, give it a
+        // surface, then light and frame the scene.
+        const groups = [
+            ['Basics', [['Meshes', 'meshes'], ['Transformations', 'transformations']]],
+            ['Modeling', [['Extrude', 'extrude'], ['Loop Cuts', 'loop-cuts'], ['Bevel', 'bevel']]],
+            ['Smoothing', [['Normals', 'normals'], ['Subdivision Surface', 'subdivision']]],
+            ['Surface', [['Materials', 'materials'], ['UV Maps', 'uv-maps'], ['Shaders', 'shaders']]],
+            ['Scene', [['Lighting', 'lighting'], ['Camera', 'camera']]],
         ];
 
         this.shadowRoot.innerHTML = `
@@ -51,6 +46,15 @@ class WikiSidebar extends HTMLElement {
                     color: #00ff88;
                 }
 
+                .group {
+                    padding: 14px 16px 4px;
+                    color: #6f6f6f;
+                    font-size: 11px;
+                    font-weight: 600;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                }
+
                 .nav-link {
                     display: block;
                     padding: 6px 16px;
@@ -74,8 +78,11 @@ class WikiSidebar extends HTMLElement {
             <a href="index.html" class="title ${currentPage === 'index.html' ? 'active' : ''}">3D Concepts</a>
 
             <nav>
-                ${concepts.map(concept => `
-                    <a href="${concept.file}" class="nav-link ${currentPage === concept.file ? 'active' : ''}">${concept.name}</a>
+                ${groups.map(([group, pages]) => `
+                    <div class="group">${group}</div>
+                    ${pages.map(([name, page]) => `
+                        <a href="${page}.html" class="nav-link ${currentPage === `${page}.html` ? 'active' : ''}">${name}</a>
+                    `).join('')}
                 `).join('')}
             </nav>
         `;

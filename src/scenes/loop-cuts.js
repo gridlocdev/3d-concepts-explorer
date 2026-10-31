@@ -1,168 +1,96 @@
-// Scenes for loop-cuts.html. start() builds them; the returned stop() tears them down.
+// Panels for loop-cuts.html. Loops are real cuts in a polygon mesh
+// (components/mesh-kit.js); the highlighted rings are the loops in question.
 import * as THREE from 'three';
-import { createScope } from '../components/scene-scope.js';
+import { createBrochure, COLORS, lines, solid, holdPingPong } from '../components/brochure.js';
+import { boxGrid, tube, toGeometry, toEdges, setGeometry } from '../components/mesh-kit.js';
+
+const S = 0.5; // half size of the cube
+
+// A cube cut at the given heights, with those loops drawn in orange.
+function cutCube(root) {
+    const body = solid(new THREE.BufferGeometry(), COLORS.body, { flatShading: true });
+    const edges = lines(new THREE.BufferGeometry(), 0x000000, 0.45);
+    const loops = lines(new THREE.BufferGeometry(), COLORS.hi);
+    loops.material.depthTest = false;
+    loops.renderOrder = 2;
+    root.add(body, edges, loops);
+    return cuts => {
+        const m = boxGrid([-S, S], [-S, ...cuts, S], [-S, S]);
+        setGeometry(body, toGeometry(m));
+        setGeometry(edges, toEdges(m));
+        const ring = [];
+        const e = S + 0.002;
+        for (const y of cuts) {
+            const c = [[-e, y, -e], [e, y, -e], [e, y, e], [-e, y, e]];
+            c.forEach((q, i) => ring.push(...q, ...c[(i + 1) % 4]));
+        }
+        setGeometry(loops, new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(ring, 3)));
+    };
+}
+
+// Bend a tube around a center off to its right; `angle` is the total bend.
+function bendPoint([x, y, z], h, angle) {
+    const k = Math.max(angle, 1e-4) / (2 * h);
+    const r = 1 / k - x;
+    const a = (y + h) * k;
+    return [1 / k - r * Math.cos(a), -h + r * Math.sin(a), z];
+}
+
+function bent(heights, angle) {
+    const m = tube(heights, 14, 0.28);
+    const h = heights.at(-1);
+    m.v = m.v.map(v => bendPoint(v, h, angle));
+    return m;
+}
+
+// The center line of the bend: the curve the tube should follow.
+function bendPath(h, angle) {
+    const pts = [];
+    for (let i = 0; i <= 40; i++) pts.push(...bendPoint([0, -h + (2 * h * i) / 40, 0], h, angle));
+    return new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+}
 
 export function start() {
-    const scope = createScope();
+    const b = createBrochure();
 
-    function initScene() {
-        const canvas = document.getElementById('three-canvas');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
+    b.panel('loop', p => {
+        cutCube(p.root)([0]);
+    });
 
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas.clientWidth / canvas.clientHeight,
-            0.1,
-            1000
-        );
+    b.panel('count', p => {
+        const draw = cutCube(p.root);
+        let shown = 0;
+        return t => {
+            const n = 1 + (Math.floor(t / 1.2) % 4);
+            if (n === shown) return;
+            shown = n;
+            draw([...Array(n).keys()].map(i => -S + (2 * S * (i + 1)) / (n + 1)));
+        };
+    });
 
-        const renderer = scope.renderer({ canvas, antialias: true });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    b.panel('slide', p => {
+        const draw = cutCube(p.root);
+        return t => draw([Math.sin(t * 1.2) * S * 0.75]);
+    });
 
-        // Create cylinder with visible loop cuts
-        const geometry = new THREE.CylinderGeometry(1, 1, 3, 16, 6);
-
-        const material = new THREE.MeshStandardMaterial({
-            color: 0x4488ff,
-            flatShading: false,
-            wireframe: false
-        });
-
-        const cylinder = new THREE.Mesh(geometry, material);
-        scene.add(cylinder);
-
-        // Add wireframe to show the loops
-        const wireframeGeometry = geometry.clone();
-        const wireframeMaterial = new THREE.MeshBasicMaterial({
-            color: 0x00ff88,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.8
-        });
-        const wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
-        scene.add(wireframe);
-
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5);
-        scene.add(light);
-
-        const ambientLight = new THREE.AmbientLight(0x505050);
-        scene.add(ambientLight);
-
-        camera.position.set(0, 2, 6);
-        camera.lookAt(0, 0, 0);
-
-        function animate() {
-            scope.raf(animate);
-            cylinder.rotation.y += 0.008;
-            wireframe.rotation.y += 0.008;
-            renderer.render(scene, camera);
-        }
-
-        scope.on(window, 'resize', () => {
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        });
-
-        animate();
+    for (const [id, rings] of [['bend-few', 2], ['bend-many', 10]]) {
+        b.panel(id, p => {
+            const heights = [...Array(rings).keys()].map(i => -0.9 + (1.8 * i) / (rings - 1));
+            const body = solid(new THREE.BufferGeometry(), COLORS.body, { flatShading: true });
+            const edges = lines(new THREE.BufferGeometry(), 0x000000, 0.45);
+            const path = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: COLORS.hi, depthTest: false }));
+            path.renderOrder = 1;
+            p.root.add(body, edges, path);
+            p.root.position.x = -0.3;
+            return t => {
+                const angle = holdPingPong(t, 5) * Math.PI * 0.6;
+                const m = bent(heights, angle);
+                setGeometry(body, toGeometry(m));
+                setGeometry(edges, toEdges(m));
+                setGeometry(path, bendPath(heights.at(-1), angle));
+            };
+        }, { spin: 0, cam: [0, 0.4, 4] });
     }
 
-    function initScene2() {
-        const canvas = document.getElementById('three-canvas-2');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
-
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas.clientWidth / canvas.clientHeight,
-            0.1,
-            1000
-        );
-
-        const renderer = scope.renderer({ canvas, antialias: true });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-        // Left: Good topology with proper loop cuts
-        const goodGeometry = new THREE.CylinderGeometry(0.8, 0.8, 2.5, 12, 6);
-        const goodMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff88, wireframe: false });
-        const goodWireMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true, transparent: true, opacity: 0.8 });
-        const goodCylinder = new THREE.Mesh(goodGeometry, goodMaterial);
-        const goodWire = new THREE.Mesh(goodGeometry.clone(), goodWireMaterial);
-        goodCylinder.position.x = -2.5;
-        goodWire.position.x = -2.5;
-        scene.add(goodCylinder);
-        scene.add(goodWire);
-
-        // Middle: Poor topology with random edges (simulated with irregular geometry)
-        const poorGeometry = new THREE.CylinderGeometry(0.8, 0.8, 2.5, 7, 3);
-        // Make it irregular
-        const positions = poorGeometry.attributes.position;
-        for (let i = 0; i < positions.count; i++) {
-            const x = positions.getX(i);
-            const y = positions.getY(i);
-            const z = positions.getZ(i);
-            positions.setXYZ(
-                i,
-                x + (Math.random() - 0.5) * 0.15,
-                y,
-                z + (Math.random() - 0.5) * 0.15
-            );
-        }
-        poorGeometry.computeVertexNormals();
-
-        const poorMaterial = new THREE.MeshStandardMaterial({ color: 0xff6600, wireframe: false, flatShading: true });
-        const poorWireMaterial = new THREE.MeshBasicMaterial({ color: 0xff6600, wireframe: true, transparent: true, opacity: 0.8 });
-        const poorCylinder = new THREE.Mesh(poorGeometry, poorMaterial);
-        const poorWire = new THREE.Mesh(poorGeometry.clone(), poorWireMaterial);
-        poorCylinder.position.x = 0;
-        poorWire.position.x = 0;
-        scene.add(poorCylinder);
-        scene.add(poorWire);
-
-        // Right: Strategic loop cuts (more detail in specific areas)
-        const strategicGeometry = new THREE.CylinderGeometry(0.8, 0.8, 2.5, 12, 8);
-        const strategicMaterial = new THREE.MeshStandardMaterial({ color: 0x4488ff, wireframe: false });
-        const strategicWireMaterial = new THREE.MeshBasicMaterial({ color: 0x4488ff, wireframe: true, transparent: true, opacity: 0.8 });
-        const strategicCylinder = new THREE.Mesh(strategicGeometry, strategicMaterial);
-        const strategicWire = new THREE.Mesh(strategicGeometry.clone(), strategicWireMaterial);
-        strategicCylinder.position.x = 2.5;
-        strategicWire.position.x = 2.5;
-        scene.add(strategicCylinder);
-        scene.add(strategicWire);
-
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5);
-        scene.add(light);
-
-        const ambientLight = new THREE.AmbientLight(0x505050);
-        scene.add(ambientLight);
-
-        camera.position.set(0, 2, 6);
-        camera.lookAt(0, 0, 0);
-
-        function animate() {
-            scope.raf(animate);
-            goodCylinder.rotation.y += 0.008;
-            goodWire.rotation.y += 0.008;
-            poorCylinder.rotation.y += 0.008;
-            poorWire.rotation.y += 0.008;
-            strategicCylinder.rotation.y += 0.008;
-            strategicWire.rotation.y += 0.008;
-            renderer.render(scene, camera);
-        }
-
-        scope.on(window, 'resize', () => {
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        });
-
-        animate();
-    }
-
-    initScene();
-    initScene2();
-    return scope.stop;
+    return b.stop;
 }

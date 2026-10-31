@@ -1,246 +1,55 @@
-// Scenes for bevel.html. start() builds them; the returned stop() tears them down.
+// Panels for bevel.html. Each block is a real beveled cube: a square outline
+// extruded with three.js's own bevel, so every edge gets the same width and
+// segment count, as a modeling tool's bevel would give it.
 import * as THREE from 'three';
-import { createScope } from '../components/scene-scope.js';
+import { createBrochure, COLORS, lines } from '../components/brochure.js';
+
+function beveledCube(size, width, segments) {
+    if (width === 0) return new THREE.BoxGeometry(size, size, size);
+    // The outline sits `width` inside the cube; the bevel grows it back out.
+    // Its corners are tiny arcs, so the side edges round with the same
+    // segment count as the front and back.
+    const a = size / 2 - width, r = 0.001;
+    const shape = new THREE.Shape();
+    const corners = [[a, a, 0], [-a, a, 0.5], [-a, -a, 1], [a, -a, 1.5]];
+    corners.forEach(([x, y, start], i) => {
+        for (let s = 0; s <= segments; s++) {
+            const ang = (start + (s / segments) * 0.5) * Math.PI;
+            const px = x - r * Math.sign(x) + r * Math.cos(ang), py = y - r * Math.sign(y) + r * Math.sin(ang);
+            if (i === 0 && s === 0) shape.moveTo(px, py);
+            else shape.lineTo(px, py);
+        }
+    });
+    const depth = size - 2 * width;
+    const geo = new THREE.ExtrudeGeometry(shape, {
+        depth, bevelEnabled: true, bevelThickness: width, bevelSize: width, bevelSegments: segments, curveSegments: 1,
+    });
+    geo.translate(0, 0, -depth / 2);
+    return geo;
+}
 
 export function start() {
-    const scope = createScope();
+    const b = createBrochure();
+    const blocks = {
+        sharp: [0, 1],
+        chamfer: [0.14, 1],
+        round: [0.14, 3],
+        smooth: [0.14, 8],
+        narrow: [0.04, 3],
+        wide: [0.3, 6],
+    };
 
-    function initScene() {
-        const canvas = document.getElementById('three-canvas');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
-
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas.clientWidth / canvas.clientHeight,
-            0.1,
-            1000
-        );
-
-        const renderer = scope.renderer({ canvas, antialias: true });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-        // Sharp cube (left)
-        const sharpGeometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
-        const sharpMaterial = new THREE.MeshStandardMaterial({
-            color: 0xff6600,
-            metalness: 0.3,
-            roughness: 0.4
-        });
-        const sharpCube = new THREE.Mesh(sharpGeometry, sharpMaterial);
-        sharpCube.position.x = -2;
-        scene.add(sharpCube);
-
-        // Beveled cube (right)
-        const roundedShape = new THREE.Shape();
-        const radius = 0.15;
-        const size = 1.5;
-        const half = size / 2;
-
-        roundedShape.moveTo(-half + radius, -half);
-        roundedShape.lineTo(half - radius, -half);
-        roundedShape.quadraticCurveTo(half, -half, half, -half + radius);
-        roundedShape.lineTo(half, half - radius);
-        roundedShape.quadraticCurveTo(half, half, half - radius, half);
-        roundedShape.lineTo(-half + radius, half);
-        roundedShape.quadraticCurveTo(-half, half, -half, half - radius);
-        roundedShape.lineTo(-half, -half + radius);
-        roundedShape.quadraticCurveTo(-half, -half, -half + radius, -half);
-
-        const beveledGeometry = new THREE.ExtrudeGeometry(roundedShape, {
-            depth: size,
-            bevelEnabled: true,
-            bevelThickness: radius,
-            bevelSize: radius,
-            bevelSegments: 5
-        });
-
-        const beveledMaterial = new THREE.MeshStandardMaterial({
-            color: 0x00ff88,
-            metalness: 0.3,
-            roughness: 0.4
-        });
-        const beveledCube = new THREE.Mesh(beveledGeometry, beveledMaterial);
-        beveledCube.position.set(2, 0, -size / 2);
-        scene.add(beveledCube);
-
-        const light1 = new THREE.DirectionalLight(0xffffff, 1);
-        light1.position.set(5, 5, 5);
-        scene.add(light1);
-
-        const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
-        light2.position.set(-5, 3, -5);
-        scene.add(light2);
-
-        const ambientLight = new THREE.AmbientLight(0x404040);
-        scene.add(ambientLight);
-
-        camera.position.set(0, 2, 6);
-        camera.lookAt(0, 0, 0);
-
-        function animate() {
-            scope.raf(animate);
-            sharpCube.rotation.x += 0.008;
-            sharpCube.rotation.y += 0.012;
-            beveledCube.rotation.x += 0.008;
-            beveledCube.rotation.y += 0.012;
-            renderer.render(scene, camera);
-        }
-
-        scope.on(window, 'resize', () => {
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        });
-
-        animate();
+    for (const [id, [width, segments]] of Object.entries(blocks)) {
+        b.panel(id, p => {
+            p.scene.environment = p.environment();
+            const geo = beveledCube(1.1, width, segments);
+            p.root.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
+                color: COLORS.body, metalness: 0.4, roughness: 0.3, flatShading: segments < 8,
+            })));
+            if (id === 'round') p.root.add(lines(new THREE.EdgesGeometry(geo, 1), 0x000000, 0.5));
+            p.root.rotation.x = 0.45;
+        }, { cam: [0, 1.1, 3.6] });
     }
 
-    function initScene2() {
-        const canvas = document.getElementById('three-canvas-2');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
-
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas.clientWidth / canvas.clientHeight,
-            0.1,
-            1000
-        );
-
-        const renderer = scope.renderer({ canvas, antialias: true });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-        // Small bevel (left)
-        const smallShape = new THREE.Shape();
-        const smallRadius = 0.05;
-        const size = 1.2;
-        const half = size / 2;
-
-        smallShape.moveTo(-half + smallRadius, -half);
-        smallShape.lineTo(half - smallRadius, -half);
-        smallShape.quadraticCurveTo(half, -half, half, -half + smallRadius);
-        smallShape.lineTo(half, half - smallRadius);
-        smallShape.quadraticCurveTo(half, half, half - smallRadius, half);
-        smallShape.lineTo(-half + smallRadius, half);
-        smallShape.quadraticCurveTo(-half, half, -half, half - smallRadius);
-        smallShape.lineTo(-half, -half + smallRadius);
-        smallShape.quadraticCurveTo(-half, -half, -half + smallRadius, -half);
-
-        const smallBevelGeometry = new THREE.ExtrudeGeometry(smallShape, {
-            depth: size,
-            bevelEnabled: true,
-            bevelThickness: smallRadius,
-            bevelSize: smallRadius,
-            bevelSegments: 2
-        });
-
-        const smallBevelMaterial = new THREE.MeshStandardMaterial({
-            color: 0xff6600,
-            metalness: 0.3,
-            roughness: 0.4
-        });
-        const smallBevelCube = new THREE.Mesh(smallBevelGeometry, smallBevelMaterial);
-        smallBevelCube.position.set(-2.5, 0, -size / 2);
-        scene.add(smallBevelCube);
-
-        // Medium bevel (center)
-        const mediumShape = new THREE.Shape();
-        const mediumRadius = 0.12;
-
-        mediumShape.moveTo(-half + mediumRadius, -half);
-        mediumShape.lineTo(half - mediumRadius, -half);
-        mediumShape.quadraticCurveTo(half, -half, half, -half + mediumRadius);
-        mediumShape.lineTo(half, half - mediumRadius);
-        mediumShape.quadraticCurveTo(half, half, half - mediumRadius, half);
-        mediumShape.lineTo(-half + mediumRadius, half);
-        mediumShape.quadraticCurveTo(-half, half, -half, half - mediumRadius);
-        mediumShape.lineTo(-half, -half + mediumRadius);
-        mediumShape.quadraticCurveTo(-half, -half, -half + mediumRadius, -half);
-
-        const mediumBevelGeometry = new THREE.ExtrudeGeometry(mediumShape, {
-            depth: size,
-            bevelEnabled: true,
-            bevelThickness: mediumRadius,
-            bevelSize: mediumRadius,
-            bevelSegments: 3
-        });
-
-        const mediumBevelMaterial = new THREE.MeshStandardMaterial({
-            color: 0x00ff88,
-            metalness: 0.3,
-            roughness: 0.4
-        });
-        const mediumBevelCube = new THREE.Mesh(mediumBevelGeometry, mediumBevelMaterial);
-        mediumBevelCube.position.set(0, 0, -size / 2);
-        scene.add(mediumBevelCube);
-
-        // Large bevel (right)
-        const largeShape = new THREE.Shape();
-        const largeRadius = 0.2;
-
-        largeShape.moveTo(-half + largeRadius, -half);
-        largeShape.lineTo(half - largeRadius, -half);
-        largeShape.quadraticCurveTo(half, -half, half, -half + largeRadius);
-        largeShape.lineTo(half, half - largeRadius);
-        largeShape.quadraticCurveTo(half, half, half - largeRadius, half);
-        largeShape.lineTo(-half + largeRadius, half);
-        largeShape.quadraticCurveTo(-half, half, -half, half - largeRadius);
-        largeShape.lineTo(-half, -half + largeRadius);
-        largeShape.quadraticCurveTo(-half, -half, -half + largeRadius, -half);
-
-        const largeBevelGeometry = new THREE.ExtrudeGeometry(largeShape, {
-            depth: size,
-            bevelEnabled: true,
-            bevelThickness: largeRadius,
-            bevelSize: largeRadius,
-            bevelSegments: 5
-        });
-
-        const largeBevelMaterial = new THREE.MeshStandardMaterial({
-            color: 0x4488ff,
-            metalness: 0.3,
-            roughness: 0.4
-        });
-        const largeBevelCube = new THREE.Mesh(largeBevelGeometry, largeBevelMaterial);
-        largeBevelCube.position.set(2.5, 0, -size / 2);
-        scene.add(largeBevelCube);
-
-        const light1 = new THREE.DirectionalLight(0xffffff, 1);
-        light1.position.set(5, 5, 5);
-        scene.add(light1);
-
-        const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
-        light2.position.set(-5, 3, -5);
-        scene.add(light2);
-
-        const ambientLight = new THREE.AmbientLight(0x404040);
-        scene.add(ambientLight);
-
-        camera.position.set(0, 2, 6);
-        camera.lookAt(0, 0, 0);
-
-        function animate() {
-            scope.raf(animate);
-            smallBevelCube.rotation.x += 0.008;
-            smallBevelCube.rotation.y += 0.012;
-            mediumBevelCube.rotation.x += 0.008;
-            mediumBevelCube.rotation.y += 0.012;
-            largeBevelCube.rotation.x += 0.008;
-            largeBevelCube.rotation.y += 0.012;
-            renderer.render(scene, camera);
-        }
-
-        scope.on(window, 'resize', () => {
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        });
-
-        animate();
-    }
-
-    initScene();
-    initScene2();
-    return scope.stop;
+    return b.stop;
 }

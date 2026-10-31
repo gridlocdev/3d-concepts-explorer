@@ -20,37 +20,34 @@
         <main class="main-container">
             <article class="page">
                 <h1>Materials</h1>
-                <p class="lede">A material defines what a surface is made of: its color, how shiny it is, and whether it behaves like metal.</p>
-
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Metal</b>Metallic 0.9, roughness 0.1</span>
-                        <span><b>Matte</b>Metallic 0.2, roughness 0.8</span>
-                        <span><b>Translucent</b>Roughness 0.3, opacity 0.6</span>
-                    </figcaption>
-                </figure>
-
-                <p>Most tools use physically based (PBR) materials, whose settings match real physical properties:</p>
-                <ul>
-                    <li><strong>Base color</strong>: the surface color.</li>
-                    <li><strong>Metallic</strong>: 1 for metal, 0 for everything else. Rarely in between.</li>
-                    <li><strong>Roughness</strong>: 0 is a mirror, 1 is fully matte.</li>
-                    <li><strong>Specular</strong>: reflection strength on non-metals; around 0.5 for most.</li>
-                </ul>
-
-                <h2>Same sphere, different materials</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Rough</b>Roughness 0.9, non-metal</span>
-                        <span><b>Polished metal</b>Roughness 0.1, metal</span>
-                        <span><b>Glossy plastic</b>Roughness 0.2, non-metal</span>
-                    </figcaption>
-                </figure>
-
-                <p>The geometry is identical; only the material changes. Metals tint their reflections with their base color. Non-metals keep their color and get white highlights on top.</p>
-                <p>Some reference points: plastic is non-metal with medium to high roughness, polished wood is non-metal with low roughness, brushed aluminum is metal with medium roughness.</p>
+                <p class="lede">A material says what a surface is made of. Most tools use physically based (PBR) materials, whose settings match real properties.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel wide" data-panel="roughness">
+                        <div class="view"></div>
+                        <figcaption><b>Roughness</b>From 0, a mirror finish, to 1, fully matte. The highlight spreads as roughness rises.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="metallic">
+                        <div class="view"></div>
+                        <figcaption><b>Metallic</b>The same orange, non-metal on the left and metal on the right. Metal tints its reflections; plastic keeps a white highlight.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="base-color">
+                        <div class="view"></div>
+                        <figcaption><b>Base color</b>The color of the surface itself, before any reflection.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="glass">
+                        <div class="view"></div>
+                        <figcaption><b>Transparent</b>Transmission lets light through and bends what is behind it, like glass.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="emission">
+                        <div class="view"></div>
+                        <figcaption><b>Emission</b>An emissive surface glows with its own color, no light needed.</figcaption>
+                    </figure>
+                    <figure class="panel wide" data-panel="real">
+                        <div class="view"></div>
+                        <figcaption><b>Real materials</b>Rubber, gold, chrome and clay, made only from color, roughness and metallic.</figcaption>
+                    </figure>
+                </div>
 
                 <nav class="pager">
                     <a href="subdivision.html" class="prev">← Subdivision Surface</a>

@@ -20,38 +20,44 @@
         <main class="main-container">
             <article class="page">
                 <h1>Transformations</h1>
-                <p class="lede">Move, rotate and scale: the three ways to change where an object is, which way it faces, and how big it is.</p>
+                <p class="lede">Move, rotate and scale change where an object is, which way it faces and how big it is. They work on whole objects and on selected vertices, edges and faces.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel" data-panel="move">
+                        <div class="view"></div>
+                        <figcaption><b>Move</b>Changes position. Dragging one arrow of the gizmo locks the move to that axis; here, X.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="rotate">
+                        <div class="view"></div>
+                        <figcaption><b>Rotate</b>Turns the object around its pivot. Each ring of the gizmo is one axis.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="scale">
+                        <div class="view"></div>
+                        <figcaption><b>Scale</b>Resizes from the pivot. Scaling all axes together keeps the proportions.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="scale-axis">
+                        <div class="view"></div>
+                        <figcaption><b>Scale one axis</b>Scaling only Y stretches the cube into a tall box.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="pivot-center">
+                        <div class="view"></div>
+                        <figcaption><b>Pivot at the center</b>The pivot (the dot) is the point everything turns and scales around.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="pivot-corner">
+                        <div class="view"></div>
+                        <figcaption><b>Pivot at a corner</b>The same rotation with the pivot moved to a corner swings the whole cube around it.</figcaption>
+                    </figure>
+                </div>
 
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Move</b>Changes position</span>
-                        <span><b>Rotate</b>Turns around a pivot</span>
-                        <span><b>Scale</b>Grows or shrinks from a pivot</span>
-                    </figcaption>
-                </figure>
-
-                <ul>
-                    <li><strong>Move</strong> (also Translate or Grab) changes position. Drag the selection, or drag one arrow of the move gizmo.</li>
-                    <li><strong>Rotate</strong> turns the object around its pivot point. Each ring of the rotate gizmo turns it around one axis.</li>
-                    <li><strong>Scale</strong> resizes from the pivot. Scaling all axes evenly keeps proportions; scaling one axis stretches or squashes.</li>
-                </ul>
-
-                <h2>Axis constraints</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Free</b>Rotates on several axes at once</span>
-                        <span><b>One axis</b>Rotates around Y only</span>
-                        <span><b>One axis</b>Moves along one axis only</span>
-                    </figcaption>
-                </figure>
-
-                <p>Constraining a transform to one axis (or a plane of two axes) makes it predictable: a move locked to X only slides left and right, however the mouse moves. Drag a single gizmo handle, or use your tool's axis key.</p>
-                <p>For exact values, type them in. The same transforms work on whole objects and on selected vertices, edges and faces inside a mesh.</p>
+                <h2>In your tool</h2>
+                <ol>
+                    <li>Select the object, or vertices, edges or faces inside a mesh.</li>
+                    <li>Pick the move, rotate or scale tool (or its shortcut) and drag a gizmo handle.</li>
+                    <li>Type a number to set an exact distance, angle or factor.</li>
+                </ol>
 
                 <nav class="pager">
-                    <a href="normals.html" class="prev">← Normals</a>
+                    <a href="meshes.html" class="prev">← Meshes</a>
                     <a href="extrude.html" class="next">Extrude →</a>
                 </nav>
             </article>

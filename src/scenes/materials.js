@@ -1,143 +1,76 @@
-// Scenes for materials.html. start() builds them; the returned stop() tears them down.
+// Panels for materials.html. Every panel lights its objects with the same
+// soft studio reflection (brochure.js environment) so metals and glossy
+// surfaces have something to reflect.
 import * as THREE from 'three';
-import { createScope } from '../components/scene-scope.js';
+import { createBrochure, label, checkerTexture } from '../components/brochure.js';
+
+const sphere = new THREE.SphereGeometry(0.42, 64, 32);
+
+// A row of spheres, each with a label under it.
+function row(p, items, gap = 1.05) {
+    p.scene.environment = p.environment();
+    items.forEach(([params, text], i) => {
+        const ball = new THREE.Mesh(sphere, new THREE.MeshPhysicalMaterial(params));
+        ball.position.x = (i - (items.length - 1) / 2) * gap;
+        p.root.add(ball);
+        if (text) {
+            const tag = label(text, { size: 0.18 });
+            tag.position.set(ball.position.x, -0.68, 0);
+            p.root.add(tag);
+        }
+    });
+}
 
 export function start() {
-    const scope = createScope();
+    const b = createBrochure();
+    const flat = { spin: 0, cam: [0, 0.35, 3.6], target: [0, -0.1, 0] };
+    const wide = { spin: 0, cam: [0, 0.35, 4.4], target: [0, -0.1, 0] };
 
-    function initScene() {
-        const canvas = document.getElementById('three-canvas');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
+    b.panel('roughness', p => {
+        row(p, [0, 0.25, 0.5, 0.75, 1].map(r => [{ color: 0x2a5aa8, roughness: r }, String(r)]));
+    }, wide);
 
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas.clientWidth / canvas.clientHeight,
-            0.1,
-            1000
-        );
+    b.panel('metallic', p => {
+        row(p, [
+            [{ color: 0xd9822b, roughness: 0.3, metalness: 0 }, 'Metallic 0'],
+            [{ color: 0xd9822b, roughness: 0.3, metalness: 1 }, 'Metallic 1'],
+        ], 1.2);
+    }, flat);
 
-        const renderer = scope.renderer({ canvas, antialias: true });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    b.panel('base-color', p => {
+        row(p, [
+            [{ color: 0xc8372d, roughness: 0.5 }],
+            [{ color: 0xe8b82a, roughness: 0.5 }],
+            [{ color: 0x2f6fd0, roughness: 0.5 }],
+        ], 0.95);
+    }, flat);
 
-        const materials = [
-            new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 0.1, metalness: 0.9 }),
-            new THREE.MeshStandardMaterial({ color: 0x00ff00, roughness: 0.8, metalness: 0.2 }),
-            new THREE.MeshStandardMaterial({ color: 0x0000ff, roughness: 0.3, metalness: 0.0, transparent: true, opacity: 0.6 })
-        ];
+    b.panel('glass', p => {
+        p.scene.environment = p.environment();
+        // A checker wall behind shows the glass bending what's behind it.
+        const wall = new THREE.Mesh(new THREE.PlaneGeometry(4, 3), new THREE.MeshBasicMaterial({ map: checkerTexture(10) }));
+        wall.position.z = -1.2;
+        p.scene.add(wall);
+        p.root.add(new THREE.Mesh(new THREE.SphereGeometry(0.65, 64, 32), new THREE.MeshPhysicalMaterial({
+            color: 0xffffff, roughness: 0.02, transmission: 1, thickness: 1.2, ior: 1.5,
+        })));
+    }, { spin: 0, cam: [0, 0, 3.4] });
 
-        const geometry = new THREE.SphereGeometry(1, 32, 32);
-        const spheres = [];
+    b.panel('emission', p => {
+        row(p, [
+            [{ color: 0x222222, emissive: 0xff6a10, emissiveIntensity: 1.2, roughness: 0.6 }, 'Emissive'],
+            [{ color: 0x222222, roughness: 0.6 }, 'Not emissive'],
+        ], 1.2);
+    }, flat);
 
-        materials.forEach((material, index) => {
-            const sphere = new THREE.Mesh(geometry, material);
-            sphere.position.x = (index - 1) * 2.5;
-            scene.add(sphere);
-            spheres.push(sphere);
-        });
+    b.panel('real', p => {
+        row(p, [
+            [{ color: 0x1c1c1c, roughness: 0.9 }, 'Rubber'],
+            [{ color: 0xffc356, roughness: 0.25, metalness: 1 }, 'Gold'],
+            [{ color: 0xffffff, roughness: 0.04, metalness: 1 }, 'Chrome'],
+            [{ color: 0xb5603a, roughness: 1 }, 'Clay'],
+        ], 1.15);
+    }, wide);
 
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5);
-        scene.add(light);
-
-        const ambientLight = new THREE.AmbientLight(0x606060);
-        scene.add(ambientLight);
-
-        camera.position.set(0, 2, 6);
-        camera.lookAt(0, 0, 0);
-
-        function animate() {
-            scope.raf(animate);
-            spheres.forEach(sphere => {
-                sphere.rotation.y += 0.01;
-            });
-            renderer.render(scene, camera);
-        }
-
-        scope.on(window, 'resize', () => {
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        });
-
-        animate();
-    }
-
-    function initScene2() {
-        const canvas = document.getElementById('three-canvas-2');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
-
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas.clientWidth / canvas.clientHeight,
-            0.1,
-            1000
-        );
-
-        const renderer = scope.renderer({ canvas, antialias: true });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-        const geometry = new THREE.SphereGeometry(1, 32, 32);
-
-        // Left: Rough plastic (matte, non-metallic)
-        const plasticMaterial = new THREE.MeshStandardMaterial({
-            color: 0x8b4513,
-            roughness: 0.9,
-            metalness: 0.0
-        });
-        const plasticSphere = new THREE.Mesh(geometry, plasticMaterial);
-        plasticSphere.position.x = -2.5;
-        scene.add(plasticSphere);
-
-        // Middle: Polished metal (reflective, metallic)
-        const metalMaterial = new THREE.MeshStandardMaterial({
-            color: 0xcccccc,
-            roughness: 0.1,
-            metalness: 1.0
-        });
-        const metalSphere = new THREE.Mesh(geometry, metalMaterial);
-        metalSphere.position.x = 0;
-        scene.add(metalSphere);
-
-        // Right: Glossy plastic (smooth, non-metallic)
-        const glossyMaterial = new THREE.MeshStandardMaterial({
-            color: 0xff0000,
-            roughness: 0.2,
-            metalness: 0.0
-        });
-        const glossySphere = new THREE.Mesh(geometry, glossyMaterial);
-        glossySphere.position.x = 2.5;
-        scene.add(glossySphere);
-
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5);
-        scene.add(light);
-
-        const ambientLight = new THREE.AmbientLight(0x606060);
-        scene.add(ambientLight);
-
-        camera.position.set(0, 2, 6);
-        camera.lookAt(0, 0, 0);
-
-        function animate() {
-            scope.raf(animate);
-            plasticSphere.rotation.y += 0.01;
-            metalSphere.rotation.y += 0.01;
-            glossySphere.rotation.y += 0.01;
-            renderer.render(scene, camera);
-        }
-
-        scope.on(window, 'resize', () => {
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        });
-
-        animate();
-    }
-
-    initScene();
-    initScene2();
-    return scope.stop;
+    return b.stop;
 }

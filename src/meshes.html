@@ -20,34 +20,38 @@
         <main class="main-container">
             <article class="page">
                 <h1>Meshes</h1>
-                <p class="lede">A mesh is a shape built from vertices (points), edges (lines between points) and faces (the surfaces edges enclose).</p>
-
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Faces</b>What renders</span>
-                        <span><b>Edges</b>The wireframe</span>
-                        <span><b>Vertices</b>The points everything hangs on</span>
-                    </figcaption>
-                </figure>
-
-                <p>Almost every model starts as a mesh. Moving a vertex moves every edge and face attached to it, so editing a mesh comes down to selecting vertices, edges or faces and transforming them.</p>
-                <p>The mesh only defines shape. Color and surface detail come later, from materials and textures.</p>
-
-                <h2>Polygon count</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Low poly</b>8 segments, 320 triangles. Facets show.</span>
-                        <span><b>High poly</b>32 segments, 2,048 triangles. Reads as a smooth sphere.</span>
-                    </figcaption>
-                </figure>
-
-                <p>More faces make curves smoother but cost memory and render time, and make the mesh harder to edit. Spend detail where the viewer looks: a character's face needs it, the sole of their shoe doesn't. Games set a polygon budget per model for this reason.</p>
+                <p class="lede">Every 3D model is a mesh: points in space, joined by straight lines, filled in with flat surfaces.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel" data-panel="vertices">
+                        <div class="view"></div>
+                        <figcaption><b>Vertices</b>Points in 3D space, each with an X, Y and Z position. This house has 10.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="edges">
+                        <div class="view"></div>
+                        <figcaption><b>Edges</b>Straight lines between two vertices. They outline the shape.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="faces">
+                        <div class="view"></div>
+                        <figcaption><b>Faces</b>Flat surfaces closed in by edges. Faces are what render; the highlight steps through all 7.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="polygons">
+                        <div class="view"></div>
+                        <figcaption><b>Triangles, quads, n-gons</b>Faces can have any number of sides. Modelers prefer quads (4 sides); renderers split everything into triangles.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="low-poly">
+                        <div class="view"></div>
+                        <figcaption><b>Low poly</b>A sphere from 80 triangles. The facets show, but it is cheap to draw and easy to edit.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="high-poly">
+                        <div class="view"></div>
+                        <figcaption><b>High poly</b>The same sphere from 1,472 triangles. Smoother, but 18 times the data.</figcaption>
+                    </figure>
+                </div>
 
                 <nav class="pager">
                     <a href="index.html" class="prev">← All concepts</a>
-                    <a href="normals.html" class="next">Normals →</a>
+                    <a href="transformations.html" class="next">Transformations →</a>
                 </nav>
             </article>
         </main>

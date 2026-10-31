@@ -20,33 +20,48 @@
         <main class="main-container">
             <article class="page">
                 <h1>Subdivision Surface</h1>
-                <p class="lede">Subdivision surface splits every face into smaller ones and smooths the result, turning a simple, blocky mesh into a smooth one.</p>
+                <p class="lede">Subdivision surface splits every face into four and smooths the result. You shape a simple cage; the tool generates the smooth surface from it.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel" data-panel="level-0">
+                        <div class="view"></div>
+                        <figcaption><b>The cage</b>A plain cube: 6 faces. This is the mesh you edit.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="level-1">
+                        <div class="view"></div>
+                        <figcaption><b>1 level</b>24 faces. Each face became four, and every point moved toward a smooth shape.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="level-2">
+                        <div class="view"></div>
+                        <figcaption><b>2 levels</b>96 faces. The cube is already close to round.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="level-3">
+                        <div class="view"></div>
+                        <figcaption><b>3 levels</b>384 faces. Each level costs four times the faces of the last.</figcaption>
+                    </figure>
+                    <figure class="panel wide" data-panel="cage">
+                        <div class="view"></div>
+                        <figcaption><b>Editing the cage</b>Move one cage vertex and the smooth surface follows, without touching its hundreds of faces.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="support">
+                        <div class="view"></div>
+                        <figcaption><b>Support loops</b>Loops cut close to the edges keep them tight after subdividing: flat sides, crisp but rounded corners.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="partial">
+                        <div class="view"></div>
+                        <figcaption><b>Some edges sharp</b>Support loops only near the top and bottom keep those rims hard while the sides round off.</figcaption>
+                    </figure>
+                </div>
 
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Base mesh</b>The low-poly cage you edit</span>
-                        <span><b>Subdivided</b>The smooth surface that renders</span>
-                    </figcaption>
-                </figure>
-
-                <p>You edit the simple cage and the tool generates the smooth surface from it, usually as a non-destructive modifier using the Catmull-Clark algorithm. Moving one cage vertex reshapes a whole region of the smooth surface.</p>
-                <p>Most tools let you set one subdivision level for the viewport and a higher one for the final render.</p>
-
-                <h2>Keeping edges sharp</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>No support loops</b>Rounds off completely</span>
-                        <span><b>Loops near every edge</b>Sharp corners, flat faces</span>
-                        <span><b>Loops near some edges</b>Hard and soft edges together</span>
-                    </figcaption>
-                </figure>
-
-                <p>Subdivision rounds an edge more when the edges around it are far apart. Add loops close to an edge (support loops) to keep it sharp, or mark it with an edge crease. This is how hard-surface models get smooth panels and crisp corners from one mesh.</p>
+                <h2>In your tool</h2>
+                <ol>
+                    <li>Add a subdivision surface modifier (or turn on smooth preview).</li>
+                    <li>Set a low level for the viewport and a higher one for rendering.</li>
+                    <li>Add support loops or crease edges that should stay sharp.</li>
+                </ol>
 
                 <nav class="pager">
-                    <a href="bevel.html" class="prev">← Bevel</a>
+                    <a href="normals.html" class="prev">← Normals</a>
                     <a href="materials.html" class="next">Materials →</a>
                 </nav>
             </article>

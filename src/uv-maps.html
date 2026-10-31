@@ -20,30 +20,41 @@
         <main class="main-container">
             <article class="page">
                 <h1>UV Maps</h1>
-                <p class="lede">A UV map unfolds a 3D surface flat so a 2D image can be painted on it and wrapped back around the model.</p>
+                <p class="lede">A UV map lays the surface of a model out flat, so a 2D image can be painted on it and wrapped back around.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel wide" data-panel="unfold">
+                        <div class="view"></div>
+                        <figcaption><b>Unfolding a cube</b>The cube cut along its seams and laid flat is its UV map. Each face shows its own patch of one image.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="cube">
+                        <div class="view"></div>
+                        <figcaption><b>On the model</b>Every square of the checker comes out the same size: a clean unwrap.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="sphere">
+                        <div class="view"></div>
+                        <figcaption><b>A sphere</b>A sphere cannot flatten without distortion. Its squares squeeze together toward the poles.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="stretched">
+                        <div class="view"></div>
+                        <figcaption><b>Stretched UVs</b>Here the front face's UVs are squeezed, so the image stretches across it.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="density">
+                        <div class="view"></div>
+                        <figcaption><b>Texel density</b>The same image at two scales. Keep texture detail even across a model so no part looks blurrier.</figcaption>
+                    </figure>
+                </div>
 
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                </figure>
-
-                <p>U and V are the horizontal and vertical axes of the flat texture, named so they don't clash with X, Y and Z. Each vertex of the mesh gets a UV coordinate that says which point of the image it shows.</p>
-                <p>Notice the grid squares stretch and shrink across the sphere. A sphere can't be flattened without distortion; a good UV map keeps it small and puts it where it won't be seen.</p>
-
-                <h2>Good vs poor unwrapping</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Good</b>Even squares on every face</span>
-                        <span><b>Poor</b>Stretched, uneven squares</span>
-                    </figcaption>
-                </figure>
-
-                <p>Simple shapes can be unwrapped by projection. Complex ones need seams: edges you mark where the mesh is cut so it can unfold, like cutting open a box. Put seams where they're hidden, on undersides and along natural breaks.</p>
-                <p>UV maps are how logos, wood grain and painted detail land exactly where you want them, and most real-time engines texture models this way.</p>
+                <h2>In your tool</h2>
+                <ol>
+                    <li>Mark seams where the mesh may be cut, along hidden or natural edges.</li>
+                    <li>Unwrap: the tool lays the pieces out flat.</li>
+                    <li>Check a checker texture on the model for stretching, then paint or apply textures.</li>
+                </ol>
 
                 <nav class="pager">
                     <a href="materials.html" class="prev">← Materials</a>
-                    <a href="lighting.html" class="next">Lighting →</a>
+                    <a href="shaders.html" class="next">Shaders →</a>
                 </nav>
             </article>
         </main>

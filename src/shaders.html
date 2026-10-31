@@ -20,26 +20,34 @@
         <main class="main-container">
             <article class="page">
                 <h1>Shaders</h1>
-                <p class="lede">A shader is a small program that runs on the graphics card and computes the color of each pixel of a surface.</p>
-
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                </figure>
-
-                <p>Material settings like roughness and metallic are inputs to a shader. Writing or wiring your own shader lets you compute color from anything: position, angle, time. This torus knot is colored by sine waves of its surface position and the time, blended between two colors.</p>
-                <p>Most tools and engines have a node-based shader editor. Each node does one job (read the surface normal, sample a texture, mix two colors, do some math) and you connect them into a material.</p>
-
-                <h2>Fresnel rim light</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                </figure>
-
-                <p>Surfaces reflect more when seen edge-on than face-on; that's the Fresnel effect, and it's why water looks brighter toward the horizon. This shader compares the view direction with the surface normal: where they're nearly perpendicular, at the sphere's edge, it adds a bright rim color.</p>
-                <p>The same trick gives force fields, holograms and character outlines. Other common shader effects: cel shading for a cartoon look, and procedural patterns that need no texture image.</p>
+                <p class="lede">A shader is a small program that runs on the graphics card and works out the color of every pixel of a surface. Materials are shaders with sliders.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel" data-panel="normal-color">
+                        <div class="view"></div>
+                        <figcaption><b>Color from the normal</b>The simplest useful shader: turn each pixel's normal direction into a color.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="fresnel">
+                        <div class="view"></div>
+                        <figcaption><b>Fresnel rim</b>Brighter where the surface turns away from you, like a glowing edge. Used for force fields and outlines.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="toon">
+                        <div class="view"></div>
+                        <figcaption><b>Toon shading</b>Light is cut into three flat bands instead of a smooth gradient, for a cartoon look.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="stripes">
+                        <div class="view"></div>
+                        <figcaption><b>Procedural pattern</b>Stripes computed from the position and the time. No texture image is involved.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="waves">
+                        <div class="view"></div>
+                        <figcaption><b>Moving vertices</b>A vertex shader moves the surface itself. These waves are computed on the graphics card each frame.</figcaption>
+                    </figure>
+                </div>
 
                 <nav class="pager">
-                    <a href="camera.html" class="prev">← Camera</a>
-                    <a href="index.html" class="next">All concepts →</a>
+                    <a href="uv-maps.html" class="prev">← UV Maps</a>
+                    <a href="lighting.html" class="next">Lighting →</a>
                 </nav>
             </article>
         </main>

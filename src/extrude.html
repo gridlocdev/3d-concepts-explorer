@@ -20,31 +20,37 @@
         <main class="main-container">
             <article class="page">
                 <h1>Extrude</h1>
-                <p class="lede">Extrude pulls selected faces, edges or vertices outward and fills the gap with new, connected geometry.</p>
+                <p class="lede">Extrude pulls a selected face, edge or vertex outward and fills the gap with new geometry joined to the old.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel wide" data-panel="face">
+                        <div class="view"></div>
+                        <figcaption><b>Extrude a face</b>The top face moves out along its normal, and a new side face fills each of its edges.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="steps">
+                        <div class="view"></div>
+                        <figcaption><b>Extrude, scale, repeat</b>Extrude the top, shrink the new face a little, extrude again. Four rounds make this tower.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="branch">
+                        <div class="view"></div>
+                        <figcaption><b>Extrude sideways</b>Any face can be extruded. Extrude a side face, then the top of the new part, and an arm grows.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="edge">
+                        <div class="view"></div>
+                        <figcaption><b>Extrude an edge</b>An extruded edge makes a new face. Good for fins, flanges and building walls from a floor outline.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="vertex">
+                        <div class="view"></div>
+                        <figcaption><b>Extrude a vertex</b>An extruded vertex makes a new edge. Chains of them trace wires and branches.</figcaption>
+                    </figure>
+                </div>
 
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                </figure>
-
-                <p>This stepped shape is one cube extruded several times: extrude the top face up, scale it down a little, repeat. Every step stays joined to the one below, so the result is still a single mesh with no gaps.</p>
+                <h2>In your tool</h2>
                 <ol>
-                    <li>Switch to editing the mesh's components.</li>
                     <li>Select a face, edge or vertex.</li>
-                    <li>Run Extrude and drag, or type a distance.</li>
+                    <li>Run Extrude.</li>
+                    <li>Drag to set how far, or type a distance.</li>
                 </ol>
-                <p>By default a face extrudes along its normal, straight out from the surface. Constrain it to an axis to extrude in a fixed direction instead, for example straight up for walls.</p>
-
-                <h2>Faces, edges and vertices</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Face</b>Builds volume: a column out of the top</span>
-                        <span><b>Edge</b>Builds a new face: fins, borders</span>
-                        <span><b>Vertex</b>Builds a new edge: branches</span>
-                    </figcaption>
-                </figure>
-
-                <p>Typical uses: limbs and branches pulled out of a body, walls and window frames in architecture, or any shape grown step by step from a cube.</p>
 
                 <nav class="pager">
                     <a href="transformations.html" class="prev">← Transformations</a>

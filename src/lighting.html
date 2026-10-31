@@ -20,34 +20,49 @@
         <main class="main-container">
             <article class="page">
                 <h1>Lighting</h1>
-                <p class="lede">A 3D scene starts dark. Lights make it visible, and their type, color and position set the mood.</p>
-
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                </figure>
-
-                <p>The same object under different lights, switching every few seconds: a warm point light, a cool directional light, and a hemisphere light that tints from above and below.</p>
-                <ul>
-                    <li><strong>Point</strong>: shines in all directions from one spot, like a bulb. Fades with distance.</li>
-                    <li><strong>Directional (sun)</strong>: parallel rays from one direction. No falloff.</li>
-                    <li><strong>Spot</strong>: a cone, like a flashlight. Set its angle and edge softness.</li>
-                    <li><strong>Area</strong>: light from a rectangle or disk. Soft, natural shadows.</li>
-                </ul>
-
-                <h2>Three-point lighting</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                </figure>
-
-                <ul>
-                    <li><strong>Key light</strong> (top right): the brightest light, about 45° to the subject. It sets the main shadows.</li>
-                    <li><strong>Fill light</strong> (front left): 25 to 50% of the key. It lifts the shadows so they aren't black.</li>
-                    <li><strong>Rim light</strong> (behind): outlines the subject and separates it from the background.</li>
-                </ul>
-                <p>The setup comes from photography and film, and works for product shots and character portraits alike. Large light sources give soft shadows; small or distant ones give hard shadows. Warm light feels cozy, cool light feels clinical.</p>
+                <p class="lede">A 3D scene starts dark. Lights make it visible, and their type, size and position set the mood.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel" data-panel="point">
+                        <div class="view"></div>
+                        <figcaption><b>Point</b>Shines in every direction from one spot, like a bare bulb, and fades with distance.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="directional">
+                        <div class="view"></div>
+                        <figcaption><b>Directional</b>Parallel rays from one direction, like the sun. Every shadow falls the same way.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="spot">
+                        <div class="view"></div>
+                        <figcaption><b>Spot</b>A cone of light, like a flashlight. You set the cone angle and how soft its edge is.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="hemisphere">
+                        <div class="view"></div>
+                        <figcaption><b>Hemisphere</b>Sky color from above, ground color from below, and no shadows. Often used as fill.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="hard">
+                        <div class="view"></div>
+                        <figcaption><b>Hard shadows</b>A small or distant light casts a crisp shadow edge.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="soft">
+                        <div class="view"></div>
+                        <figcaption><b>Soft shadows</b>A large light casts a soft edge, which is how most real light looks.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="key">
+                        <div class="view"></div>
+                        <figcaption><b>Key light</b>Three-point lighting starts with one main light from the side. Half the subject falls into shadow.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="fill">
+                        <div class="view"></div>
+                        <figcaption><b>+ Fill light</b>A weaker light from the other side lifts the shadows.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="rim">
+                        <div class="view"></div>
+                        <figcaption><b>+ Rim light</b>A light from behind outlines the edge and separates the subject from the background.</figcaption>
+                    </figure>
+                </div>
 
                 <nav class="pager">
-                    <a href="uv-maps.html" class="prev">← UV Maps</a>
+                    <a href="shaders.html" class="prev">← Shaders</a>
                     <a href="camera.html" class="next">Camera →</a>
                 </nav>
             </article>

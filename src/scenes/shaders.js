@@ -1,161 +1,94 @@
-// Scenes for shaders.html. start() builds them; the returned stop() tears them down.
+// Panels for shaders.html. Each custom shader is a few lines of GLSL.
 import * as THREE from 'three';
-import { createScope } from '../components/scene-scope.js';
+import { createBrochure } from '../components/brochure.js';
+
+const knot = new THREE.TorusKnotGeometry(0.55, 0.18, 160, 24);
+
+const viewVertex = /* glsl */ `
+    varying vec3 vNormal;
+    varying vec3 vView;
+    varying vec3 vPos;
+    void main() {
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vNormal = normalize(normalMatrix * normal);
+        vView = -mv.xyz;
+        vPos = position;
+        gl_Position = projectionMatrix * mv;
+    }
+`;
 
 export function start() {
-    const scope = createScope();
+    const b = createBrochure();
 
-    function initScene() {
-        const canvas = document.getElementById('three-canvas');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
+    b.panel('normal-color', p => {
+        p.root.add(new THREE.Mesh(knot, new THREE.MeshNormalMaterial()));
+    });
 
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas.clientWidth / canvas.clientHeight,
-            0.1,
-            1000
-        );
+    b.panel('fresnel', p => {
+        p.root.add(new THREE.Mesh(knot, new THREE.ShaderMaterial({
+            vertexShader: viewVertex,
+            fragmentShader: /* glsl */ `
+                varying vec3 vNormal;
+                varying vec3 vView;
+                void main() {
+                    float facing = max(dot(normalize(vNormal), normalize(vView)), 0.0);
+                    float rim = pow(1.0 - facing, 2.5);
+                    gl_FragColor = vec4(mix(vec3(0.03, 0.06, 0.15), vec3(0.3, 0.9, 1.0), rim), 1.0);
+                }
+            `,
+        })));
+    });
 
-        const renderer = scope.renderer({ canvas, antialias: true });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    b.panel('toon', p => {
+        const steps = new Uint8Array([60, 150, 255]);
+        const gradientMap = new THREE.DataTexture(steps, steps.length, 1, THREE.RedFormat);
+        gradientMap.minFilter = gradientMap.magFilter = THREE.NearestFilter;
+        gradientMap.needsUpdate = true;
+        p.root.add(new THREE.Mesh(knot, new THREE.MeshToonMaterial({ color: 0xff8a4c, gradientMap })));
+    });
 
-        const vertexShader = `
-            varying vec3 vPosition;
-            void main() {
-                vPosition = position;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `;
+    b.panel('stripes', p => {
+        const uniforms = { time: { value: 0 } };
+        p.root.add(new THREE.Mesh(knot, new THREE.ShaderMaterial({
+            uniforms,
+            vertexShader: viewVertex,
+            fragmentShader: /* glsl */ `
+                uniform float time;
+                varying vec3 vNormal;
+                varying vec3 vPos;
+                void main() {
+                    float stripe = step(0.5, fract(vPos.y * 4.0 + time * 0.5));
+                    vec3 color = mix(vec3(0.15, 0.35, 0.85), vec3(1.0, 0.75, 0.25), stripe);
+                    float light = 0.35 + 0.65 * max(dot(normalize(vNormal), normalize(vec3(0.4, 0.8, 0.6))), 0.0);
+                    gl_FragColor = vec4(color * light, 1.0);
+                }
+            `,
+        })));
+        return t => { uniforms.time.value = t; };
+    });
 
-        const fragmentShader = `
-            uniform float time;
-            varying vec3 vPosition;
+    b.panel('waves', p => {
+        const uniforms = { time: { value: 0 } };
+        p.root.add(new THREE.Mesh(new THREE.SphereGeometry(0.75, 128, 64), new THREE.ShaderMaterial({
+            uniforms,
+            vertexShader: /* glsl */ `
+                uniform float time;
+                varying float vLift;
+                void main() {
+                    float lift = sin(position.y * 9.0 + time * 2.5) * sin(position.x * 7.0 + time * 1.7) * 0.09;
+                    vLift = lift;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position + normal * lift, 1.0);
+                }
+            `,
+            fragmentShader: /* glsl */ `
+                varying float vLift;
+                void main() {
+                    gl_FragColor = vec4(mix(vec3(0.1, 0.2, 0.55), vec3(0.4, 0.95, 0.75), vLift / 0.18 + 0.5), 1.0);
+                }
+            `,
+        })));
+        return t => { uniforms.time.value = t; };
+    }, { spin: 0.1 });
 
-            void main() {
-                vec3 color1 = vec3(1.0, 0.0, 0.5);
-                vec3 color2 = vec3(0.0, 0.5, 1.0);
-
-                float pattern = sin(vPosition.x * 5.0 + time) * sin(vPosition.y * 5.0 + time) * sin(vPosition.z * 5.0 + time);
-                vec3 color = mix(color1, color2, pattern * 0.5 + 0.5);
-
-                gl_FragColor = vec4(color, 1.0);
-            }
-        `;
-
-        const material = new THREE.ShaderMaterial({
-            vertexShader,
-            fragmentShader,
-            uniforms: {
-                time: { value: 0 }
-            }
-        });
-
-        const geometry = new THREE.TorusKnotGeometry(1.5, 0.5, 100, 16);
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-
-        camera.position.set(0, 2, 6);
-        camera.lookAt(0, 0, 0);
-
-        let time = 0;
-        function animate() {
-            scope.raf(animate);
-            time += 0.01;
-            material.uniforms.time.value = time;
-            mesh.rotation.x += 0.005;
-            mesh.rotation.y += 0.01;
-            renderer.render(scene, camera);
-        }
-
-        scope.on(window, 'resize', () => {
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        });
-
-        animate();
-    }
-
-    function initScene2() {
-        const canvas = document.getElementById('three-canvas-2');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
-
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas.clientWidth / canvas.clientHeight,
-            0.1,
-            1000
-        );
-
-        const renderer = scope.renderer({ canvas, antialias: true });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-        // Fresnel rim lighting shader
-        const vertexShader = `
-            varying vec3 vNormal;
-            varying vec3 vViewPosition;
-
-            void main() {
-                vNormal = normalize(normalMatrix * normal);
-                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                vViewPosition = -mvPosition.xyz;
-                gl_Position = projectionMatrix * mvPosition;
-            }
-        `;
-
-        const fragmentShader = `
-            varying vec3 vNormal;
-            varying vec3 vViewPosition;
-
-            void main() {
-                vec3 viewDir = normalize(vViewPosition);
-                vec3 normal = normalize(vNormal);
-
-                // Fresnel effect
-                float fresnel = pow(1.0 - max(0.0, dot(viewDir, normal)), 3.0);
-
-                // Base color and rim color
-                vec3 baseColor = vec3(0.1, 0.2, 0.4);
-                vec3 rimColor = vec3(0.0, 0.8, 1.0);
-
-                // Mix based on fresnel
-                vec3 finalColor = mix(baseColor, rimColor, fresnel);
-
-                gl_FragColor = vec4(finalColor, 1.0);
-            }
-        `;
-
-        const material = new THREE.ShaderMaterial({
-            vertexShader,
-            fragmentShader
-        });
-
-        const geometry = new THREE.SphereGeometry(2, 64, 64);
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-
-        camera.position.set(0, 2, 6);
-        camera.lookAt(0, 0, 0);
-
-        function animate() {
-            scope.raf(animate);
-            mesh.rotation.x += 0.003;
-            mesh.rotation.y += 0.005;
-            renderer.render(scene, camera);
-        }
-
-        scope.on(window, 'resize', () => {
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        });
-
-        animate();
-    }
-
-    initScene();
-    initScene2();
-    return scope.stop;
+    return b.stop;
 }

@@ -13,9 +13,9 @@ function pageName(url) {
     return file.replace(/\.html$/, '') || 'index';
 }
 
-// Pages with canvases have a matching module in scenes/ exporting start().
+// Pages with 3D panels have a matching module in scenes/ exporting start().
 function loadScene(url, doc) {
-    if (!doc.querySelector('canvas')) return null;
+    if (!doc.querySelector('[data-panel]')) return null;
     return import(`../scenes/${pageName(url)}.js`);
 }
 

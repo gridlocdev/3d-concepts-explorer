@@ -20,30 +20,38 @@
         <main class="main-container">
             <article class="page">
                 <h1>Camera</h1>
-                <p class="lede">The camera is the viewpoint the final image is rendered from. You can look around the scene freely while working, but only the camera’s view ends up in the render.</p>
-
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                </figure>
-
-                <p>The camera is an object like any other: move it, rotate it, animate it. Here it orbits the torus. Look through it in the viewport to see exactly what will render.</p>
-                <ul>
-                    <li><strong>Focal length</strong> (mm) sets the field of view. Short lenses see wide, long lenses see narrow. 50mm is close to human vision.</li>
-                    <li><strong>Sensor size</strong> works with focal length to set the exact field of view. 36mm matches a full-frame camera.</li>
-                    <li><strong>Depth of field</strong> blurs what's out of focus. Set a focus distance and an f-stop; lower f-stops blur more.</li>
-                </ul>
-
-                <h2>Focal length</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                </figure>
-
-                <p>The view cycles through a wide, a normal and a telephoto lens, moving the camera back each time so the sphere stays about the same size. Watch the cubes behind it: the wide lens pushes them apart and exaggerates depth, the telephoto lens pulls them close and flattens it.</p>
-                <p>Wide lenses suit architecture and tight spaces; long lenses suit portraits and product shots. Low camera angles make a subject look imposing, high angles make it look small.</p>
+                <p class="lede">The camera is the viewpoint the final image is rendered from. You can look around freely while you work, but only the camera's view ends up in the render.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel wide" data-panel="frustum">
+                        <div class="view"></div>
+                        <figcaption><b>The camera in the scene</b>The camera is an object with a viewing volume (the frustum). Only what is inside it renders.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="perspective">
+                        <div class="view"></div>
+                        <figcaption><b>Perspective</b>Far things look smaller and parallel lines meet in the distance, as in a photo.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="orthographic">
+                        <div class="view"></div>
+                        <figcaption><b>Orthographic</b>No perspective: size does not change with distance. Used for technical views and plans.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="wide">
+                        <div class="view"></div>
+                        <figcaption><b>18mm, wide</b>A short lens sees a wide angle. To fill the frame it stands close, and the pillars behind spread far apart.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="normal">
+                        <div class="view"></div>
+                        <figcaption><b>50mm, normal</b>Close to how our eyes see. Moderate depth.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="tele">
+                        <div class="view"></div>
+                        <figcaption><b>135mm, telephoto</b>A long lens from far away flattens depth: the pillars seem stacked right behind the subject.</figcaption>
+                    </figure>
+                </div>
 
                 <nav class="pager">
                     <a href="lighting.html" class="prev">← Lighting</a>
-                    <a href="shaders.html" class="next">Shaders →</a>
+                    <a href="index.html" class="next">All concepts →</a>
                 </nav>
             </article>
         </main>

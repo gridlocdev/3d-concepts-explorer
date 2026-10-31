@@ -23,6 +23,10 @@ export function createScope() {
             cleanups.push(() => target.removeEventListener(type, fn, options));
         },
 
+        add(cleanup) {
+            cleanups.push(cleanup);
+        },
+
         renderer(params) {
             const renderer = new THREE.WebGLRenderer(params);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));

@@ -20,34 +20,42 @@
         <main class="main-container">
             <article class="page">
                 <h1>Normals</h1>
-                <p class="lede">Every face has a normal: a direction pointing straight out of it. Renderers use normals to decide which side is the front and how light hits the surface.</p>
-
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Normals out</b>Lit as expected</span>
-                        <span><b>Normals flipped</b>You see the inside faces</span>
-                    </figcaption>
-                </figure>
-
-                <p>A face has two sides, and most renderers draw only the front one. If a face's normal points inward, the face renders dark, black or not at all, and the model looks like it has holes.</p>
-                <p>To fix it, select the faces and use your tool's Flip Normals (or Reverse Normals) command, or recalculate all normals to point outward.</p>
-
-                <h2>Flat vs smooth shading</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Flat</b>One normal per face. Every polygon shows.</span>
-                        <span><b>Smooth</b>Normals averaged at each vertex. Same faces, looks round.</span>
-                    </figcaption>
-                </figure>
-
-                <p>Smooth shading adds no geometry. It blends the normals across each face so light changes gradually, which makes a low-poly surface look curved.</p>
-                <p>You can mix the two: smooth-shade an object and mark some edges as sharp. A phone, for example, has smooth sides and a hard edge around the screen.</p>
+                <p class="lede">A normal is the direction a face points. Renderers use it to tell the front of a face from the back, and to work out how light falls on it.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel" data-panel="face-normals">
+                        <div class="view"></div>
+                        <figcaption><b>Face normals</b>One arrow per face, pointing straight out of it.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="vertex-normals">
+                        <div class="view"></div>
+                        <figcaption><b>Vertex normals</b>Each vertex can have its own normal, averaged from the faces around it. This is what makes smooth shading possible.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="backface">
+                        <div class="view"></div>
+                        <figcaption><b>Front and back</b>This square only draws its front. Turned away, it disappears.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="flipped">
+                        <div class="view"></div>
+                        <figcaption><b>A flipped face</b>One face points inward (orange arrow), so it draws from inside only and leaves a hole. Fix it with Flip Normals or Recalculate Normals.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="flat">
+                        <div class="view"></div>
+                        <figcaption><b>Flat shading</b>Each face uses its own normal, so every face is lit as one flat color.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="smooth">
+                        <div class="view"></div>
+                        <figcaption><b>Smooth shading</b>The same mesh with vertex normals. Light blends across faces and the sphere looks round. No faces were added.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="mixed">
+                        <div class="view"></div>
+                        <figcaption><b>Smooth with sharp edges</b>Smooth sides, sharp rims: the cap edges keep separate normals. Tools call this auto smooth or marking edges sharp.</figcaption>
+                    </figure>
+                </div>
 
                 <nav class="pager">
-                    <a href="meshes.html" class="prev">← Meshes</a>
-                    <a href="transformations.html" class="next">Transformations →</a>
+                    <a href="bevel.html" class="prev">← Bevel</a>
+                    <a href="subdivision.html" class="next">Subdivision Surface →</a>
                 </nav>
             </article>
         </main>

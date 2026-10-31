@@ -20,38 +20,45 @@
         <main class="main-container">
             <article class="page">
                 <h1>Bevel</h1>
-                <p class="lede">Bevel replaces a sharp edge with a narrow face, or a rounded strip of faces, so the edge catches light the way real objects do.</p>
+                <p class="lede">Bevel replaces a sharp edge with a narrow strip of faces. Real edges are never perfectly sharp, and a bevel lets an edge catch the light.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel" data-panel="sharp">
+                        <div class="view"></div>
+                        <figcaption><b>Sharp</b>No bevel. The edges show no highlight, which reads as computer-made.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="chamfer">
+                        <div class="view"></div>
+                        <figcaption><b>1 segment</b>A single flat face along each edge, called a chamfer.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="round">
+                        <div class="view"></div>
+                        <figcaption><b>3 segments</b>More segments curve the edge. The wireframe shows the new faces.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="smooth">
+                        <div class="view"></div>
+                        <figcaption><b>8 segments</b>Enough segments read as a smooth round edge.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="narrow">
+                        <div class="view"></div>
+                        <figcaption><b>Narrow width</b>Width sets how far the bevel cuts in. A small width keeps the object crisp, like machined metal.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="wide">
+                        <div class="view"></div>
+                        <figcaption><b>Wide width</b>A large width softens the whole shape, like worn wood or molded plastic.</figcaption>
+                    </figure>
+                </div>
 
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Sharp</b>Thin, harsh highlight</span>
-                        <span><b>Beveled</b>Highlight runs along the edge</span>
-                    </figcaption>
-                </figure>
-
-                <p>Real edges are never perfectly sharp; even a knife edge is slightly round up close. A perfectly sharp edge in 3D gets no highlight, which is a common reason a model looks computer-generated. A small bevel fixes it.</p>
+                <h2>In your tool</h2>
                 <ol>
                     <li>Select edges (or vertices).</li>
                     <li>Run Bevel (some tools call it Chamfer).</li>
-                    <li>Set the width, and raise the segment count for a rounder profile.</li>
+                    <li>Drag to set the width, and raise the segment count for a rounder edge.</li>
                 </ol>
-
-                <h2>Width and segments</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Small, 2 segments</b>Tight; machined parts</span>
-                        <span><b>Medium, 3 segments</b>A general default</span>
-                        <span><b>Large, 5 segments</b>Soft or worn edges</span>
-                    </figcaption>
-                </figure>
-
-                <p>Width sets how much of the edge is rounded; segments set how smooth the curve is, at the cost of more geometry. New, manufactured objects have small bevels. Wood, plastic and worn objects have larger ones.</p>
 
                 <nav class="pager">
                     <a href="loop-cuts.html" class="prev">← Loop Cuts</a>
-                    <a href="subdivision.html" class="next">Subdivision Surface →</a>
+                    <a href="normals.html" class="next">Normals →</a>
                 </nav>
             </article>
         </main>

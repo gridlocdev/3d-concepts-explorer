@@ -20,31 +20,37 @@
         <main class="main-container">
             <article class="page">
                 <h1>Loop Cuts</h1>
-                <p class="lede">A loop cut inserts a new ring of edges all the way around a mesh, adding detail in one place without touching the rest.</p>
+                <p class="lede">A loop cut adds a ring of edges all the way around a mesh, so you get more detail in one band without touching the rest.</p>
+                <p class="hint">Drag a model to turn it.</p>
+                <div class="spread">
+                    <figure class="panel" data-panel="loop">
+                        <div class="view"></div>
+                        <figcaption><b>An edge loop</b>A chain of edges that circles the mesh and closes on itself, like a line of latitude.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="count">
+                        <div class="view"></div>
+                        <figcaption><b>Adding loops</b>The same cube with 1 to 4 loop cuts. Each cut splits every face it crosses.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="slide">
+                        <div class="view"></div>
+                        <figcaption><b>Sliding a loop</b>A placed loop can slide along the faces around it, to sit exactly where detail is needed.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="bend-few">
+                        <div class="view"></div>
+                        <figcaption><b>Bending, 2 rings</b>The orange line is the bend we want. With no rings between the ends, the tube can only lean as a straight shape.</figcaption>
+                    </figure>
+                    <figure class="panel" data-panel="bend-many">
+                        <div class="view"></div>
+                        <figcaption><b>Bending, 10 rings</b>Loops along the length let it follow the curve. Arms and legs get extra loops at the joints for this reason.</figcaption>
+                    </figure>
+                </div>
 
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas"></canvas></div>
-                </figure>
-
-                <p>An edge loop is a chain of edges that runs around the mesh and closes on itself, like the latitude lines on a globe. The rings on this cylinder are loops; each one is a place the shape can now bend or change width.</p>
+                <h2>In your tool</h2>
                 <ol>
-                    <li>Run the loop cut tool (also Insert Edge Loop, Swift Loop or Connect).</li>
-                    <li>Hover an edge to preview where the loop will run.</li>
+                    <li>Run the loop cut tool (also called Insert Edge Loop, Swift Loop or Connect).</li>
+                    <li>Hover an edge to preview the loop, and set how many to add.</li>
                     <li>Click to place it, then slide it into position.</li>
                 </ol>
-
-                <h2>Topology</h2>
-                <figure class="demo">
-                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
-                    <figcaption class="legend">
-                        <span><b>Even loops</b>Bends smoothly and predictably</span>
-                        <span><b>Random edges</b>Triangles and n-gons; deforms badly</span>
-                        <span><b>Loops where needed</b>Extra loops at the joints</span>
-                    </figcaption>
-                </figure>
-
-                <p>Topology is how the edges flow across a mesh. Loops that follow the form deform cleanly when animated and subdivide cleanly. Edges added at random create triangles and n-gons (faces with more than four sides) that pinch and crease.</p>
-                <p>For animation, put extra loops at joints such as elbows and knees. For hard-surface models, loops close to an edge keep it sharp under subdivision.</p>
 
                 <nav class="pager">
                     <a href="extrude.html" class="prev">← Extrude</a>

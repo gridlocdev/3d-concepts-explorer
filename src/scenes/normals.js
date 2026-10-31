@@ -1,135 +1,77 @@
-// Scenes for normals.html. start() builds them; the returned stop() tears them down.
+// Panels for normals.html.
 import * as THREE from 'three';
-import { createScope } from '../components/scene-scope.js';
+import { createBrochure, COLORS, lines, solid, arrow } from '../components/brochure.js';
+import { cube, faceCenter, faceNormal, toGeometry, toEdges } from '../components/mesh-kit.js';
+
+// Short lines from each vertex along its normal.
+function normalLines(geo, length, color) {
+    const pos = geo.attributes.position, nor = geo.attributes.normal, out = [];
+    for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+        out.push(x, y, z, x + nor.getX(i) * length, y + nor.getY(i) * length, z + nor.getZ(i) * length);
+    }
+    return lines(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(out, 3)), color);
+}
+
+function faceArrows(m, flipped = -1) {
+    const g = new THREE.Group();
+    m.f.forEach((_, fi) => {
+        const c = new THREE.Vector3(...faceCenter(m, fi));
+        const n = new THREE.Vector3(...faceNormal(m, fi));
+        g.add(arrow(c, n, 0.45, fi === flipped ? COLORS.hi : COLORS.good));
+    });
+    return g;
+}
 
 export function start() {
-    const scope = createScope();
+    const b = createBrochure();
 
-    function initScene() {
-        const canvas = document.getElementById('three-canvas');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
+    b.panel('face-normals', p => {
+        const m = cube(0.9);
+        p.root.add(solid(toGeometry(m), COLORS.body, { flatShading: true }), lines(toEdges(m), 0x000000, 0.4));
+        p.root.add(faceArrows(m));
+    }, { cam: [0, 1.5, 3.8] });
 
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas.clientWidth / canvas.clientHeight,
-            0.1,
-            1000
-        );
+    b.panel('vertex-normals', p => {
+        const geo = new THREE.SphereGeometry(0.75, 14, 10);
+        p.root.add(solid(geo, COLORS.body), normalLines(geo, 0.3, COLORS.good));
+    });
 
-        const renderer = scope.renderer({ canvas, antialias: true });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    b.panel('backface', p => {
+        const geo = new THREE.PlaneGeometry(1.3, 1.3);
+        p.root.add(solid(geo, COLORS.body, { side: THREE.FrontSide }));
+        p.root.add(lines(new THREE.EdgesGeometry(geo), COLORS.faint));
+        p.root.add(arrow(new THREE.Vector3(), new THREE.Vector3(0, 0, 1), 0.6, COLORS.good));
+    }, { spin: 0.9, cam: [0, 0.6, 3.6] });
 
-        const geometry = new THREE.BoxGeometry(2, 2, 2);
+    b.panel('flipped', p => {
+        const m = cube(0.9);
+        const FRONT = 5; // +Z
+        m.f[FRONT].reverse();
+        const geo = toGeometry(m, { color: COLORS.body, faceColors: {} });
+        // Front sides in blue; the insides (back sides) in dark gray, as
+        // many tools show them, so the inside-out face reads as a hole.
+        p.root.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: COLORS.body, flatShading: true })));
+        p.root.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: 0x333333, side: THREE.BackSide })));
+        p.root.add(lines(toEdges(m), 0x000000, 0.4), faceArrows(m, FRONT));
+        p.root.rotation.y = -0.5;
+    }, { cam: [0, 1.4, 3.8], spin: 0.2 });
 
-        // Left: Correct normals (normal rendering)
-        const correctMaterial = new THREE.MeshStandardMaterial({
-            color: 0x00ff88,
-            side: THREE.FrontSide
-        });
-        const correctMesh = new THREE.Mesh(geometry, correctMaterial);
-        correctMesh.position.x = -2.5;
-        scene.add(correctMesh);
+    b.panel('flat', p => {
+        p.root.add(solid(new THREE.SphereGeometry(0.85, 12, 8), COLORS.body, { flatShading: true }));
+    });
 
-        // Right: Flipped normals (back faces only)
-        const flippedMaterial = new THREE.MeshStandardMaterial({
-            color: 0xff6600,
-            side: THREE.BackSide
-        });
-        const flippedMesh = new THREE.Mesh(geometry, flippedMaterial);
-        flippedMesh.position.x = 2.5;
-        scene.add(flippedMesh);
+    b.panel('smooth', p => {
+        p.root.add(solid(new THREE.SphereGeometry(0.85, 12, 8), COLORS.body));
+    });
 
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5);
-        scene.add(light);
+    b.panel('mixed', p => {
+        // CylinderGeometry gives the caps their own normals: smooth sides,
+        // sharp rims.
+        const geo = new THREE.CylinderGeometry(0.6, 0.6, 1, 16);
+        p.root.add(solid(geo, COLORS.body), lines(new THREE.EdgesGeometry(geo, 30), 0x000000, 0.5));
+        p.root.rotation.x = 0.35;
+    });
 
-        const ambientLight = new THREE.AmbientLight(0x404040);
-        scene.add(ambientLight);
-
-        camera.position.set(0, 2, 6);
-        camera.lookAt(0, 0, 0);
-
-        function animate() {
-            scope.raf(animate);
-            correctMesh.rotation.y += 0.01;
-            flippedMesh.rotation.y += 0.01;
-            renderer.render(scene, camera);
-        }
-
-        scope.on(window, 'resize', () => {
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        });
-
-        animate();
-    }
-
-    function initScene2() {
-        const canvas = document.getElementById('three-canvas-2');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
-
-        const camera = new THREE.PerspectiveCamera(
-            50,
-            canvas.clientWidth / canvas.clientHeight,
-            0.1,
-            1000
-        );
-
-        const renderer = scope.renderer({ canvas, antialias: true });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-        // Left: Flat shading (faceted appearance)
-        const flatGeometry = new THREE.IcosahedronGeometry(1.5, 1);
-        const flatMaterial = new THREE.MeshStandardMaterial({
-            color: 0xff6600,
-            flatShading: true
-        });
-        const flatMesh = new THREE.Mesh(flatGeometry, flatMaterial);
-        flatMesh.position.x = -2;
-        scene.add(flatMesh);
-
-        // Right: Smooth shading (interpolated normals)
-        const smoothGeometry = new THREE.IcosahedronGeometry(1.5, 1);
-        const smoothMaterial = new THREE.MeshStandardMaterial({
-            color: 0x00ff88,
-            flatShading: false
-        });
-        const smoothMesh = new THREE.Mesh(smoothGeometry, smoothMaterial);
-        smoothMesh.position.x = 2;
-        scene.add(smoothMesh);
-
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5);
-        scene.add(light);
-
-        const ambientLight = new THREE.AmbientLight(0x404040);
-        scene.add(ambientLight);
-
-        camera.position.set(0, 2, 6);
-        camera.lookAt(0, 0, 0);
-
-        function animate() {
-            scope.raf(animate);
-            flatMesh.rotation.y += 0.01;
-            flatMesh.rotation.x += 0.005;
-            smoothMesh.rotation.y += 0.01;
-            smoothMesh.rotation.x += 0.005;
-            renderer.render(scene, camera);
-        }
-
-        scope.on(window, 'resize', () => {
-            camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-        });
-
-        animate();
-    }
-
-    initScene();
-    initScene2();
-    return scope.stop;
+    return b.stop;
 }
