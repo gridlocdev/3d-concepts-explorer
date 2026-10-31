@@ -12,7 +12,7 @@ serve port=port:
 build:
     rm -rf dist
     cp -R src dist
-    rm dist/index-old.html
+    rm dist/vendor/three/LICENSE dist/vendor/three/VERSION
     @echo "Built dist/ ($(find dist -type f | wc -l | tr -d ' ') files)"
 
 # Build, then serve dist/ to check it before deploying

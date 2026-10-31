@@ -34,7 +34,6 @@ src/components/              code shared by every page
 src/styles/main.css          shared styles for all pages
 src/static/                  icons and other static assets
 src/vendor/three/            three.js (version in VERSION)
-src/index-old.html           the original single-page version, kept for reference
 tools/serve.py               the local dev server
 ```
 
@@ -89,6 +88,7 @@ say what the model shows.
 
 ## Building and deploying
 
-`just build` writes `dist/`: a copy of `src/` without `index-old.html`. Upload the contents of
+`just build` writes `dist/`: a copy of `src/` without three.js's `LICENSE` and `VERSION`, which
+the pages don't load (the minified files carry their own license header). Upload the contents of
 `dist/` to any static web server. `just preview` builds and serves `dist/` at
 http://localhost:5180/ so you can check it first. `dist/` is ignored by git.
