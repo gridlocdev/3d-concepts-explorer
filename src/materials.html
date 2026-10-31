@@ -18,97 +18,45 @@
         </aside>
 
         <main class="main-container">
-            <div class="content-area">
+            <article class="page">
                 <h1>Materials</h1>
+                <p class="lede">A material defines what a surface is made of: its color, how shiny it is, and whether it behaves like metal.</p>
 
-                <h2>Overview</h2>
-                <p>Materials define what your objects look like - whether they appear as metal, plastic, glass, or any
-                    other substance. They control color, shininess, and how light interacts with surfaces.</p>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas"></canvas></div>
+                    <figcaption class="legend">
+                        <span><b>Metal</b>Metallic 0.9, roughness 0.1</span>
+                        <span><b>Matte</b>Metallic 0.2, roughness 0.8</span>
+                        <span><b>Translucent</b>Roughness 0.3, opacity 0.6</span>
+                    </figcaption>
+                </figure>
 
-                <div class="canvas-container">
-                    <canvas id="three-canvas"></canvas>
-                </div>
+                <p>Most tools use physically based (PBR) materials, whose settings match real physical properties:</p>
+                <ul>
+                    <li><strong>Base color</strong>: the surface color.</li>
+                    <li><strong>Metallic</strong>: 1 for metal, 0 for everything else. Rarely in between.</li>
+                    <li><strong>Roughness</strong>: 0 is a mirror, 1 is fully matte.</li>
+                    <li><strong>Specular</strong>: reflection strength on non-metals; around 0.5 for most.</li>
+                </ul>
 
-                <h2>Understanding Materials</h2>
-                <p>If meshes are the shape of your object, materials are its surface appearance. The same sphere
-                    geometry can look like a chrome ball bearing, a rubber toy, or a glass marble - entirely depending
-                    on its material properties.</p>
+                <h2>Same sphere, different materials</h2>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
+                    <figcaption class="legend">
+                        <span><b>Rough</b>Roughness 0.9, non-metal</span>
+                        <span><b>Polished metal</b>Roughness 0.1, metal</span>
+                        <span><b>Glossy plastic</b>Roughness 0.2, non-metal</span>
+                    </figcaption>
+                </figure>
 
-                <p>Materials in modern 3D tools use a physically-based rendering (PBR) system, which means they simulate how
-                    light behaves in the real world. This makes creating realistic materials more intuitive, as the
-                    parameters correspond to real physical properties.</p>
+                <p>The geometry is identical; only the material changes. Metals tint their reflections with their base color. Non-metals keep their color and get white highlights on top.</p>
+                <p>Some reference points: plastic is non-metal with medium to high roughness, polished wood is non-metal with low roughness, brushed aluminum is metal with medium roughness.</p>
 
-                <h3>Key Material Properties</h3>
-                <p><strong>Base Color:</strong> The fundamental color of the surface. This is what most people think of
-                    as the "color" of an object.</p>
-
-                <p><strong>Metallic:</strong> Determines whether the surface behaves like metal (value of 1.0) or like a
-                    non-metal/dielectric (value of 0.0). Metals reflect their surroundings differently than non-metals.
-                    This is typically binary - either 0 or 1, rarely in between.</p>
-
-                <p><strong>Roughness:</strong> Controls how smooth or rough the surface appears. A value of 0 creates a
-                    perfect mirror, while 1.0 creates a completely diffuse, matte surface. Most real materials fall
-                    somewhere in between.</p>
-
-                <p><strong>Specular:</strong> Controls the strength of reflections on non-metallic surfaces. Most
-                    non-metals have a specular value around 0.5.</p>
-
-                <div class="tip-box">
-                    <strong>Material Realism:</strong>
-                    Study real materials and their properties. Plastic is typically non-metallic with medium to high
-                    roughness. Polished wood is non-metallic with low roughness. Brushed aluminum is metallic with
-                    medium roughness. Understanding these patterns helps you create convincing materials quickly.
-                </div>
-
-                <h3>What You're Seeing</h3>
-                <p>In the visualization at the start, you see three spheres with identical geometry but different
-                    materials:
-                </p>
-
-                <p><strong>Red sphere (left):</strong> Metallic (0.9) and smooth (low roughness ~0.1). It reflects the
-                    environment like polished metal.</p>
-
-                <p><strong>Green sphere (center):</strong> Non-metallic (0.2) and rough (high roughness ~0.8). It has a
-                    matte, diffuse appearance like rubber or unglazed ceramic.</p>
-
-                <p><strong>Blue sphere (right):</strong> Non-metallic (0.0) with medium roughness (0.3) and transparency
-                    (opacity 0.6). It simulates a translucent material like frosted glass.</p>
-
-                <h3>Same Shape, Different Materials</h3>
-                <p>In the visualization below, the same sphere geometry is shown with three drastically different
-                    materials to demonstrate how materials define appearance:</p>
-
-                <div class="canvas-container">
-                    <canvas id="three-canvas-2"></canvas>
-                </div>
-
-                <p><strong>Left (bronze/brown) - Rough Plastic:</strong> High roughness (0.9), non-metallic (0.0), matte
-                    brown color. Diffuse, no reflections, absorbs light. This simulates materials like rubber, chalk, or
-                    unfinished wood - materials that scatter light in all directions.</p>
-
-                <p><strong>Middle (silver) - Polished Metal:</strong> Low roughness (0.1), metallic (1.0), silver color.
-                    Sharp reflections, shows the environment. Notice how it reflects light differently than non-metals -
-                    metals reflect their surroundings tinted by their base color, while non-metals maintain their color
-                    and add white specular highlights.</p>
-
-                <p><strong>Right (red) - Glossy Plastic:</strong> Low roughness (0.2), non-metallic (0.0), bright red
-                    color. Sharp but colored reflections. This is typical of glossy paint, polished plastic, or
-                    lacquered surfaces - smooth non-metals with clear coatings.</p>
-
-                <p>The same exact geometry produces completely different visual results. Materials are what make a
-                    sphere look like a billiard ball, a Christmas ornament, or a clay sculpture. Mastering materials
-                    means understanding these physical properties and how they combine to create the surfaces you see
-                    every day.</p>
-
-                <h3>Building Complex Materials</h3>
-                <p>Materials can become incredibly complex with texture mapping, normal maps, and node-based shading,
-                    but these fundamental properties form the foundation of all material definitions.</p>
-            </div>
-
-            <nav class="navigation-footer">
-                <a href="subdivision.html" class="nav-button">← Previous: Subdivision Surface</a>
-                <a href="uv-maps.html" class="nav-button">Next: UV Maps →</a>
-            </nav>
+                <nav class="pager">
+                    <a href="subdivision.html" class="prev">← Subdivision Surface</a>
+                    <a href="uv-maps.html" class="next">UV Maps →</a>
+                </nav>
+            </article>
         </main>
     </div>
 

@@ -18,87 +18,38 @@
         </aside>
 
         <main class="main-container">
-            <div class="content-area">
+            <article class="page">
                 <h1>Meshes</h1>
+                <p class="lede">A mesh is a shape built from vertices (points), edges (lines between points) and faces (the surfaces edges enclose).</p>
 
-                <h2>Overview</h2>
-                <p>A mesh is the skeleton of your 3D object - made of dots (vertices), lines (edges), and flat surfaces
-                    (faces) that create the shape.</p>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas"></canvas></div>
+                    <figcaption class="legend">
+                        <span><b>Faces</b>What renders</span>
+                        <span><b>Edges</b>The wireframe</span>
+                        <span><b>Vertices</b>The points everything hangs on</span>
+                    </figcaption>
+                </figure>
 
-                <div class="canvas-container">
-                    <canvas id="three-canvas"></canvas>
-                </div>
+                <p>Almost every model starts as a mesh. Moving a vertex moves every edge and face attached to it, so editing a mesh comes down to selecting vertices, edges or faces and transforming them.</p>
+                <p>The mesh only defines shape. Color and surface detail come later, from materials and textures.</p>
 
-                <h2>Understanding Meshes</h2>
-                <p>Almost everything you create in 3D modeling starts as a mesh - it's the fundamental building block of 3D
-                    modeling. Think of a mesh as the skeletal framework of your object, similar to how a building has a
-                    frame of steel beams before the walls are added.</p>
+                <h2>Polygon count</h2>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
+                    <figcaption class="legend">
+                        <span><b>Low poly</b>8 segments, 320 triangles. Facets show.</span>
+                        <span><b>High poly</b>32 segments, 2,048 triangles. Reads as a smooth sphere.</span>
+                    </figcaption>
+                </figure>
 
-                <p>A mesh is composed of three basic elements:</p>
+                <p>More faces make curves smoother but cost memory and render time, and make the mesh harder to edit. Spend detail where the viewer looks: a character's face needs it, the sole of their shoe doesn't. Games set a polygon budget per model for this reason.</p>
 
-                <p><strong>Vertices (dots):</strong> These are the corner points where edges meet. They're the
-                    fundamental building blocks - you can think of them as the joints in a skeleton.</p>
-
-                <p><strong>Edges (lines):</strong> These connect vertices together, forming the outline of your shape.
-                    They're like the bones connecting the joints.</p>
-
-                <p><strong>Faces (surfaces):</strong> These are flat surfaces bounded by edges. When you fill in the
-                    space between edges, you create a face - this is what becomes visible when you render your object.
-                </p>
-
-                <div class="tip-box">
-                    <strong>Pro Tip:</strong>
-                    The complexity of your mesh directly impacts performance. A simple cube has just 8 vertices, but a
-                    detailed character model might have thousands. More detail means more realism, but also requires
-                    more computing power to manipulate and render.
-                </div>
-
-                <h3>What You're Seeing</h3>
-                <p>In the visualization at the start, you can see the same object displayed three different ways:</p>
-
-                <p><strong>Solid mesh (blue):</strong> This is what your finished object looks like with faces visible.
-                </p>
-
-                <p><strong>Wireframe (green):</strong> This shows only the edges, revealing the underlying structure of
-                    your mesh.</p>
-
-                <p><strong>Vertices (red dots):</strong> These highlight just the vertices, showing you the control
-                    points of your mesh.</p>
-
-                <h3>Mesh Complexity: Low-Poly vs High-Poly</h3>
-                <p>In the visualization below, you can see how mesh complexity dramatically affects the final
-                    appearance:</p>
-
-                <div class="canvas-container">
-                    <canvas id="three-canvas-2"></canvas>
-                </div>
-
-                <p><strong>Left (orange) - Low-Poly Sphere:</strong> Built with just 8 segments horizontally and
-                    vertically (320 triangles). You can clearly see the faceted structure. Perfect for game assets,
-                    stylized art, or when you need performance. Models render faster and are easier to edit, but curved
-                    surfaces appear angular.</p>
-
-                <p><strong>Right (green) - High-Poly Sphere:</strong> Built with 32 segments (2,048 triangles). Creates
-                    a perfectly smooth sphere that's indistinguishable from a true mathematical sphere. Required for
-                    close-up renders and detailed sculpting, but requires more memory and processing power.</p>
-
-                <p>The key insight: more geometry isn't always better. Use only as much detail as you need for your
-                    specific purpose. A character's face needs high detail, but the back of their shoe doesn't. This is
-                    why game developers carefully budget polygons - placing detail where it matters most while keeping
-                    total counts manageable for real-time performance.</p>
-
-                <h3>The Mesh as Foundation</h3>
-                <p>Understanding that the mesh is just the shape - separate from its appearance - is crucial. You'll add
-                    materials, textures, and shaders on top of the mesh to give it color and surface properties like
-                    wood grain, metallic shine, or fabric texture.</p>
-
-                <p>The mesh defines the geometry and form. Everything else builds upon this foundation.</p>
-            </div>
-
-            <nav class="navigation-footer">
-                <a href="index.html" class="nav-button">← Back to Home</a>
-                <a href="normals.html" class="nav-button">Next: Normals →</a>
-            </nav>
+                <nav class="pager">
+                    <a href="index.html" class="prev">← All concepts</a>
+                    <a href="normals.html" class="next">Normals →</a>
+                </nav>
+            </article>
         </main>
     </div>
 

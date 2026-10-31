@@ -32,100 +32,51 @@ class WikiSidebar extends HTMLElement {
                     display: block;
                     width: 100%;
                     height: 100%;
-                    background: #0f0f0f;
-                    border-right: 2px solid #333;
+                    background: #0d0d0d;
+                    border-right: 1px solid #262626;
+                    font-size: 14px;
                 }
 
-                .sidebar-header {
-                    padding: 20px;
-                    background: #1a1a1a;
-                    border-bottom: 2px solid #333;
+                .title {
+                    display: block;
+                    padding: 18px 16px 12px;
+                    color: #f2f2f2;
+                    font-size: 16px;
+                    font-weight: 600;
+                    text-decoration: none;
                 }
 
-                .sidebar-title {
-                    margin: 0;
-                    font-size: 20px;
+                .title:hover,
+                .title.active {
                     color: #00ff88;
-                    font-weight: bold;
-                }
-
-                .sidebar-subtitle {
-                    margin: 5px 0 0 0;
-                    font-size: 12px;
-                    color: #888;
-                }
-
-                nav {
-                    padding: 10px 0;
-                }
-
-                .nav-section {
-                    margin-bottom: 20px;
-                }
-
-                .nav-section-title {
-                    padding: 10px 20px;
-                    font-size: 11px;
-                    font-weight: bold;
-                    color: #666;
-                    text-transform: uppercase;
-                    letter-spacing: 1px;
                 }
 
                 .nav-link {
                     display: block;
-                    padding: 12px 20px;
-                    color: #ccc;
+                    padding: 6px 16px;
+                    color: #a8a8a8;
                     text-decoration: none;
-                    font-size: 14px;
-                    transition: all 0.2s;
-                    border-left: 3px solid transparent;
+                    border-left: 2px solid transparent;
                 }
 
                 .nav-link:hover {
-                    background: #1a1a1a;
-                    color: #00ff88;
-                    border-left-color: #00ff88;
+                    color: #f2f2f2;
+                    background: #161616;
                 }
 
                 .nav-link.active {
-                    background: #1a1a1a;
                     color: #00ff88;
+                    background: #161616;
                     border-left-color: #00ff88;
-                    font-weight: bold;
-                }
-
-                .home-link {
-                    padding: 15px 20px;
-                    color: #00ff88;
-                    text-decoration: none;
-                    font-size: 14px;
-                    display: block;
-                    border-bottom: 1px solid #333;
-                    transition: background 0.2s;
-                }
-
-                .home-link:hover {
-                    background: #1a1a1a;
                 }
             </style>
 
-            <div class="sidebar-header">
-                <h1 class="sidebar-title">3D Concepts</h1>
-                <p class="sidebar-subtitle">Interactive Learning Guide</p>
-            </div>
-
-            <a href="index.html" class="home-link">← Home</a>
+            <a href="index.html" class="title ${currentPage === 'index.html' ? 'active' : ''}">3D Concepts</a>
 
             <nav>
-                <div class="nav-section">
-                    <div class="nav-section-title">Core Concepts</div>
-                    ${concepts.map(concept => `
-                        <a href="${concept.file}" class="nav-link ${currentPage === concept.file ? 'active' : ''}">
-                            ${concept.name}
-                        </a>
-                    `).join('')}
-                </div>
+                ${concepts.map(concept => `
+                    <a href="${concept.file}" class="nav-link ${currentPage === concept.file ? 'active' : ''}">${concept.name}</a>
+                `).join('')}
             </nav>
         `;
     }

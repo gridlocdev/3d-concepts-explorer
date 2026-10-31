@@ -65,11 +65,10 @@ To update three.js, run `just vendor-three <version>` (for example `just vendor-
 ## Navigation
 
 Each concept page includes:
-- A TL;DR box with a quick summary
-- Detailed explanation with technical depth
-- Live 3D visualization demonstrating the concept
-- Navigation links to previous/next concepts
-- Sidebar with links to all concepts
+- A one-line summary under the title
+- Two live 3D scenes, full width, with a caption under each object (`.demo` > `.stage` + `.legend`)
+- A short explanation after each scene
+- Previous/next links, and the sidebar with every concept
 
 ## Original Version
 

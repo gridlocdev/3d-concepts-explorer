@@ -18,107 +18,30 @@
         </aside>
 
         <main class="main-container">
-            <div class="content-area">
+            <article class="page">
                 <h1>Shaders</h1>
+                <p class="lede">A shader is a small program that runs on the graphics card and computes the color of each pixel of a surface.</p>
 
-                <h2>Overview</h2>
-                <p>Shaders are programs that run on your graphics card to determine how every pixel on your 3D models
-                    should be colored - they enable effects that regular materials can't achieve!</p>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas"></canvas></div>
+                </figure>
 
-                <div class="canvas-container">
-                    <canvas id="three-canvas"></canvas>
-                </div>
+                <p>Material settings like roughness and metallic are inputs to a shader. Writing or wiring your own shader lets you compute color from anything: position, angle, time. This torus knot is colored by sine waves of its surface position and the time, blended between two colors.</p>
+                <p>Most tools and engines have a node-based shader editor. Each node does one job (read the surface normal, sample a texture, mix two colors, do some math) and you connect them into a material.</p>
 
-                <h2>Understanding Shaders</h2>
-                <p>Shaders represent a deeper level of control over your 3D graphics. While materials in a 3D tool provide
-                    sliders for properties like roughness and metallic, shaders are the actual programs running behind
-                    the scenes that calculate those properties.</p>
+                <h2>Fresnel rim light</h2>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
+                </figure>
 
-                <p><strong>What shaders do:</strong> For every pixel that needs to be rendered, the shader calculates
-                    what color it should be based on factors like lighting, viewing angle, material properties, and
-                    custom logic you provide.</p>
+                <p>Surfaces reflect more when seen edge-on than face-on; that's the Fresnel effect, and it's why water looks brighter toward the horizon. This shader compares the view direction with the surface normal: where they're nearly perpendicular, at the sphere's edge, it adds a bright rim color.</p>
+                <p>The same trick gives force fields, holograms and character outlines. Other common shader effects: cel shading for a cartoon look, and procedural patterns that need no texture image.</p>
 
-                <p>Most 3D tools and game engines offer a node-based shader editor. Each node performs a specific
-                    calculation (get the surface normal, sample a texture, mix two colors), and you connect them to
-                    build complex material behaviors. This is visual shader programming.</p>
-
-                <h3>Types of Shader Nodes</h3>
-                <p><strong>BSDF nodes:</strong> (Bidirectional Scattering Distribution Function) Define how light
-                    scatters off surfaces. The Principled BSDF you use in materials is actually a sophisticated shader
-                    that combines multiple simpler shaders.</p>
-
-                <p><strong>Texture nodes:</strong> Sample images or generate procedural patterns (noise, gradients,
-                    etc.).</p>
-
-                <p><strong>Math nodes:</strong> Perform calculations, allowing you to create dynamic, responsive
-                    materials.</p>
-
-                <p><strong>Input nodes:</strong> Provide information about the surface (position, normal direction, UV
-                    coordinates, etc.).</p>
-
-                <div class="tip-box">
-                    <strong>Custom Shader Effects:</strong>
-                    Want materials that change color based on viewing angle? Use a Fresnel node. Need animated patterns?
-                    Connect a noise texture to a time value. Want cartoon-style cel shading? Use ColorRamp nodes to
-                    posterize lighting. Shaders unlock these creative possibilities.
-                </div>
-
-                <h3>What You're Seeing</h3>
-                <p>In the visualization at the start, you see a torus knot with a custom animated shader. The colorful,
-                    flowing
-                    pattern is created by shader code that calculates colors based on the surface position and time.
-                    This effect would be impossible with static materials alone.</p>
-
-                <p>The pattern uses:</p>
-                <p>• Position data (where on the surface each pixel is)<br>
-                    • Time data (to create animation)<br>
-                    • Sine functions (to create wave patterns)<br>
-                    • Color mixing (blending between two colors)</p>
-
-                <h3>Practical Shader: Fresnel Rim Lighting</h3>
-                <p>The visualization below shows a practical shader technique called Fresnel-based rim lighting:</p>
-
-                <div class="canvas-container">
-                    <canvas id="three-canvas-2"></canvas>
-                </div>
-
-                <p><strong>What is Fresnel:</strong> The Fresnel effect describes how reflections become stronger at
-                    grazing angles. When you look at a surface straight-on, you see mostly the surface color. When you
-                    look at it edge-on, you see more reflections. This is why the horizon over water appears brighter.
-                </p>
-
-                <p><strong>Rim Lighting Application:</strong> By using the Fresnel effect in a shader, we can add a
-                    glowing edge to objects. Notice how the sphere has a bright rim where its surface curves away from
-                    the camera. This technique is used extensively in sci-fi effects, character highlights, and to make
-                    objects "pop" against backgrounds.</p>
-
-                <p><strong>The shader calculates:</strong> The angle between the camera view and the surface normal at
-                    each point. Where these are perpendicular (at edges), it adds the bright rim color. Where they're
-                    parallel (facing the camera), it shows the base color.</p>
-
-                <p>This single shader technique can transform ordinary objects into eye-catching elements. It's commonly
-                    used for force fields, energy shields, highlights on characters, and making UI elements visible
-                    against varying backgrounds.</p>
-
-                <h3>When to Use Shaders</h3>
-                <p><strong>Special effects:</strong> Holographic materials, force fields, magical effects, stylized
-                    rendering.</p>
-
-                <p><strong>Procedural variation:</strong> Materials that vary based on position, orientation, or random
-                    values without requiring texture maps.</p>
-
-                <p><strong>Performance optimization:</strong> Procedural shaders can be more efficient than large
-                    texture files.</p>
-
-                <p>While beginners typically work with pre-made materials, understanding that shaders exist helps you
-                    recognize what's possible. As you advance, shader knowledge becomes essential for creating unique,
-                    compelling visuals.</p>
-            </div>
-
-            <nav class="navigation-footer">
-                <a href="camera.html" class="nav-button">← Previous: Camera</a>
-                <a href="index.html" class="nav-button">Back to Home</a>
-            </nav>
+                <nav class="pager">
+                    <a href="camera.html" class="prev">← Camera</a>
+                    <a href="index.html" class="next">All concepts →</a>
+                </nav>
+            </article>
         </main>
     </div>
 

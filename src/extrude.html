@@ -18,87 +18,39 @@
         </aside>
 
         <main class="main-container">
-            <div class="content-area">
+            <article class="page">
                 <h1>Extrude</h1>
+                <p class="lede">Extrude pulls selected faces, edges or vertices outward and fills the gap with new, connected geometry.</p>
 
-                <h2>Overview</h2>
-                <p>Extrude is like pulling clay out of your model - select a face and extrude it to pull it out and
-                    create new geometry. It's the most-used modeling tool!</p>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas"></canvas></div>
+                </figure>
 
-                <div class="canvas-container">
-                    <canvas id="three-canvas"></canvas>
-                </div>
+                <p>This stepped shape is one cube extruded several times: extrude the top face up, scale it down a little, repeat. Every step stays joined to the one below, so the result is still a single mesh with no gaps.</p>
+                <ol>
+                    <li>Switch to editing the mesh's components.</li>
+                    <li>Select a face, edge or vertex.</li>
+                    <li>Run Extrude and drag, or type a distance.</li>
+                </ol>
+                <p>By default a face extrudes along its normal, straight out from the surface. Constrain it to an axis to extrude in a fixed direction instead, for example straight up for walls.</p>
 
-                <h2>Understanding Extrusion</h2>
-                <p>If there's one modeling operation you absolutely must master, it's extrusion. This single tool is
-                    responsible for creating a vast majority of 3D geometry across all skill levels.</p>
+                <h2>Faces, edges and vertices</h2>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
+                    <figcaption class="legend">
+                        <span><b>Face</b>Builds volume: a column out of the top</span>
+                        <span><b>Edge</b>Builds a new face: fins, borders</span>
+                        <span><b>Vertex</b>Builds a new edge: branches</span>
+                    </figcaption>
+                </figure>
 
-                <p><strong>What extrusion does:</strong> It takes selected geometry (faces, edges, or vertices) and
-                    creates new connected geometry by "pulling" it outward. Think of it like working with clay - when
-                    you pull part of the clay outward, you're stretching and adding material while keeping it connected
-                    to the original form.</p>
+                <p>Typical uses: limbs and branches pulled out of a body, walls and window frames in architecture, or any shape grown step by step from a cube.</p>
 
-                <p>The process is beautifully simple:</p>
-                <p>1. Switch to editing the mesh's components (vertices, edges, faces)<br>
-                    2. Select a face, edge, or vertex<br>
-                    3. Run the Extrude tool<br>
-                    4. Drag to pull the new geometry outward (or type an exact distance)<br>
-                    5. Confirm</p>
-
-                <div class="tip-box">
-                    <strong>Axis-Constrained Extrusion:</strong>
-                    Just like with transformations, you can constrain an extrusion to a single axis. By default most
-                    tools extrude a face along its normal (straight out from the surface); constraining it to the
-                    vertical axis instead extrudes straight up, perfect for creating walls or vertical features.
-                </div>
-
-                <h3>What You're Seeing</h3>
-                <p>The visualization shows a stepped pyramid structure created through multiple extrusions. Each layer
-                    was created by selecting the top face and extruding upward, then scaling it slightly smaller. This
-                    technique of "extrude and scale" is fundamental to organic modeling.</p>
-
-                <p>Notice how each level maintains connection to the level below it - this is the power of extrusion
-                    creating unified, seamless geometry.</p>
-
-                <h3>Extrude Types: Faces, Edges, and Vertices</h3>
-                <p>The visualization below demonstrates the three types of extrusion:</p>
-
-                <div class="canvas-container">
-                    <canvas id="three-canvas-2"></canvas>
-                </div>
-
-                <p><strong>Left (orange) - Face Extrude:</strong> The top face of the cube is extruded upward, creating
-                    a protruding column. This is the most common type and creates new faces automatically.</p>
-
-                <p><strong>Middle (green) - Edge Extrude:</strong> A single edge is selected and extruded, creating a
-                    new face between the original edge and the new edge. Perfect for creating fins, borders, or
-                    extending geometry along a direction.</p>
-
-                <p><strong>Right (blue) - Vertex Extrude:</strong> Individual vertices are extruded, creating edges from
-                    the original vertices to the new ones. This gives you maximum control for creating branches or
-                    tentacle-like geometry.</p>
-
-                <p>Each type serves different modeling needs. Face extrusion builds volume, edge extrusion adds details,
-                    and vertex extrusion creates branching structures.</p>
-
-                <h3>Common Use Cases</h3>
-                <p><strong>Building forms:</strong> Start with a simple cube, extrude one face to create a protrusion,
-                    and keep extruding to build complex shapes organically.</p>
-
-                <p><strong>Adding appendages:</strong> Creating arms, legs, or branches? Select a face where you want it
-                    to start and extrude outward.</p>
-
-                <p><strong>Creating architecture:</strong> Extruding walls upward, creating window frames, adding detail
-                    to structures.</p>
-
-                <p>What makes extrusion powerful is that the new geometry stays connected to your mesh. This means no
-                    gaps, no separate pieces to worry about - everything remains part of a unified whole.</p>
-            </div>
-
-            <nav class="navigation-footer">
-                <a href="transformations.html" class="nav-button">← Previous: Transformations</a>
-                <a href="loop-cuts.html" class="nav-button">Next: Loop Cuts →</a>
-            </nav>
+                <nav class="pager">
+                    <a href="transformations.html" class="prev">← Transformations</a>
+                    <a href="loop-cuts.html" class="next">Loop Cuts →</a>
+                </nav>
+            </article>
         </main>
     </div>
 

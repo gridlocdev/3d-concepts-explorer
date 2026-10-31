@@ -18,82 +18,38 @@
         </aside>
 
         <main class="main-container">
-            <div class="content-area">
+            <article class="page">
                 <h1>Normals</h1>
+                <p class="lede">Every face has a normal: a direction pointing straight out of it. Renderers use normals to decide which side is the front and how light hits the surface.</p>
 
-                <h2>Overview</h2>
-                <p>Normals are invisible arrows pointing out from each face that tell the renderer which side is the
-                    'outside' - get them backwards and your model looks inside-out!</p>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas"></canvas></div>
+                    <figcaption class="legend">
+                        <span><b>Normals out</b>Lit as expected</span>
+                        <span><b>Normals flipped</b>You see the inside faces</span>
+                    </figcaption>
+                </figure>
 
-                <div class="canvas-container">
-                    <canvas id="three-canvas"></canvas>
-                </div>
+                <p>A face has two sides, and most renderers draw only the front one. If a face's normal points inward, the face renders dark, black or not at all, and the model looks like it has holes.</p>
+                <p>To fix it, select the faces and use your tool's Flip Normals (or Reverse Normals) command, or recalculate all normals to point outward.</p>
 
-                <h2>Understanding Normals</h2>
-                <p>Normals are one of those concepts that seem invisible until something goes wrong - and then they
-                    become very obvious! Every face on your mesh has an invisible directional vector (think of it as an
-                    arrow) pointing perpendicular to its surface.</p>
+                <h2>Flat vs smooth shading</h2>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
+                    <figcaption class="legend">
+                        <span><b>Flat</b>One normal per face. Every polygon shows.</span>
+                        <span><b>Smooth</b>Normals averaged at each vertex. Same faces, looks round.</span>
+                    </figcaption>
+                </figure>
 
-                <p><strong>What normals do:</strong> They tell the rendering engine which side of a face is the
-                    "outside" and should be visible. This is crucial for how light interacts with your surface and which
-                    side actually gets rendered.</p>
+                <p>Smooth shading adds no geometry. It blends the normals across each face so light changes gradually, which makes a low-poly surface look curved.</p>
+                <p>You can mix the two: smooth-shade an object and mark some edges as sharp. A phone, for example, has smooth sides and a hard edge around the screen.</p>
 
-                <p>Think of a face like a piece of paper - it has two sides, but in 3D graphics, we typically only want
-                    to see one of them. The normal determines which side is considered the "front."</p>
-
-                <div class="tip-box">
-                    <strong>Common Problem:</strong>
-                    If your model appears dark, has black patches, or seems to have holes when it shouldn't, you likely
-                    have inverted normals. Select the problematic faces and use your tool's Flip (or Reverse) Normals
-                    command to correct them, or have it recalculate all normals to point outward.
-                </div>
-
-                <h3>What You're Seeing</h3>
-                <p>In the visualization at the start, you'll see two cubes:</p>
-
-                <p><strong>Left cube (green):</strong> Has correct normals pointing outward. Light bounces off it
-                    naturally, and all faces render as expected.</p>
-
-                <p><strong>Right cube (orange):</strong> Has flipped normals pointing inward. Notice how it appears
-                    darker or may look like you're seeing the inside of the cube - because you are! The faces are being
-                    rendered from the "back" side.</p>
-
-
-                <h3>Smooth vs Flat Shading</h3>
-                <p>In the visualization below, you can see the dramatic effect normal interpolation has on appearance:
-                </p>
-
-                <div class="canvas-container">
-                    <canvas id="three-canvas-2"></canvas>
-                </div>
-
-                <p><strong>Left (orange) - Flat Shading:</strong> Each face uses its own normal, perpendicular to that
-                    face. This creates hard edges between faces - you can clearly see every polygon. The shading changes
-                    abruptly at each edge. Perfect for mechanical objects, faceted gems, or low-poly stylized art.</p>
-
-                <p><strong>Right (green) - Smooth Shading:</strong> The normals at vertices are averaged between
-                    adjacent faces, then interpolated across each face. This creates the illusion of a curved, smooth
-                    surface even though the geometry is the same. The shading transitions gradually, making the sphere
-                    appear round.</p>
-
-                <p>Smooth shading doesn't add geometry - it's purely a lighting trick achieved through normal
-                    interpolation. The mesh has the same number of faces either way. This is why smooth shading is so
-                    powerful: you get curved-looking surfaces without the performance cost of millions of polygons.</p>
-
-                <p>You can combine both techniques: smooth shade most of an object but mark certain edges as "sharp" to
-                    preserve hard corners. This is how you model things like a smartphone (smooth rounded sides, but
-                    sharp screen edges).</p>
-
-                <h3>Normals and Shading</h3>
-                <p>Normals also affect smooth shading. When you smooth-shade an object, the renderer interpolates the normals
-                    across faces to create the illusion of a curved surface. Understanding normals becomes essential
-                    when you want precise control over how light and shadow play across your model.</p>
-            </div>
-
-            <nav class="navigation-footer">
-                <a href="meshes.html" class="nav-button">← Previous: Meshes</a>
-                <a href="transformations.html" class="nav-button">Next: Transformations →</a>
-            </nav>
+                <nav class="pager">
+                    <a href="meshes.html" class="prev">← Meshes</a>
+                    <a href="transformations.html" class="next">Transformations →</a>
+                </nav>
+            </article>
         </main>
     </div>
 

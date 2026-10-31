@@ -25,6 +25,7 @@ export function createScope() {
 
         renderer(params) {
             const renderer = new THREE.WebGLRenderer(params);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             cleanups.push(() => {
                 renderer.dispose();
                 renderer.forceContextLoss();

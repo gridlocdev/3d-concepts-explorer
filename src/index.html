@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Concepts Explorer - Interactive Learning Guide</title>
+    <title>3D Concepts Explorer</title>
     <link rel="icon" type="image/x-icon" href="static/icons8-html-5-16.png">
     <script type="importmap">{ "imports": { "three": "./vendor/three/three.module.min.js" } }</script>
     <link rel="stylesheet" href="styles/main.css">
@@ -15,91 +15,25 @@
             <wiki-sidebar></wiki-sidebar>
         </aside>
 
-        <main class="main-container" style="overflow-y: auto;">
-            <div class="landing-container">
-                <div class="hero">
-                    <h1>3D Concepts Explorer</h1>
-                    <p>Master the fundamental concepts of 3D modeling with interactive visualizations and clear explanations. Each concept comes with a live Three.js demonstration to help you understand how it works.</p>
-                </div>
-
-                <div class="intro-section">
-                    <h2>About This Guide</h2>
-                    <p>This interactive guide is designed to help you understand the core concepts of 3D modeling, whichever tool you use. Whether you're completely new to 3D or switching tools, these foundational concepts will help you build a solid understanding of how 3D graphics work.</p>
-                    <p>Each page includes a TL;DR summary, detailed explanation, and an interactive 3D visualization powered by Three.js. Click any concept below to begin learning.</p>
-                </div>
-
-                <h2 style="color: #00ff88; margin-bottom: 20px; font-size: 28px;">Core Concepts</h2>
-
-                <div class="concept-grid">
-                    <a href="meshes.html" class="concept-card">
-                        <h3>Meshes</h3>
-                        <p>The fundamental building blocks of 3D objects - vertices, edges, and faces that define shape and form.</p>
-                    </a>
-
-                    <a href="normals.html" class="concept-card">
-                        <h3>Normals</h3>
-                        <p>Invisible directional vectors that determine which side of a surface is "outside" and how light interacts with it.</p>
-                    </a>
-
-                    <a href="transformations.html" class="concept-card">
-                        <h3>Transformations</h3>
-                        <p>The three essential operations - Move, Rotate, and Scale - that you'll use constantly to position and modify objects.</p>
-                    </a>
-
-                    <a href="extrude.html" class="concept-card">
-                        <h3>Extrude</h3>
-                        <p>The most-used modeling operation - pull geometry outward to create new connected forms organically.</p>
-                    </a>
-
-                    <a href="loop-cuts.html" class="concept-card">
-                        <h3>Loop Cuts</h3>
-                        <p>Add edge loops to increase detail exactly where you need it, maintaining clean topology while building complexity.</p>
-                    </a>
-
-                    <a href="bevel.html" class="concept-card">
-                        <h3>Bevel</h3>
-                        <p>Round off sharp edges to create realistic lighting and make your models look less computer-generated.</p>
-                    </a>
-
-                    <a href="subdivision.html" class="concept-card">
-                        <h3>Subdivision Surface</h3>
-                        <p>Automatically smooth and round your geometry - model with simple shapes, render with organic curves.</p>
-                    </a>
-
-                    <a href="materials.html" class="concept-card">
-                        <h3>Materials</h3>
-                        <p>Define surface appearance - whether objects look like metal, plastic, glass, or any other substance.</p>
-                    </a>
-
-                    <a href="uv-maps.html" class="concept-card">
-                        <h3>UV Maps</h3>
-                        <p>Unfold 3D surfaces into 2D space so you can paint textures and apply images with precision.</p>
-                    </a>
-
-                    <a href="lighting.html" class="concept-card">
-                        <h3>Lighting</h3>
-                        <p>Set the mood and make your scene visible - different light types create dramatically different atmospheres.</p>
-                    </a>
-
-                    <a href="camera.html" class="concept-card">
-                        <h3>Camera</h3>
-                        <p>Your viewpoint into the 3D world - frame your scene with the same principles photographers use.</p>
-                    </a>
-
-                    <a href="shaders.html" class="concept-card">
-                        <h3>Shaders</h3>
-                        <p>Programs that run on your GPU to create custom visual effects beyond what standard materials offer.</p>
-                    </a>
-                </div>
-
-                <div class="intro-section" style="margin-top: 40px;">
-                    <h2>How to Use This Guide</h2>
-                    <p><strong>1. Start with Meshes:</strong> If you're new to 3D, begin with the Meshes concept and work through them in order.</p>
-                    <p><strong>2. Use the sidebar:</strong> Navigate between concepts using the sidebar on the left, which is available on every page.</p>
-                    <p><strong>3. Interact with visualizations:</strong> The 3D examples on each page are live and interactive - watch them animate to understand the concept.</p>
-                    <p><strong>4. Read both sections:</strong> Start with the TL;DR for a quick overview, then dive into the detailed explanation for deeper understanding.</p>
-                </div>
-            </div>
+        <main class="main-container">
+            <article class="page">
+                <h1>3D Concepts Explorer</h1>
+                <p class="lede">The core ideas of 3D modeling, each shown with a live 3D scene. They apply in any modeling tool. New to 3D? Start with Meshes and go in order.</p>
+                <nav class="concept-grid">
+                    <a href="meshes.html" class="concept-card"><b>Meshes</b>Vertices, edges and faces</a>
+                    <a href="normals.html" class="concept-card"><b>Normals</b>Which side of a face is the front</a>
+                    <a href="transformations.html" class="concept-card"><b>Transformations</b>Move, rotate, scale</a>
+                    <a href="extrude.html" class="concept-card"><b>Extrude</b>Pull new geometry out of a mesh</a>
+                    <a href="loop-cuts.html" class="concept-card"><b>Loop Cuts</b>Add a ring of edges where you need detail</a>
+                    <a href="bevel.html" class="concept-card"><b>Bevel</b>Round off sharp edges</a>
+                    <a href="subdivision.html" class="concept-card"><b>Subdivision Surface</b>Smooth a blocky mesh</a>
+                    <a href="materials.html" class="concept-card"><b>Materials</b>Color, roughness, metal</a>
+                    <a href="uv-maps.html" class="concept-card"><b>UV Maps</b>Unfold a surface to texture it</a>
+                    <a href="lighting.html" class="concept-card"><b>Lighting</b>Light types and three-point lighting</a>
+                    <a href="camera.html" class="concept-card"><b>Camera</b>Viewpoint, focal length, depth of field</a>
+                    <a href="shaders.html" class="concept-card"><b>Shaders</b>Programs that color each pixel</a>
+                </nav>
+            </article>
         </main>
     </div>
 

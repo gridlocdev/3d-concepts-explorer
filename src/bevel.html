@@ -18,84 +18,42 @@
         </aside>
 
         <main class="main-container">
-            <div class="content-area">
+            <article class="page">
                 <h1>Bevel</h1>
+                <p class="lede">Bevel replaces a sharp edge with a narrow face, or a rounded strip of faces, so the edge catches light the way real objects do.</p>
 
-                <h2>Overview</h2>
-                <p>Bevel rounds off sharp edges to make things look more realistic - nothing in real life has perfectly
-                    sharp edges, so bevel makes your models look less 'CG'!</p>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas"></canvas></div>
+                    <figcaption class="legend">
+                        <span><b>Sharp</b>Thin, harsh highlight</span>
+                        <span><b>Beveled</b>Highlight runs along the edge</span>
+                    </figcaption>
+                </figure>
 
-                <div class="canvas-container">
-                    <canvas id="three-canvas"></canvas>
-                </div>
+                <p>Real edges are never perfectly sharp; even a knife edge is slightly round up close. A perfectly sharp edge in 3D gets no highlight, which is a common reason a model looks computer-generated. A small bevel fixes it.</p>
+                <ol>
+                    <li>Select edges (or vertices).</li>
+                    <li>Run Bevel (some tools call it Chamfer).</li>
+                    <li>Set the width, and raise the segment count for a rounder profile.</li>
+                </ol>
 
-                <h2>Understanding Beveling</h2>
-                <p>Here's a crucial insight that separates amateur 3D work from professional: <em>nothing in the real
-                        world has perfectly sharp edges</em>. Even objects that appear sharp - a knife blade, a fresh
-                    sheet of metal, the corner of a building - have microscopic roundness when viewed up close.</p>
+                <h2>Width and segments</h2>
+                <figure class="demo">
+                    <div class="stage"><canvas id="three-canvas-2"></canvas></div>
+                    <figcaption class="legend">
+                        <span><b>Small, 2 segments</b>Tight; machined parts</span>
+                        <span><b>Medium, 3 segments</b>A general default</span>
+                        <span><b>Large, 5 segments</b>Soft or worn edges</span>
+                    </figcaption>
+                </figure>
 
-                <p><strong>Why this matters:</strong> Sharp edges don't catch light the way real objects do. When light
-                    hits a perfectly sharp edge in 3D, it creates an unnaturally harsh highlight. Beveling those edges -
-                    even slightly - allows light to play across the surface more naturally, immediately making your
-                    model look more realistic.</p>
+                <p>Width sets how much of the edge is rounded; segments set how smooth the curve is, at the cost of more geometry. New, manufactured objects have small bevels. Wood, plastic and worn objects have larger ones.</p>
 
-                <p>To bevel:</p>
-                <p>1. Switch to editing the mesh's components (vertices, edges, faces)<br>
-                    2. Select edges (or vertices)<br>
-                    3. Run the Bevel tool (some tools call it Chamfer)<br>
-                    4. Drag or type a value to set the width of the bevel<br>
-                    5. Raise the segment count for smoother rounding<br>
-                    6. Confirm</p>
-
-                <div class="tip-box">
-                    <strong>Hard Surface Modeling:</strong>
-                    Beveling is absolutely essential for hard surface work - mechanical objects, vehicles, architecture,
-                    product design. A good rule of thumb: if it would hurt to get hit by it in real life, it probably
-                    needs a bevel in your 3D model. Even subtle bevels (0.5-2mm on real-world scale objects) make a huge
-                    difference.
-                </div>
-
-                <h3>What You're Seeing</h3>
-                <p>In the visualization at the start, compare the two cubes:</p>
-
-                <p><strong>Orange cube (left):</strong> Has perfectly sharp edges. Notice how the highlights are harsh
-                    and thin, and the object has that telltale "CG" look.</p>
-
-                <p><strong>Green cube (right):</strong> Has beveled edges. The rounded corners catch light across a
-                    wider area, creating more natural highlights and giving the object visual weight and realism.</p>
-
-                <p>The difference becomes even more pronounced under different lighting conditions. Beveled edges create
-                    subtle gradations in shading that make objects feel solid and tangible.</p>
-
-                <h3>Bevel Width and Segments</h3>
-                <p>In the visualization below, you can see three cubes demonstrating different bevel settings:</p>
-
-                <div class="canvas-container">
-                    <canvas id="three-canvas-2"></canvas>
-                </div>
-
-                <p><strong>Left cube (orange):</strong> Small bevel width with 2 segments - creates a tight, subtle
-                    chamfer perfect for manufactured objects.</p>
-
-                <p><strong>Middle cube (green):</strong> Medium bevel width with 3 segments - a balanced approach that
-                    works for most hard surface modeling.</p>
-
-                <p><strong>Right cube (blue):</strong> Large bevel width with 5 segments - creates smooth, rounded edges
-                    ideal for worn or soft materials.</p>
-
-                <p>The segment count controls how smooth the bevel appears. More segments create a smoother curve but
-                    add geometry to your model.</p>
-
-                <h3>How Much to Bevel</h3>
-                <p>It depends on the material and wear. New, manufactured objects might have very subtle bevels. Worn or
-                    soft materials (wood, plastic) might have more pronounced rounding. Metal edges could be anywhere on
-                    this spectrum depending on the object's history.</p>
-            </div>
-
-            <nav class="navigation-footer">
-                <a href="loop-cuts.html" class="nav-button">← Previous: Loop Cuts</a>
-                <a href="subdivision.html" class="nav-button">Next: Subdivision Surface →</a>
-            </nav>
+                <nav class="pager">
+                    <a href="loop-cuts.html" class="prev">← Loop Cuts</a>
+                    <a href="subdivision.html" class="next">Subdivision Surface →</a>
+                </nav>
+            </article>
         </main>
     </div>
 
